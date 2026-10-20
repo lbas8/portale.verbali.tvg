@@ -226,7 +226,7 @@
       { id: "comp9", title: "9. CONFORMITÀ LEGISLATIVA", subsections: [{ items: ["Aggiornamento Quadro degli Adempimenti Ambientali", "Presenza e aggiornamento del registro delle autorizzazioni", "Aggiornamento semestrale della verifica di conformità legislativa"] }] }
     ];
 
-    const photoStore = {};
+        const photoStore = {};
     const participantsList = [];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -236,6 +236,65 @@
 
       renderAspects();
       initCanvases();
+
+      // CONTROLLO PER IL CARICAMENTO AUTOMATICO DALL'URL (Dalla Home)
+      const urlParams = new URLSearchParams(window.location.search);
+      const loadKey = urlParams.get('load');
+      if (loadKey) {
+        setTimeout(() => {
+          db.ref('verbali/' + loadKey).once('value', (snapshot) => {
+            const record = snapshot.val();
+            if (record) {
+              if (record.cantiere) document.getElementById('cantiere').value = record.cantiere;
+              if (record.area) document.getElementById('area').value = record.area;
+              if (record.datetime) document.getElementById('datetime').value = record.datetime;
+              if (record.oggetto) document.getElementById('oggetto').value = record.oggetto;
+              if (record.conclusioni) document.getElementById('conclusioni').value = record.conclusioni;
+              if (record.nomeRedattore) document.getElementById('nome-redattore').value = record.nomeRedattore;
+              if (record.nomeDirezione) document.getElementById('nome-direzione').value = record.nomeDirezione;
+
+              if (record.participantsList) {
+                participantsList.length = 0;
+                participantsList.push(...record.participantsList);
+                renderParticipants();
+              }
+
+              if (record.aspectsState) {
+                environmentalAspects.forEach((aspect, aIdx) => {
+                  const isChecked = record.aspectsState[aIdx] || false;
+                  const chk = document.getElementById(`aspect_toggle_${aIdx}`);
+                  if (chk) {
+                    chk.checked = isChecked;
+                    toggleAspect(aIdx);
+                  }
+
+                  aspect.subsections.forEach((sub, sIdx) => {
+                    sub.items.forEach((itemText, iIdx) => {
+                      const key = `item_${aIdx}_${sIdx}_${iIdx}`;
+                      const itemData = record.aspectsState[key];
+                      if (itemData) {
+                        const radios = document.querySelectorAll(`input[name="${key}_val"]`);
+                        radios.forEach(r => { if (r.value === itemData.val) r.checked = true; });
+                        const noteEl = document.getElementById(`${key}_note`);
+                        if (noteEl) noteEl.value = itemData.note || '';
+                      }
+                    });
+                  });
+                });
+              }
+
+              if (record.observations && record.observations.length > 0) {
+                document.getElementById('observations-list').innerHTML = '';
+                record.observations.forEach(obs => addObservation(obs));
+              }
+
+              console.log("Verbale caricato correttamente: ", loadKey);
+            } else {
+              alert("Impossibile trovare i dati per questa chiave nel Cloud.");
+            }
+          });
+        }, 400);
+      }
     });
 
     function addParticipant() {
