@@ -38,13 +38,13 @@
         <span class="text-xs text-slate-500">Organizza e sposta i verbali salvati</span>
       </div>
 
-      <!-- SEZIONE 1: VERBALI NON CLASSIFICATI (Inviati dal Cantiere) -->
+      <!-- SEZIONE 1: VERBALI NON CLASSIFICATI -->
       <div class="mb-8 bg-amber-50/50 border border-amber-200 rounded-xl p-4">
         <h3 class="text-sm font-bold text-amber-900 mb-3 flex items-center gap-2">
           <i class="fa-solid fa-mobile-screen-button text-amber-600"></i> Da Classificare (Salvati da Cantiere)
         </h3>
         <div id="unclassified-list" class="space-y-2">
-          <p class="text-xs text-slate-400 italic">Caricamento verbali in corso...</p>
+          <p class="text-xs text-slate-400 italic">Connessione al Cloud in corso...</p>
         </div>
       </div>
 
@@ -54,31 +54,54 @@
           <i class="fa-solid fa-folder-tree text-sky-600"></i> Cartelle Personalizzate
         </h3>
         <div id="folders-container" class="space-y-4">
-          <p class="text-xs text-slate-400 italic">Caricamento cartelle in corso...</p>
+          <p class="text-xs text-slate-400 italic">Connessione al Cloud in corso...</p>
         </div>
       </div>
     </div>
   </div>
 
- <script>
-    // CONFIGURAZIONE FIREBASE (Assicurati che l'URL sia corretto)
+  <script>
+    // CONFIGURAZIONE FIREBASE
     const firebaseConfig = {
       databaseURL: "https://verbale-ambientale-default-rtdb.europe-west1.firebasedatabase.app"
     };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
     let allFolders = {};
     let allVerbali = {};
+    let dataLoaded = false;
 
-    // Ascolto separato dei nodi per evitare blocchi se la cartella non esiste ancora
+    // Sblocco di sicurezza se Firebase non risponde entro 2.5 secondi
+    setTimeout(() => {
+      if (!dataLoaded) {
+        console.warn("Timeout connessione Firebase. Forzatura sblocco interfaccia.");
+        renderPortal();
+      }
+    }, 2500);
+
+    // Ascolto verbali
     db.ref('verbali').on('value', (snapshot) => {
       allVerbali = snapshot.val() || {};
+      dataLoaded = true;
+      renderPortal();
+    }, (error) => {
+      console.error("Errore lettura verbali:", error);
+      dataLoaded = true;
       renderPortal();
     });
 
+    // Ascolto cartelle
     db.ref('cartelle').on('value', (snapshot) => {
       allFolders = snapshot.val() || {};
+      dataLoaded = true;
+      renderPortal();
+    }, (error) => {
+      console.error("Errore lettura cartelle:", error);
+      dataLoaded = true;
       renderPortal();
     });
 
@@ -100,7 +123,7 @@
       });
     }
 
-    // Spostamento di un verbale in una cartella o nella radice
+    // Spostamento di un verbale
     function moveVerbale(verbaleKey, targetFolderId) {
       if (targetFolderId === "ROOT") {
         db.ref('verbali/' + verbaleKey + '/folderId').remove();
@@ -132,7 +155,7 @@
       const folderKeys = Object.keys(allFolders);
       const verbaleKeys = Object.keys(allVerbali);
 
-      // 1. Render dei Verbali da Classificare
+      // 1. Verbali da classificare
       const unclassified = verbaleKeys.filter(k => !allVerbali[k].folderId);
 
       if (unclassified.length === 0) {
@@ -143,7 +166,7 @@
         });
       }
 
-      // 2. Render Cartelle Personalizzate
+      // 2. Cartelle personalizzate
       if (folderKeys.length === 0) {
         foldersContainer.innerHTML = '<p class="text-xs text-slate-400 italic">Nessuna cartella creata. Clicca su "+ Nuova Cartella" in alto per iniziare.</p>';
       } else {
@@ -154,16 +177,13 @@
           const folderEl = document.createElement('div');
           folderEl.className = "border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 shadow-sm";
 
-          let verbaliListHTML = '';
-          if (folderVerbali.length === 0) {
-            verbaliListHTML = '<p class="text-xs text-slate-400 italic p-3">Cartella vuota. Sposta qui i verbali utilizzando il selettore.</p>';
-          }
+          let verbaliListHTML = '<p class="text-xs text-slate-400 italic p-3">Cartella vuota. Sposta qui i verbali utilizzando il selettore.</p>';
 
           folderEl.innerHTML = `
             <div class="bg-slate-200/70 px-4 py-3 flex justify-between items-center cursor-pointer border-b border-slate-200" onclick="toggleFolderContent('${fKey}')">
               <div class="flex items-center gap-2">
                 <i class="fa-solid fa-folder text-amber-500 text-lg"></i>
-                <span class="font-bold text-sm text-slate-800">${folder.nome}</span>
+                <span class="font-bold text-sm text-slate-800">${folder.nome || 'Cartella'}</span>
                 <span class="text-xs bg-slate-300 text-slate-700 px-2 py-0.5 rounded-full font-semibold">${folderVerbali.length} verbali</span>
               </div>
               <div class="flex items-center gap-2">
@@ -174,14 +194,15 @@
               </div>
             </div>
             <div id="content_folder_${fKey}" class="p-3 space-y-2 bg-white hidden">
-              ${verbaliListHTML}
             </div>
           `;
 
           foldersContainer.appendChild(folderEl);
 
-          if (folderVerbali.length > 0) {
-            const contentBox = folderEl.querySelector(`#content_folder_${fKey}`);
+          const contentBox = folderEl.querySelector(`#content_folder_${fKey}`);
+          if (folderVerbali.length === 0) {
+            contentBox.innerHTML = verbaliListHTML;
+          } else {
             folderVerbali.forEach(vKey => {
               contentBox.appendChild(createVerbaleCard(vKey, allVerbali[vKey], folderKeys));
             });
@@ -190,7 +211,7 @@
       }
     }
 
-    // Helper per creare la scheda del singolo verbale
+    // Helper per creare la scheda del verbale
     function createVerbaleCard(vKey, verbale, folderKeys) {
       const dateStr = verbale.datetime ? new Date(verbale.datetime).toLocaleString() : 'Data N.D.';
       
