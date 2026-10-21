@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portale Verbali e Catene di Custodia - Terzo Valico AV/AC</title>
+  <title>Portale Gestione Ambientale - Terzo Valico AV/AC</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -25,38 +25,63 @@
     </div>
   </header>
 
-  <!-- CONTENUTO CENTRALE (DASHBOARD) -->
-  <main class="max-w-4xl mx-auto px-4 py-12 flex-grow w-full">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12 text-center space-y-8">
+  <!-- CONTENUTO CENTRALE (DASHBOARD DOPPIA) -->
+  <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10 text-center space-y-8">
       
-      <div class="space-y-3 max-w-2xl mx-auto">
-        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Gestione Matrice Suolo e Sottosuolo</span>
-        <h2 class="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight">Catene di Custodia e Verbali di Campionamento</h2>
-        <p class="text-sm text-slate-600">
-          Seleziona un'opzione per redigere un nuovo verbale di campionamento sul campo oppure per accedere all'archivio generale dei documenti salvati nel cloud.
+      <div class="space-y-2 max-w-2xl mx-auto">
+        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Punto d'Accesso Principale</span>
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight">Scegli l'Ambito Operativo</h2>
+        <p class="text-xs md:text-sm text-slate-600">
+          Seleziona la tipologia di documento che desideri gestire o compilare all'interno del portale di cantiere.
         </p>
       </div>
 
-      <!-- PULSANTI DI NAVIGAZIONE PRINCIPALE -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto pt-4">
+      <!-- MACRO PULSANTI PRINCIPALI -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto pt-2">
         
-        <!-- CARD NUOVO VERBALE -->
-        <a href="campionamento-form.html" class="group bg-gradient-to-br from-emerald-800 to-emerald-950 hover:from-emerald-700 hover:to-emerald-900 text-white p-6 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col items-center text-center space-y-3 border border-emerald-700">
-          <div class="bg-emerald-700/50 p-4 rounded-full text-white text-2xl group-hover:scale-110 transition">
-            <i class="fa-solid fa-file-circle-plus"></i>
+        <!-- MACRO AREA: CAMPIONAMENTI -->
+        <div class="bg-gradient-to-br from-emerald-900 to-slate-900 text-white p-6 rounded-2xl shadow-lg border border-emerald-700 flex flex-col justify-between space-y-4 text-left">
+          <div class="space-y-2">
+            <div class="bg-emerald-700/50 w-10 h-10 rounded-lg flex items-center justify-center text-emerald-300 text-xl mb-3">
+              <i class="fa-solid fa-vials"></i>
+            </div>
+            <h3 class="font-bold text-lg text-emerald-300 uppercase tracking-wide">Campionamenti</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Gestione Catene di Custodia, inserimento parametri suolo e sottosuolo, firme digitali e archivio storico dei campioni prelevati.
+            </p>
           </div>
-          <h3 class="font-bold text-lg">Nuovo Campionamento</h3>
-          <p class="text-xs text-emerald-200">Compila una nuova Catena di Custodia, inserisci i dati dei campioni e firma digitalmente.</p>
-        </a>
+          <div class="flex flex-col sm:flex-row gap-2 pt-2">
+            <a href="campionamento-form.html" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow">
+              <i class="fa-solid fa-file-circle-plus"></i> Nuovo Campione
+            </a>
+            <a href="campionamenti.html" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition border border-slate-700">
+              <i class="fa-solid fa-folder-open"></i> Archivio
+            </a>
+          </div>
+        </div>
 
-        <!-- CARD ARCHIVIO VERBALI -->
-        <a href="campionamenti.html" class="group bg-gradient-to-br from-slate-800 to-slate-950 hover:from-slate-700 hover:to-slate-900 text-white p-6 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex flex-col items-center text-center space-y-3 border border-slate-700">
-          <div class="bg-slate-700/50 p-4 rounded-full text-white text-2xl group-hover:scale-110 transition">
-            <i class="fa-solid fa-folder-open"></i>
+        <!-- MACRO AREA: VERBALI DI SOPRALLUOGO -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-950 text-white p-6 rounded-2xl shadow-lg border border-slate-700 flex flex-col justify-between space-y-4 text-left">
+          <div class="space-y-2">
+            <div class="bg-slate-700/50 w-10 h-10 rounded-lg flex items-center justify-center text-sky-400 text-xl mb-3">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h3 class="font-bold text-lg text-sky-400 uppercase tracking-wide">Verbali di Sopralluogo</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Compilazione dei verbali di ispezione generale, organizzazione in cartelle personalizzate e monitoraggio delle attività di cantiere.
+            </p>
           </div>
-          <h3 class="font-bold text-lg">Archivio Verbali</h3>
-          <p class="text-xs text-slate-300">Consulta, modifica o ristampa in formato PDF i verbali precedentemente salvati nel Cloud.</p>
-        </a>
+          <div class="flex flex-col sm:flex-row gap-2 pt-2">
+            <a href="verbale.html" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow">
+              <i class="fa-solid fa-plus"></i> Nuovo Verbale
+            </a>
+            <a href="campionamenti.html" class="hidden"></a> <!-- Placeholder strutturale -->
+            <a href="index-vecchio.html" onclick="alert('Usa l\'archivio storico dei verbali')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition border border-slate-600">
+              <i class="fa-solid fa-folder-tree"></i> Archivio & Cartelle
+            </a>
+          </div>
+        </div>
 
       </div>
 
