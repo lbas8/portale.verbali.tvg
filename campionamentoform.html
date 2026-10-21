@@ -93,14 +93,14 @@
         <button onclick="saveCampionamentoToCloud()" class="bg-sky-600 hover:bg-sky-500 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition font-medium">
           <i class="fa-solid fa-cloud-arrow-up"></i> Salva Cloud
         </button>
-        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition font-medium">
-          <i class="fa-solid fa-file-pdf"></i> Stampa / PDF
+        <button onclick="downloadPDF()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition font-medium">
+          <i class="fa-solid fa-file-pdf"></i> Scarica PDF / Stampa
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto my-2 px-2">
+  <main id="form-container" class="max-w-5xl mx-auto my-2 px-2">
     <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-3 space-y-2.5">
 
       <!-- INTESTAZIONE UFFICIALE -->
@@ -229,14 +229,19 @@
 
         <div class="overflow-x-auto border border-slate-300 rounded-lg">
           <table class="w-full text-left border-collapse text-[9px]">
-            <thead id="analisi_thead">
-              <!-- Generato dinamicamente via JS -->
-            </thead>
-            <tbody id="rows-analisi" class="divide-y divide-slate-200">
-              <!-- Generato dinamicamente via JS -->
-            </tbody>
+            <thead id="analisi_thead"></thead>
+            <tbody id="rows-analisi" class="divide-y divide-slate-200"></tbody>
           </table>
         </div>
+
+        <!-- Riferimenti normativi rifiuti -->
+        <div id="note_normative_rifiuti" class="mt-1 text-[8px] text-slate-600 leading-tight space-y-0.5 bg-slate-50 p-1 rounded border hidden">
+          <p><strong>*</strong> D.lgs. n. 36 del 13/01/2003 All. 4 Tab. 3/4/5bis (come modificato dal D.lgs. 03/09/2020 n. 121)</p>
+          <p><strong>**</strong> D.M. 05/02/1998 (D.M. 186/2006)</p>
+          <p><strong>***</strong> D.lgs. n. 36 del 13/01/2003 All. 4 Tab. 5 (come modificato dal D.lgs. 03/09/2020 n. 121)</p>
+          <p><strong>****</strong> D.lgs. n. 36 del 13/01/2003 All. 4 Tab. 2 (come modificato dal D.lgs. 03/09/2020 n. 121)</p>
+        </div>
+
         <div class="mt-1">
           <label class="block text-[9px] font-bold text-slate-700 mb-0.5">Altre analisi da eseguire:</label>
           <input type="text" id="altre_analisi" placeholder="Eventuali parametri specifici..." class="w-full border rounded p-0.5 text-[9px] bg-white">
@@ -265,23 +270,30 @@
       </section>
 
       <!-- SEZIONE INVIO EMAIL (NO PRINT) -->
-      <section class="border-t border-emerald-600 pt-1.5 bg-emerald-50/50 p-2 rounded-lg no-print">
-        <h3 class="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <i class="fa-solid fa-envelope text-emerald-700"></i> Invio Modulo via E-mail
+      <section class="border-t border-emerald-600 pt-2 bg-emerald-50/50 p-2.5 rounded-lg no-print space-y-2">
+        <h3 class="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-paper-plane text-emerald-700"></i> Esporta PDF e Precompila E-mail
         </h3>
+        
+        <div class="text-[10.5px] text-slate-600 bg-white p-2 rounded border border-emerald-200">
+          <i class="fa-solid fa-circle-info text-emerald-600 mr-1"></i>
+          Cliccando su <strong>"Genera PDF & Apri Mail"</strong>, il sistema scaricherà automaticamente il PDF del verbale e aprirà l'e-mail precompilata: dovrai solamente <u>trascinare o allegare il PDF appena scaricato</u> ed inviare.
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
           <div>
-            <label class="block font-bold text-slate-700 mb-0.5 text-[10px]">Destinatari Principali (@cociv.it):</label>
-            <input type="text" id="email_destinatari" value="@cociv.it" class="w-full border rounded p-1 bg-white text-xs">
+            <label class="block font-bold text-slate-700 mb-0.5 text-[10px]">Destinatari Principali:</label>
+            <input type="text" id="email_destinatari" value="ambiente@cociv.it" class="w-full border rounded p-1 bg-white text-xs">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-0.5 text-[10px]">Copia Conoscenza (Cc):</label>
-            <input type="text" id="email_cc" placeholder="Altre e-mail separate da virgola" class="w-full border rounded p-1 bg-white text-xs">
+            <input type="text" id="email_cc" placeholder="Eventuali altre mail..." class="w-full border rounded p-1 bg-white text-xs">
           </div>
         </div>
-        <div class="mt-2 flex justify-end">
-          <button onclick="sendEmailReport()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1.5 shadow transition">
-            <i class="fa-solid fa-paper-plane"></i> Genera e Invia E-mail
+        
+        <div class="flex justify-end pt-1">
+          <button onclick="generatePDFAndSendEmail()" class="bg-emerald-700 hover:bg-emerald-600 text-white px-4 py-1.5 rounded text-xs font-bold flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Genera PDF & Apri Mail
           </button>
         </div>
       </section>
@@ -296,7 +308,6 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Configurazione personalizzata delle colonne di analisi per ciascuna Matrice
     const matrixAnalysesConfig = {
       "Sottoprodotto": [
         { key: "amianto", label: "Amianto" },
@@ -304,10 +315,10 @@
         { key: "dm161_com", label: "D.M. 161/2012 Tab. 4.1 [Completa No Amianto con BTEX e IPA]" }
       ],
       "Rifiuto": [
-        { key: "dlgs152_terre", label: "D.lgs. 152/2006 Parte IV All. 5 Tab. 1 Terre" },
-        { key: "cess_rec", label: "D.M. 05/02/1998 Test Cessione [a recupero]" },
-        { key: "cess_disc", label: "D.lgs. 121/2020 Test Cessione [a discarica]" },
-        { key: "peric", label: "D.lgs. 152/2006 Parte IV All. 1 [Det. Pericolosità Rifiuto]" }
+        { key: "tal_quale", label: "Tal quale *" },
+        { key: "cess_rec", label: "Test di Cessione a Recupero**" },
+        { key: "cess_disc", label: "Test di Cessione a Non Pericolosità [Discarica]***" },
+        { key: "cess_inerti", label: "Test di Cessione per Inerti****" }
       ],
       "Acque": [
         { key: "aua_liguria", label: "A.U.A. Liguria" },
@@ -317,7 +328,6 @@
       ]
     };
 
-    // Canvas Firma
     const canvas = document.getElementById('signature-pad');
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
@@ -330,24 +340,16 @@
     window.addEventListener('resize', resizeCanvas);
     setTimeout(resizeCanvas, 200);
 
-    function startPosition(e) {
-      isDrawing = true;
-      draw(e);
-    }
-    function endPosition() {
-      isDrawing = false;
-      ctx.beginPath();
-    }
+    function startPosition(e) { isDrawing = true; draw(e); }
+    function endPosition() { isDrawing = false; ctx.beginPath(); }
     function draw(e) {
       if (!isDrawing) return;
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#0f172a';
-
       const rect = canvas.getBoundingClientRect();
       const clientX = e.clientX || (e.touches && e.touches[0].clientX);
       const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-
       if (clientX && clientY) {
         ctx.lineTo(clientX - rect.left, clientY - rect.top);
         ctx.stroke();
@@ -359,7 +361,6 @@
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', endPosition);
     canvas.addEventListener('mousemove', draw);
-
     canvas.addEventListener('touchstart', startPosition);
     canvas.addEventListener('touchend', endPosition);
     canvas.addEventListener('touchmove', draw);
@@ -382,14 +383,6 @@
 
       const progInput = document.getElementById('prog_custom');
       const progVal = progInput.value.trim() || "XXX";
-      if (progInput.value.trim() !== "") {
-        progInput.classList.remove('bg-amber-100', 'border-amber-400');
-        progInput.classList.add('bg-white', 'border-slate-300');
-      } else {
-        progInput.classList.remove('bg-white', 'border-slate-300');
-        progInput.classList.add('bg-amber-100', 'border-amber-400');
-      }
-
       let wbsVal = "WBS";
       const wbsFirstRow = document.getElementById('c_1_wbs');
       if (wbsFirstRow && wbsFirstRow.value.trim() !== "") {
@@ -420,7 +413,6 @@
       if (!row) return;
       const checkboxes = row.querySelectorAll('input[type="checkbox"]');
       const hasChecked = Array.from(checkboxes).some(cb => cb.checked);
-      
       if (hasChecked) {
         row.classList.remove('row-analisi-vuota');
       } else {
@@ -431,6 +423,15 @@
     function renderAnalisiTable() {
       const matrice = document.getElementById('matrice_selezionata').value;
       document.getElementById('label_matrice_corrente').innerText = matrice;
+      
+      // Mostra o nasconde le note normative dei rifiuti in base alla matrice
+      const noteNormative = document.getElementById('note_normative_rifiuti');
+      if (matrice === "Rifiuto") {
+        noteNormative.classList.remove('hidden');
+      } else {
+        noteNormative.classList.add('hidden');
+      }
+
       const cols = matrixAnalysesConfig[matrice] || matrixAnalysesConfig["Sottoprodotto"];
 
       const thead = document.getElementById('analisi_thead');
@@ -463,12 +464,6 @@
     function onMatriceChange() {
       renderAnalisiTable();
     }
-
-    document.addEventListener('input', (e) => {
-      if (e.target.id === 'datetime' || e.target.id === 'prog_custom') {
-        updateIdentificativo();
-      }
-    });
 
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
@@ -563,6 +558,42 @@
         setTimeout(() => loadFromCloud(loadKey), 400);
       }
     });
+
+    function downloadPDF() {
+      window.print();
+    }
+
+    function generatePDFAndSendEmail() {
+      const id = document.getElementById('identificativo').value.trim() || "CDC_N.D.";
+      const localita = document.getElementById('localita').value.trim() || "Cantiere";
+      const matrice = document.getElementById('matrice_selezionata').value;
+      const fileName = `${id.replace(/[\/\\#$[[\]]/g, "_")}.pdf`;
+
+      window.print();
+
+      const dest = document.getElementById('email_destinatari').value;
+      const cc = document.getElementById('email_cc').value;
+
+      const subject = encodeURIComponent(`Catena di Custodia - ${id} - ${localita} [${matrice}]`);
+      const body = encodeURIComponent(
+        `Buongiorno,\n\n` +
+        `Si trasmette in allegato il verbale di Catena di Custodia n. ${id}\n` +
+        `Matrice: ${matrice}\n` +
+        `Località / Cantiere: ${localita}\n\n` +
+        `* NOTA OPERATIVO: Ricordarsi di allegare il file PDF "${fileName}" scaricato.* \n\n` +
+        `Cordiali saluti,\n` +
+        `Consorzio COCIV — Terzo Valico dei Giovi`
+      );
+
+      let mailtoLink = `mailto:${dest}?subject=${subject}&body=${body}`;
+      if (cc.trim() !== "") {
+        mailtoLink += `&cc=${encodeURIComponent(cc)}`;
+      }
+
+      setTimeout(() => {
+        window.location.href = mailtoLink;
+      }, 1000);
+    }
 
     function saveCampionamentoToCloud() {
       const identificativo = document.getElementById('identificativo').value.trim() || "Campionamento_" + Date.now();
@@ -696,23 +727,6 @@
           }
         }
       });
-    }
-
-    function sendEmailReport() {
-      const dest = document.getElementById('email_destinatari').value;
-      const cc = document.getElementById('email_cc').value;
-      const id = document.getElementById('identificativo').value || "CDC-N.D.";
-      const localita = document.getElementById('localita').value || "N.D.";
-
-      const subject = encodeURIComponent(`Catena di Custodia - ${id} - ${localita}`);
-      const body = encodeURIComponent(`Buongiorno,\n\nSi trasmette in allegato la Catena di Custodia n. ${id} relativa al cantiere: ${localita}.\n\nCordiali saluti.`);
-
-      let mailtoLink = `mailto:${dest}?subject=${subject}&body=${body}`;
-      if (cc.trim() !== "") {
-        mailtoLink += `&cc=${encodeURIComponent(cc)}`;
-      }
-
-      window.location.href = mailtoLink;
     }
   </script>
 </body>
