@@ -117,17 +117,103 @@
           </table>
         </div>
 
-        <!-- Note della sezione A -->
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] bg-slate-50 p-3 rounded-lg border">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):[cite: 13]</label>
-            <textarea id="note_campo" rows="2" placeholder="Indicare se tal quale, scarto frazione >20mm, materiale antropico..." class="w-full border rounded p-1 bg-white"></textarea>
+        <!-- Note e Opzioni Avanzate (Sezione Stella) -->
+        <div class="mt-4 bg-slate-50 p-4 rounded-lg border border-slate-300 space-y-4 text-xs">
+          <h4 class="font-bold text-slate-800 uppercase tracking-wider border-b pb-1">
+            <i class="fa-solid fa-list-check text-emerald-700"></i> Legenda e Specifiche di Campionamento
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            <!-- (*) Tipologia -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">(*) Tipologia Punto Prelievo:</label>
+              <select id="legenda_tipologia" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Seleziona tipologia --</option>
+                <option value="TBM nastro">TBM nastro</option>
+                <option value="Fronte di scavo">Fronte di scavo</option>
+                <option value="Cumulo di stoccaggio">Cumulo di stoccaggio</option>
+                <option value="Vasca di stoccaggio">Vasca di stoccaggio</option>
+                <option value="Trincea o scavo">Trincea o scavo</option>
+                <option value="Sondaggio a carotaggio">Sondaggio a carotaggio</option>
+                <option value="Perforazione a distruzione">Perforazione a distruzione</option>
+                <option value="Topsoil">Topsoil</option>
+                <option value="Affioramento superficiale">Affioramento superficiale</option>
+              </select>
+            </div>
+
+            <!-- (**) Natura e Stato -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">(**) Natura e Stato Campione:</label>
+              <div class="flex gap-2">
+                <select id="legenda_natura" class="w-1/2 border rounded p-1.5 bg-white">
+                  <option value="">Natura...</option>
+                  <option value="TER">TER (Terra e Roccia)</option>
+                  <option value="RIP">RIP (Riporto)</option>
+                  <option value="RIF">RIF (Rifiuto)</option>
+                </select>
+                <select id="legenda_stato" class="w-1/2 border rounded p-1.5 bg-white">
+                  <option value="">Stato...</option>
+                  <option value="Solido">Solido</option>
+                  <option value="Polverulento">Polverulento</option>
+                  <option value="Fangoso">Fangoso</option>
+                  <option value="Liquido">Liquido</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- (***) Metodo Campionatura -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">(***) Metodo e Campionatura:</label>
+              <div class="flex gap-2">
+                <select id="legenda_campione" class="w-1/2 border rounded p-1.5 bg-white">
+                  <option value="">Tipo...</option>
+                  <option value="Grezzo">Grezzo</option>
+                  <option value="Composito">Composito</option>
+                  <option value="Puntuale">Puntuale</option>
+                  <option value="Talquale">Talquale</option>
+                </select>
+                <select id="legenda_norma" class="w-1/2 border rounded p-1.5 bg-white">
+                  <option value="">Norma UNI...</option>
+                  <option value="Casuale">Casuale</option>
+                  <option value="Stratificata">Stratificata</option>
+                  <option value="Sistematica">Sistematica</option>
+                  <option value="Dinamica">Dinamica</option>
+                  <option value="Selettiva">Selettiva</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- (****) Contenitore -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">(****) Contenitore Campione:</label>
+              <select id="legenda_contenitore" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Seleziona contenitore --</option>
+                <option value="(1) Busta in plastica">(1) Busta in plastica</option>
+                <option value="(2) Barattolo in PE">(2) Barattolo in PE</option>
+                <option value="(3) Bottiglia in vetro">(3) Bottiglia in vetro</option>
+                <option value="(4) Vials">(4) Vials</option>
+                <option value="(5) Bottiglia in PE">(5) Bottiglia in PE</option>
+              </select>
+            </div>
+
+            <!-- (*****) Note di Campo a Scelta Rapida (Checkbox) -->
+            <div class="md:col-span-2">
+              <label class="block font-bold text-slate-700 mb-1">(*****) Note di Campo / Trattamento Frazioni:</label>
+              <div class="flex flex-wrap gap-3 bg-white p-2 border rounded">
+                <label class="flex items-center gap-1.5"><input type="checkbox" id="note_a" class="accent-emerald-600"> (A) Tal quale</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" id="note_b" class="accent-emerald-600"> (B) Scartata frazione > 20 mm</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" id="note_c" class="accent-emerald-600"> (C) Scartata frazione organica</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" id="note_d" class="accent-emerald-600"> (D) Scartato materiale antropico</label>
+              </div>
+            </div>
+
           </div>
-          <div class="space-y-1 text-slate-600">
-            <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento[cite: 13].</p>
-            <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido[cite: 13].</p>
-            <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva[cite: 13].</p>
-            <p><strong>(****) Contenitore:</strong> (1) Busta PE, (2) Barattolo PE, (3) Bottiglia vetro, (4) Vials, (5) Bottiglia PE[cite: 13].</p>
+
+          <!-- Testo libero aggiuntivo per altre note -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Altre Note Aggiuntive:</label>
+            <input type="text" id="note_campo" placeholder="Eventuali annotazioni specifiche..." class="w-full border rounded p-1.5 bg-white">
           </div>
         </div>
       </section>
