@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -37,7 +36,6 @@
       </div>
     </div>
     <div class="flex items-center gap-2 flex-wrap">
-      <!-- NUOVO PULSANTE HOME -->
       <a href="index.html" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 transition">
         <i class="fa-solid fa-house"></i> <span class="hidden sm:inline">Home</span>
       </a>
@@ -58,14 +56,12 @@
   </div>
 </header>
 
-
   <main class="max-w-5xl mx-auto my-6 px-4 print-container">
     <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-8">
 
       <!-- FRONTALINO UFFICIALE DI INTESTAZIONE -->
       <table class="w-full border-collapse border border-slate-900 mb-6 header-table text-slate-900">
         <tr>
-          <!-- Cella Sinistra: General Contractor -->
           <td class="w-1/2 border border-slate-900 p-3 align-top bg-white">
             <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-600 mb-1">GENERAL CONTRACTOR</div>
             <div class="flex items-center gap-2 my-2">
@@ -76,8 +72,6 @@
               </div>
             </div>
           </td>
-
-          <!-- Cella Destra: Alta Sorveglianza -->
           <td class="w-1/2 border border-slate-900 p-3 align-top bg-white">
             <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-600 mb-1">ALTA SORVEGLIANZA</div>
             <div class="flex items-center gap-2 my-2">
@@ -86,14 +80,10 @@
             <div class="text-[9px] font-bold text-slate-600 uppercase tracking-tight">GRUPPO FERROVIE DELLO STATO ITALIANE</div>
           </td>
         </tr>
-
         <tr>
-          <!-- Titolo Documento -->
           <td class="w-1/2 border border-slate-900 p-3 align-middle bg-slate-50">
             <h2 class="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Verbale di sopralluogo</h2>
           </td>
-
-          <!-- Riferimento Procedura -->
           <td class="w-1/2 border border-slate-900 p-3 align-middle bg-slate-50">
             <p class="text-xs font-semibold text-slate-800 leading-snug">
               Allegato 5 Procedura: Sorveglianza ambientale dei lavori - IG51-0-0-E-CV-PS-IM-00-0-0-006
@@ -205,7 +195,6 @@
   </main>
 
   <script>
-    // Configurazione Firebase Realtime Database
     const firebaseConfig = {
       databaseURL: "https://vstvg-1f2f6-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -233,7 +222,7 @@
       { id: "comp9", title: "9. CONFORMITÀ LEGISLATIVA", subsections: [{ items: ["Aggiornamento Quadro degli Adempimenti Ambientali", "Presenza e aggiornamento del registro delle autorizzazioni", "Aggiornamento semestrale della verifica di conformità legislativa"] }] }
     ];
 
-        const photoStore = {};
+    const fileStore = {};
     const participantsList = [];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -244,7 +233,6 @@
       renderAspects();
       initCanvases();
 
-      // CONTROLLO PER IL CARICAMENTO AUTOMATICO DALL'URL (Dalla Home)
       const urlParams = new URLSearchParams(window.location.search);
       const loadKey = urlParams.get('load');
       if (loadKey) {
@@ -294,8 +282,6 @@
                 document.getElementById('observations-list').innerHTML = '';
                 record.observations.forEach(obs => addObservation(obs));
               }
-
-              console.log("Verbale caricato correttamente: ", loadKey);
             } else {
               alert("Impossibile trovare i dati per questa chiave nel Cloud.");
             }
@@ -309,9 +295,7 @@
       const ruoloInput = document.getElementById('input-partecipante-ruolo');
       const nome = nomeInput.value.trim();
       const ruolo = ruoloInput.value.trim();
-
       if (!nome) return;
-
       participantsList.push({ nome, ruolo });
       nomeInput.value = '';
       ruoloInput.value = '';
@@ -369,7 +353,7 @@
           let itemsHTML = '';
           sub.items.forEach((itemText, iIdx) => {
             const key = `item_${aIdx}_${sIdx}_${iIdx}`;
-            if (!photoStore[key]) photoStore[key] = [];
+            if (!fileStore[key]) fileStore[key] = [];
 
             itemsHTML += `
               <div class="p-3 bg-slate-50/70 border border-slate-200 rounded mb-2">
@@ -382,13 +366,13 @@
                       <label class="bg-slate-100 text-slate-600 px-2 py-1 rounded cursor-pointer border"><input type="radio" name="${key}_val" value="NA" checked> N.A.</label>
                     </div>
                     <label class="no-print bg-white hover:bg-slate-100 border text-slate-700 text-xs px-2 py-1 rounded cursor-pointer flex items-center gap-1 shadow-sm">
-                      <i class="fa-solid fa-camera text-slate-500"></i> Foto
-                      <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoUpload(event, '${key}')">
+                      <i class="fa-solid fa-paperclip text-slate-500"></i> Allega (Foto/PDF)
+                      <input type="file" accept="image/*,.pdf" multiple class="hidden" onchange="handleFileUpload(event, '${key}')">
                     </label>
                   </div>
                 </div>
                 <input type="text" id="${key}_note" placeholder="Note specifiche..." class="w-full border border-slate-300 rounded px-2 py-1 text-xs mt-2 bg-white">
-                <div id="${key}_photos" class="flex flex-wrap gap-2 mt-2"></div>
+                <div id="${key}_files" class="flex flex-wrap gap-2 mt-2"></div>
               </div>
             `;
           });
@@ -411,30 +395,50 @@
       });
     }
 
-    function handlePhotoUpload(event, key) {
+    function handleFileUpload(event, key) {
       const files = event.target.files;
-      if (!files || !files[0]) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        if (!photoStore[key]) photoStore[key] = [];
-        photoStore[key].push(e.target.result);
-        renderPhotos(key);
-      };
-      reader.readAsDataURL(files[0]);
+      if (!files || files.length === 0) return;
+
+      if (!fileStore[key]) fileStore[key] = [];
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          fileStore[key].push({
+            name: file.name,
+            type: file.type,
+            data: e.target.result
+          });
+          renderFiles(key);
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
-    function renderPhotos(key) {
-      const container = document.getElementById(`${key}_photos`);
+    function renderFiles(key) {
+      const container = document.getElementById(`${key}_files`);
       if (!container) return;
       container.innerHTML = '';
-      (photoStore[key] || []).forEach((src, idx) => {
-        container.innerHTML += `
-          <div class="relative inline-block mr-2 mb-2">
-            <!-- Modifica w-24 h-24 a piacimento (es. w-32 h-32 per farle ancora più grandi) -->
-            <img src="${src}" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
-            <button onclick="photoStore['${key}'].splice(${idx},1); renderPhotos('${key}')" class="no-print absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center font-bold shadow">&times;</button>
-          </div>
-        `;
+      
+      (fileStore[key] || []).forEach((fileObj, idx) => {
+        const isPdf = fileObj.type === 'application/pdf' || (fileObj.name && fileObj.name.toLowerCase().endsWith('.pdf'));
+        
+        if (isPdf) {
+          container.innerHTML += `
+            <div class="relative inline-flex items-center gap-2 bg-slate-100 border px-3 py-2 rounded-lg shadow-sm mr-2 mb-2">
+              <i class="fa-solid fa-file-pdf text-red-600 text-xl"></i>
+              <div class="text-xs max-w-[120px] truncate font-medium text-slate-700">${fileObj.name || 'Documento.pdf'}</div>
+              <button onclick="fileStore['${key}'].splice(${idx},1); renderFiles('${key}')" class="no-print bg-red-600 text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center font-bold shadow ml-1">&times;</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML += `
+            <div class="relative inline-block mr-2 mb-2">
+              <img src="${fileObj.data}" class="w-20 h-20 object-cover rounded-lg border shadow-sm">
+              <button onclick="fileStore['${key}'].splice(${idx},1); renderFiles('${key}')" class="no-print absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold shadow">&times;</button>
+            </div>
+          `;
+        }
       });
     }
 
@@ -496,7 +500,6 @@
       canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // SALVATAGGIO IN CLOUD (Firebase) con reindirizzamento automatico
     function saveToCloud() {
       const cantiere = document.getElementById('cantiere').value.trim() || "Cantiere";
       const area = document.getElementById('area').value.trim() || "Area";
@@ -517,7 +520,8 @@
             const noteEl = document.getElementById(`${key}_note`);
             aspectsState[key] = {
               val: val,
-              note: noteEl ? noteEl.value : ''
+              note: noteEl ? noteEl.value : '',
+              files: fileStore[key] || []
             };
           });
         });
@@ -545,102 +549,39 @@
         area: document.getElementById('area').value,
         datetime: document.getElementById('datetime').value,
         oggetto: document.getElementById('oggetto').value,
+        participantsList: participantsList,
+        aspectsState: aspectsState,
+        observations: observations,
         conclusioni: document.getElementById('conclusioni').value,
         nomeRedattore: document.getElementById('nome-redattore').value,
         nomeDirezione: document.getElementById('nome-direzione').value,
-        participantsList: participantsList,
-        aspectsState: aspectsState,
-        photoStore: photoStore,
-        observations: observations,
         timestamp: Date.now()
       };
 
       db.ref('verbali/' + docId.replace(/[.#$/[\]]/g, "_")).set(formData, (error) => {
         if (error) {
-          alert("Errore nel salvataggio Cloud: " + error.message);
+          alert("Errore durante il salvataggio: " + error.message);
         } else {
-          alert("☁️ Bozza salvata in Cloud con successo!\nIdentificativo: " + docId);
-          // Reindirizzamento automatico alla home page dopo il salvataggio
-          window.location.href = "index.html";
+          alert("☁️ Verbale salvato con successo nel Cloud!");
+          window.location.href = "verbali-archivio.html";
         }
       });
     }
 
-    // Funzione per stampare / esportare e tornare alla home
+    function loadFromCloud() {
+      const docId = prompt("Inserisci l'ID del verbale salvato da caricare:");
+      if (!docId) return;
+      window.location.href = `verbale.html?load=${encodeURIComponent(docId.trim())}`;
+    }
+
+    function resetForm() {
+      if (confirm("Vuoi ripulire tutti i campi del modulo?")) {
+        window.location.href = "verbale.html";
+      }
+    }
+
     function exportAndGoHome() {
       window.print();
-      // Opzionalmente, se vuoi rimandare alla home dopo la stampa:
-      // window.location.href = "index.html";
-    }
-
-    // CARICAMENTO DAL CLOUD (Firebase)
-    function loadFromCloud() {
-      db.ref('verbali').once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) {
-          alert("Nessuna bozza trovata nel Cloud.");
-          return;
-        }
-
-        const keys = Object.keys(data);
-        const selectedKey = prompt("Bozze disponibili nel Cloud:\n\n- " + keys.join("\n- ") + "\n\nDigita il nome esatto della bozza da caricare:");
-        if (!selectedKey || !data[selectedKey]) return;
-
-        const record = data[selectedKey];
-        if (record.cantiere) document.getElementById('cantiere').value = record.cantiere;
-        if (record.area) document.getElementById('area').value = record.area;
-        if (record.datetime) document.getElementById('datetime').value = record.datetime;
-        if (record.oggetto) document.getElementById('oggetto').value = record.oggetto;
-        if (record.conclusioni) document.getElementById('conclusioni').value = record.conclusioni;
-        if (record.nomeRedattore) document.getElementById('nome-redattore').value = record.nomeRedattore;
-        if (record.nomeDirezione) document.getElementById('nome-direzione').value = record.nomeDirezione;
-
-        if (record.participantsList) {
-          participantsList.length = 0;
-          participantsList.push(...record.participantsList);
-          renderParticipants();
-        }
-
-        if (record.photoStore) {
-          Object.assign(photoStore, record.photoStore);
-          Object.keys(photoStore).forEach(k => renderPhotos(k));
-        }
-
-        if (record.aspectsState) {
-          environmentalAspects.forEach((aspect, aIdx) => {
-            const isChecked = record.aspectsState[aIdx] || false;
-            const chk = document.getElementById(`aspect_toggle_${aIdx}`);
-            if (chk) {
-              chk.checked = isChecked;
-              toggleAspect(aIdx);
-            }
-
-            aspect.subsections.forEach((sub, sIdx) => {
-              sub.items.forEach((itemText, iIdx) => {
-                const key = `item_${aIdx}_${sIdx}_${iIdx}`;
-                const itemData = record.aspectsState[key];
-                if (itemData) {
-                  const radios = document.querySelectorAll(`input[name="${key}_val"]`);
-                  radios.forEach(r => { if (r.value === itemData.val) r.checked = true; });
-                  const noteEl = document.getElementById(`${key}_note`);
-                  if (noteEl) noteEl.value = itemData.note || '';
-                }
-              });
-            });
-          });
-        }
-
-        if (record.observations) {
-          document.getElementById('observations-list').innerHTML = '';
-          record.observations.forEach(obs => addObservation(obs));
-        }
-
-        alert("📂 Bozza caricata con successo dal Cloud!");
-      });
-    }
-
-    function resetForm() { 
-      if(confirm("Sei sicuro di voler resettare tutti i campi?")) location.reload(); 
     }
   </script>
 </body>
