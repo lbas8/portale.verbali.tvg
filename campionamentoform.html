@@ -14,7 +14,10 @@
   <style>
     @media print {
       .no-print { display: none !important; }
-      body { background-color: #fff !important; font-size: 8.5pt; color: #000 !important; }
+      body { background-color: #fff !important; font-size: 8pt; color: #000 !important; }
+      
+      main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+      .bg-white { border: none !important; box-shadow: none !important; padding: 0 !important; }
       
       input, select, textarea { 
         border: none !important; 
@@ -22,10 +25,10 @@
         appearance: none !important;
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
-        padding: 1px !important;
+        padding: 0px !important;
         margin: 0 !important;
         color: #000 !important;
-        font-size: 8pt !important;
+        font-size: 7.5pt !important;
       }
 
       select::-ms-expand { display: none; }
@@ -55,7 +58,7 @@
       input[type="checkbox"]:checked::after {
         content: "X" !important;
         font-weight: bold !important;
-        font-size: 10pt !important;
+        font-size: 9pt !important;
         color: #000 !important;
       }
 
@@ -66,7 +69,11 @@
 
       canvas { 
         border: 1px solid #94a3b8 !important; 
-        max-height: 70px !important;
+        max-height: 50px !important;
+      }
+
+      .page-break {
+        page-break-before: always;
       }
     }
   </style>
@@ -75,119 +82,126 @@
 
   <!-- TOP BAR COMANDI -->
   <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md no-print">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center space-x-3">
-        <i class="fa-solid fa-vial-circle-check text-emerald-400 text-2xl"></i>
+        <i class="fa-solid fa-vial-circle-check text-emerald-400 text-xl"></i>
         <div>
-          <h1 class="font-bold text-base leading-tight">Catena di Custodia - Campionamento</h1>
-          <p class="text-[11px] text-slate-400">Terzo Valico dei Giovi | Matrice: Suolo e Sottosuolo</p>
+          <h1 class="font-bold text-sm leading-tight">Catena di Custodia - Campionamento</h1>
+          <p class="text-[10px] text-slate-400">Terzo Valico dei Giovi | Matrice: Suolo e Sottosuolo</p>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded text-sm flex items-center gap-1.5 transition border border-slate-700">
+        <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1 transition border border-slate-700">
           <i class="fa-solid fa-house"><span> Home</span></i>
         </a>
-        <a href="campionamenti.html" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-sm flex items-center gap-1.5 transition">
+        <a href="campionamenti.html" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1 transition">
           <i class="fa-solid fa-arrow-left"><span> Indietro</span></i>
         </a>
-        <button onclick="saveCampionamentoToCloud()" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 transition font-medium">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Salva nel Cloud
+        <button onclick="saveCampionamentoToCloud()" class="bg-sky-600 hover:bg-sky-500 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition font-medium">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Salva Cloud
         </button>
-        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 transition font-medium">
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition font-medium">
           <i class="fa-solid fa-file-pdf"></i> Stampa / PDF
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto my-6 px-4">
-    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-8 space-y-8">
+  <main class="max-w-5xl mx-auto my-4 px-2">
+    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-4 md:p-6 space-y-4">
 
-      <!-- INTESTAZIONE UFFICIALE -->
-      <div class="border-2 border-slate-900 p-4 bg-slate-50">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-3">
-          <div class="flex items-center gap-4">
+      <!-- INTESTAZIONE UFFICIALE (COMPATTA) -->
+      <div class="border-2 border-slate-900 p-3 bg-slate-50 text-xs">
+        <!-- RIGA 1: LOGO, TITOLO E IDENTIFICATIVO SU UNA LINEA -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-slate-300 pb-2">
+          <div class="flex items-center gap-3">
             <div class="bg-white p-1 border border-slate-300 rounded flex items-center justify-center">
-              <img src="logo.png" alt="Logo" class="h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-              <span class="text-xs font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
+              <img src="logo.png" alt="Logo" class="h-8 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <span class="text-[10px] font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
             </div>
             <div>
-              <h2 class="text-lg font-black text-slate-900 uppercase">Verbale di Campionamento e Catena di Custodia</h2>
-              <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo</p>
+              <h2 class="text-sm font-black text-slate-900 uppercase leading-none">Verbale di Campionamento e Catena di Custodia</h2>
+              <p class="text-[10px] font-semibold text-slate-600 mt-0.5">Lavori del Terzo Valico dei Giovi — Matrice: Suolo e Sottosuolo</p>
             </div>
           </div>
-          <div class="text-right">
-            <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo (Composizione Automatica)</label>
-            <input type="text" id="identificativo" readonly class="border border-slate-400 rounded p-1 text-xs font-bold text-right bg-slate-100 w-full cursor-not-allowed">
+          
+          <!-- NUMERO IDENTIFICATIVO SU UNA SOLA LINEA -->
+          <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+            <label class="font-bold text-[10px] text-slate-700 uppercase whitespace-nowrap">N. ID:</label>
+            <input type="text" id="identificativo" readonly class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold bg-slate-100 text-slate-900 w-48 text-center cursor-not-allowed">
             
-            <div class="mt-1 flex items-center justify-end gap-1">
-              <span class="text-[10px] text-slate-500">Progressivo:</span>
-              <input type="text" id="prog_custom" placeholder="Es. 001" oninput="updateIdentificativo()" class="border border-amber-400 rounded p-1 text-xs font-bold text-center bg-amber-50 focus:bg-white w-20 transition">
+            <!-- Campo progressivo: visibile SOLO in compilazione a schermo (no-print) -->
+            <div class="no-print flex items-center gap-1 bg-amber-50 p-0.5 rounded border border-amber-300">
+              <span class="text-[9px] font-bold text-amber-800">Prog:</span>
+              <input type="text" id="prog_custom" placeholder="001" oninput="updateIdentificativo()" class="border border-amber-400 rounded px-1 py-0.5 text-xs font-bold text-center bg-amber-100 focus:bg-white w-12">
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-3">
-          <div>
-            <label class="block font-bold text-slate-600 mb-1">In Località / Ubicazione prelievo:</label>
-            <input type="text" id="localita" placeholder="Es. Area San Bovo / Cantiere..." class="w-full border rounded p-1.5 bg-white">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-600 mb-1">Esecutore Campionamento / Nominativo:</label>
-            <input type="text" id="esecutore" placeholder="Nome e Cognome / Società" class="w-full border rounded p-1.5 bg-white">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-600 mb-1">Laboratorio / Ente Incaricato:</label>
-            <input type="text" id="laboratorio" placeholder="Nome Laboratorio" class="w-full border rounded p-1.5 bg-white">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-600 mb-1">Data e Ora Campionamento:</label>
-            <input type="datetime-local" id="datetime" oninput="updateIdentificativo()" class="w-full border rounded p-1.5 bg-white">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-600 mb-1">Per conto di:</label>
-            <input type="text" id="per_conto" placeholder="Es. COCIV / General Contractor" class="w-full border rounded p-1.5 bg-white">
+        <!-- RIGA 2 & 3: DATI INTESTAZIONE DISTRIBUITI SU DUE COLONNE COMPATTE -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 mt-2">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 w-36 shrink-0">Ubicazione / Località:</label>
+              <input type="text" id="localita" placeholder="Es. CSL2 - Cravasco" class="w-full border rounded px-1.5 py-0.5 bg-white">
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 w-36 shrink-0">Esecutore Campionamento:</label>
+              <input type="text" id="esecutore" placeholder="Nome / Società" class="w-full border rounded px-1.5 py-0.5 bg-white">
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 w-36 shrink-0">Laboratorio Incaricato:</label>
+              <input type="text" id="laboratorio" placeholder="Nome Laboratorio" class="w-full border rounded px-1.5 py-0.5 bg-white">
+            </div>
           </div>
 
-          <!-- FIRMA A MANO LIBERA (CANVAS) -->
-          <div class="md:col-span-3">
-            <label class="block font-bold text-slate-600 mb-1">Firma del Campionatore:</label>
-            <div class="border border-slate-400 rounded bg-white p-2 flex flex-col items-center">
-              <canvas id="signature-pad" class="w-full h-24 border border-dashed border-slate-300 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
-              <div class="flex justify-between w-full mt-1">
-                <span class="text-[10px] text-slate-400">Usa il dito o il mouse per firmare</span>
-                <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-0.5 rounded border border-red-200 bg-red-50 no-print">
-                  <i class="fa-solid fa-eraser"></i> Cancella Firma
-                </button>
-              </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 w-36 shrink-0">Data e Ora Prelievo:</label>
+              <input type="datetime-local" id="datetime" oninput="updateIdentificativo()" class="w-full border rounded px-1.5 py-0.5 bg-white">
             </div>
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 w-36 shrink-0">Per conto di:</label>
+              <input type="text" id="per_conto" placeholder="Es. COCIV" class="w-full border rounded px-1.5 py-0.5 bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGA FIRMA A MANO LIBERA -->
+        <div class="mt-2 pt-2 border-t border-slate-200 flex flex-col md:flex-row items-center gap-2">
+          <label class="font-bold text-slate-700 shrink-0">Firma Campionatore:</label>
+          <div class="border border-slate-300 rounded bg-white p-1 flex-1 w-full flex items-center gap-2">
+            <canvas id="signature-pad" class="w-full h-12 border border-dashed border-slate-200 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
+            <button type="button" onclick="clearSignature()" class="text-[10px] text-red-600 hover:text-red-800 font-medium px-1.5 py-0.5 rounded border border-red-200 bg-red-50 no-print shrink-0">
+              <i class="fa-solid fa-eraser"></i>
+            </button>
           </div>
         </div>
       </div>
 
       <!-- SEZIONE A: TABELLA CAMPIONI (01 - 10) -->
       <section>
-        <div class="flex justify-between items-center mb-2">
-          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-            <span class="bg-emerald-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">A</span> 
+        <div class="flex justify-between items-center mb-1">
+          <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="bg-emerald-700 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">A</span> 
             Tabella dei Campioni Prelievi (01 - 10)
           </h3>
         </div>
 
         <div class="overflow-x-auto border border-slate-300 rounded-lg">
-          <table class="w-full text-left border-collapse text-[10px]">
+          <table class="w-full text-left border-collapse text-[9.5px]">
             <thead>
               <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
-                <th class="p-1.5 border-r text-center w-8">Rif.</th>
-                <th class="p-1.5 border-r w-28">Tipologia (*)</th>
-                <th class="p-1.5 border-r w-20">WBS / Pk</th>
-                <th class="p-1.5 border-r w-24">Codice [Etichetta]</th>
-                <th class="p-1.5 border-r w-20">Profondità</th>
-                <th class="p-1.5 border-r w-24">Natura / Stato (**)</th>
-                <th class="p-1.5 border-r w-28">Metodo (***)</th>
-                <th class="p-1.5 border-r text-center w-10">Incr.</th>
-                <th class="p-1.5 border-r w-24">Contenitore (****)</th>
-                <th class="p-1.5 text-center w-10">Repl.</th>
+                <th class="p-1 border-r text-center w-7">Rif.</th>
+                <th class="p-1 border-r w-28">Tipologia (*)</th>
+                <th class="p-1 border-r w-16">WBS / Pk</th>
+                <th class="p-1 border-r w-20">Codice [Etichetta]</th>
+                <th class="p-1 border-r w-16">Profondità</th>
+                <th class="p-1 border-r w-20">Natura / Stato (**)</th>
+                <th class="p-1 border-r w-24">Metodo (***)</th>
+                <th class="p-1 border-r text-center w-8">Incr.</th>
+                <th class="p-1 border-r w-20">Contenitore (****)</th>
+                <th class="p-1 text-center w-8">Repl.</th>
               </tr>
             </thead>
             <tbody id="rows-campionamento" class="divide-y divide-slate-200">
@@ -196,12 +210,13 @@
           </table>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] bg-slate-50 p-3 rounded-lg border">
+        <!-- Note della sezione A COMPATTE -->
+        <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 text-[9.5px] bg-slate-50 p-2 rounded border">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):</label>
-            <textarea id="note_campo" rows="2" placeholder="Indicare se tal quale, scarto frazione >20mm, materiale antropico..." class="w-full border rounded p-1 bg-white"></textarea>
+            <label class="block font-bold text-slate-700 mb-0.5">Note di Campo (*****):</label>
+            <textarea id="note_campo" rows="1" placeholder="Tal quale, scarto >20mm..." class="w-full border rounded p-1 bg-white text-[9.5px] h-9"></textarea>
           </div>
-          <div class="space-y-1 text-slate-600 text-[10px]">
+          <div class="text-slate-600 text-[8.5px] leading-tight space-y-0.5">
             <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento.</p>
             <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido.</p>
             <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva.</p>
@@ -212,23 +227,23 @@
 
       <!-- SEZIONE B: ANALISI DA ESEGUIRE -->
       <section>
-        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-          <span class="bg-emerald-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">B</span> 
+        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          <span class="bg-emerald-700 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">B</span> 
           Analisi da Eseguire presso il Laboratorio Incaricato
         </h3>
 
         <div class="overflow-x-auto border border-slate-300 rounded-lg">
-          <table class="w-full text-left border-collapse text-[10px]">
+          <table class="w-full text-left border-collapse text-[9.5px]">
             <thead>
               <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
-                <th class="p-1.5 border-r text-center w-8">Rif.</th>
-                <th class="p-1.5 border-r text-center">Amianto (MOCF/SEM)</th>
-                <th class="p-1.5 border-r text-center">DM 161/12 Tab. 4.1 [Ridotta (+)]</th>
-                <th class="p-1.5 border-r text-center">DM 161/12 Tab. 4.1 [Completa (++))]</th>
-                <th class="p-1.5 border-r text-center">D.Lgs 152/06 All.5 Tab.1 (Terre)</th>
-                <th class="p-1.5 border-r text-center">DM 05/02/98 Test Cessione (Recupero)</th>
-                <th class="p-1.5 border-r text-center">D.Lgs 121/20 Test Cessione (Discarica)</th>
-                <th class="p-1.5 text-center">D.Lgs 152/06 Pericolosità Rifiuto</th>
+                <th class="p-1 border-r text-center w-7">Rif.</th>
+                <th class="p-1 border-r text-center">Amianto (MOCF/SEM)</th>
+                <th class="p-1 border-r text-center">DM 161/12 Tab. 4.1 [Ridotta (+)]</th>
+                <th class="p-1 border-r text-center">DM 161/12 Tab. 4.1 [Completa (++))]</th>
+                <th class="p-1 border-r text-center">D.Lgs 152/06 All.5 Tab.1 (Terre)</th>
+                <th class="p-1 border-r text-center">DM 05/02/98 Test Cessione (Recupero)</th>
+                <th class="p-1 border-r text-center">D.Lgs 121/20 Test Cessione (Discarica)</th>
+                <th class="p-1 text-center">D.Lgs 152/06 Pericolosità Rifiuto</th>
               </tr>
             </thead>
             <tbody id="rows-analisi" class="divide-y divide-slate-200">
@@ -236,54 +251,51 @@
             </tbody>
           </table>
         </div>
-        <div class="mt-3">
-          <label class="block text-xs font-bold text-slate-700 mb-1">Altre analisi da eseguire:</label>
-          <input type="text" id="altre_analisi" placeholder="Eventuali parametri specifici richiesti..." class="w-full border rounded p-1.5 text-xs bg-white">
+        <div class="mt-1.5">
+          <label class="block text-[10px] font-bold text-slate-700 mb-0.5">Altre analisi da eseguire:</label>
+          <input type="text" id="altre_analisi" placeholder="Eventuali parametri specifici..." class="w-full border rounded p-1 text-[10px] bg-white">
         </div>
       </section>
 
-      <!-- SEZIONE C, D: DELEGA E TRASPORTO -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="border rounded-lg p-4 bg-slate-50 space-y-3">
-          <h4 class="font-bold text-slate-800 uppercase">C) Eventuale Delega Consegna Aliquota</h4>
-          <input type="text" id="delega_info" placeholder="Dati delegato / motivazione" class="w-full border rounded p-1.5 bg-white">
-          <div class="grid grid-cols-2 gap-2">
+      <!-- SEZIONE C, D: DELEGA E TRASPORTO (COMPATTE) -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[10px]">
+        <div class="border rounded p-2 bg-slate-50 space-y-1.5">
+          <h4 class="font-bold text-slate-800 uppercase text-[10px]">C) Eventuale Delega Consegna Aliquota</h4>
+          <input type="text" id="delega_info" placeholder="Dati delegato / motivazione" class="w-full border rounded p-1 bg-white">
+          <div class="grid grid-cols-2 gap-1.5">
             <input type="text" id="delega_consegnato" placeholder="Consegnato da (Firma)" class="border rounded p-1 bg-white">
             <input type="text" id="delega_ricevuto" placeholder="Ricevuto da (Firma)" class="border rounded p-1 bg-white">
           </div>
         </div>
 
-        <div class="border rounded-lg p-4 bg-slate-50 space-y-3">
-          <h4 class="font-bold text-slate-800 uppercase">D) Trasporto e Consegna al Laboratorio</h4>
-          <input type="text" id="trasporto_societa" placeholder="Società trasportatrice / incaricato" class="w-full border rounded p-1.5 bg-white">
-          <div class="grid grid-cols-2 gap-2">
+        <div class="border rounded p-2 bg-slate-50 space-y-1.5">
+          <h4 class="font-bold text-slate-800 uppercase text-[10px]">D) Trasporto e Consegna al Laboratorio</h4>
+          <input type="text" id="trasporto_societa" placeholder="Società trasportatrice / incaricato" class="w-full border rounded p-1 bg-white">
+          <div class="grid grid-cols-2 gap-1.5">
             <input type="text" id="trasporto_data" placeholder="Data e Ora consegna" class="border rounded p-1 bg-white">
             <input type="text" id="trasporto_ricevuto" placeholder="Ricevuto c/o Laboratorio (Firma)" class="border rounded p-1 bg-white">
           </div>
         </div>
       </section>
 
-      <!-- SEZIONE INVIO EMAIL -->
-      <section class="border-t-2 border-emerald-600 pt-6 bg-emerald-50/50 p-6 rounded-xl no-print">
-        <h3 class="text-sm font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+      <!-- SEZIONE INVIO EMAIL (NASCOSTA IN STAMPA) -->
+      <section class="border-t border-emerald-600 pt-3 bg-emerald-50/50 p-3 rounded-lg no-print">
+        <h3 class="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1 flex items-center gap-1.5">
           <i class="fa-solid fa-envelope text-emerald-700"></i> Invio Modulo via E-mail
         </h3>
-        <p class="text-xs text-slate-600 mb-4">
-          La presente catena di custodia dovrà essere anticipata via e-mail e successivamente restituita in originale firmata assieme ai certificati di analisi.
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Destinatari Principali (@cociv.it):</label>
-            <input type="text" id="email_destinatari" value="@cociv.it" class="w-full border rounded p-2 bg-white">
+            <label class="block font-bold text-slate-700 mb-0.5 text-[10px]">Destinatari Principali (@cociv.it):</label>
+            <input type="text" id="email_destinatari" value="@cociv.it" class="w-full border rounded p-1 bg-white text-xs">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Copia Conoscenza (Cc):</label>
-            <input type="text" id="email_cc" placeholder="Altre e-mail separate da virgola" class="w-full border rounded p-2 bg-white">
+            <label class="block font-bold text-slate-700 mb-0.5 text-[10px]">Copia Conoscenza (Cc):</label>
+            <input type="text" id="email_cc" placeholder="Altre e-mail separate da virgola" class="w-full border rounded p-1 bg-white text-xs">
           </div>
         </div>
-        <div class="mt-4 flex justify-end">
-          <button onclick="sendEmailReport()" class="bg-teal-700 hover:bg-teal-600 text-white px-4 py-2 rounded text-xs font-medium flex items-center gap-2 shadow transition">
-            <i class="fa-solid fa-paper-plane"></i> Genera e Invia E-mail con Dati
+        <div class="mt-2 flex justify-end">
+          <button onclick="sendEmailReport()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1.5 shadow transition">
+            <i class="fa-solid fa-paper-plane"></i> Genera e Invia E-mail
           </button>
         </div>
       </section>
@@ -366,11 +378,11 @@
       const progInput = document.getElementById('prog_custom');
       const progVal = progInput.value.trim() || "XXX";
       if (progInput.value.trim() !== "") {
-        progInput.classList.remove('bg-amber-50', 'border-amber-400');
+        progInput.classList.remove('bg-amber-100', 'border-amber-400');
         progInput.classList.add('bg-white', 'border-slate-300');
       } else {
         progInput.classList.remove('bg-white', 'border-slate-300');
-        progInput.classList.add('bg-amber-50', 'border-amber-400');
+        progInput.classList.add('bg-amber-100', 'border-amber-400');
       }
 
       let wbsVal = "WBS";
@@ -383,7 +395,6 @@
       document.getElementById('identificativo').value = idFinale;
     }
 
-    // Controllo dinamico se la riga del campione è compilata
     function checkCampioneCompilato(i) {
       const row = document.getElementById(`tr_campione_${i}`);
       const tipologia = document.getElementById(`c_${i}_tipologia`).value;
@@ -399,7 +410,6 @@
       updateIdentificativo();
     }
 
-    // Controllo dinamico se la riga di analisi è compilata
     function checkAnalisiVuota(i) {
       const row = document.getElementById(`tr_analisi_${i}`);
       const checkboxes = [
@@ -438,7 +448,6 @@
       for (let i = 1; i <= 10; i++) {
         const idStr = i < 10 ? `0${i}` : `${i}`;
         
-        // Di default le righe partono con la classe "vuota" per la stampa, tranne la prima o se caricate
         const isFirst = (i === 1);
         const campClass = isFirst ? "" : "row-campione-vuota";
         const analClass = isFirst ? "" : "row-analisi-vuota";
@@ -447,7 +456,7 @@
           <tr id="tr_campione_${i}" class="${campClass}">
             <td class="p-1 border-r text-center font-bold bg-slate-50">${idStr}</td>
             <td class="p-1 border-r">
-              <select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-1 bg-white text-[9.55px]">
+              <select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[9px]">
                 <option value="">-- Seleziona --</option>
                 <option value="TBM nastro">TBM nastro</option>
                 <option value="Fronte di scavo">Fronte di scavo</option>
@@ -460,18 +469,18 @@
                 <option value="Affioramento superficiale">Affioramento superficiale</option>
               </select>
             </td>
-            <td class="p-1 border-r"><input type="text" id="c_${i}_wbs" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-1 bg-white text-[10px]" placeholder="WBS / Pk"></td>
-            <td class="p-1 border-r"><input type="text" id="c_${i}_codice" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-1 bg-white font-bold text-[10px]" placeholder="Etichetta"></td>
-            <td class="p-1 border-r"><input type="text" id="c_${i}_prof" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-1 bg-white text-[10px]" placeholder="Profondità"></td>
+            <td class="p-1 border-r"><input type="text" id="c_${i}_wbs" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[9px]" placeholder="WBS / Pk"></td>
+            <td class="p-1 border-r"><input type="text" id="c_${i}_codice" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white font-bold text-[9px]" placeholder="Etichetta"></td>
+            <td class="p-1 border-r"><input type="text" id="c_${i}_prof" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[9px]" placeholder="Profondità"></td>
             <td class="p-1 border-r">
               <div class="flex gap-0.5">
-                <select id="c_${i}_natura" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
+                <select id="c_${i}_natura" class="w-1/2 border rounded p-0.5 bg-white text-[8.5px]">
                   <option value="">Nat.</option>
                   <option value="TER">TER</option>
                   <option value="RIP">RIP</option>
                   <option value="RIF">RIF</option>
                 </select>
-                <select id="c_${i}_stato" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
+                <select id="c_${i}_stato" class="w-1/2 border rounded p-0.5 bg-white text-[8.5px]">
                   <option value="">Stato</option>
                   <option value="Solido">Solido</option>
                   <option value="Polverulento">Polv.</option>
@@ -482,14 +491,14 @@
             </td>
             <td class="p-1 border-r">
               <div class="flex gap-0.5">
-                <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
+                <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-0.5 bg-white text-[8.5px]">
                   <option value="">Tipo</option>
                   <option value="Grezzo">Grezzo</option>
                   <option value="Composito">Composito</option>
                   <option value="Puntuale">Puntuale</option>
                   <option value="Talquale">Talquale</option>
                 </select>
-                <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
+                <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-0.5 bg-white text-[8.5px]">
                   <option value="">Norma</option>
                   <option value="Casuale">Casuale</option>
                   <option value="Stratificata">Strat.</option>
@@ -499,9 +508,9 @@
                 </select>
               </div>
             </td>
-            <td class="p-1 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-1 text-center bg-white text-[10px]" value="1"></td>
+            <td class="p-1 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-0.5 text-center bg-white text-[9px]" value="1"></td>
             <td class="p-1 border-r">
-              <select id="c_${i}_contenitore" class="w-full border rounded p-1 bg-white text-[9.5px]">
+              <select id="c_${i}_contenitore" class="w-full border rounded p-0.5 bg-white text-[8.5px]">
                 <option value="">-- Cont. --</option>
                 <option value="(1) Busta in plastica">(1) Busta PE</option>
                 <option value="(2) Barattolo in PE">(2) Barattolo PE</option>
@@ -510,20 +519,20 @@
                 <option value="(5) Bottiglia in PE">(5) Bottiglia PE</option>
               </select>
             </td>
-            <td class="p-1 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-1 text-center bg-white text-[10px]" value="1"></td>
+            <td class="p-1 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-0.5 text-center bg-white text-[9px]" value="1"></td>
           </tr>
         `;
 
         rowsAnals.innerHTML += `
           <tr id="tr_analisi_${i}" class="${analClass}">
-            <td class="p-1.5 border-r text-center font-bold bg-slate-50">${idStr}</td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_amianto" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-1.5 text-center"><input type="checkbox" id="b_${i}_peric" onchange="checkAnalisiVuota(${i})" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center font-bold bg-slate-50">${idStr}</td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_amianto" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
+            <td class="p-1 text-center"><input type="checkbox" id="b_${i}_peric" onchange="checkAnalisiVuota(${i})" class="w-3.5 h-3.5 accent-emerald-600"></td>
           </tr>
         `;
       }
