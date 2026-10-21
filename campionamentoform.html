@@ -345,101 +345,6 @@
       ]
     };
 
-    function updateTipologieColumn() {
-      const matrice = document.getElementById('matrice_selezionata').value;
-      const headerCell = document.getElementById('header_tipologia_eer');
-
-      // Normalizzazione controllo maiuscole/minuscole
-      if (matrice.toLowerCase() === "rifiuto") {
-        if (headerCell) headerCell.innerText = "Potenziale EER (*)";
-
-        for (let i = 1; i <= 10; i++) {
-          const cell = document.getElementById(`cell_tipologia_${i}`);
-          if (!cell) continue;
-
-          cell.innerHTML = `
-            <input type="text" id="c_${i}_tipologia" list="cer_suggestions" 
-                   oninput="checkCampioneCompilato(${i})" 
-                   class="w-full border rounded p-0.5 bg-white text-[8.5px]" 
-                   placeholder="Codice EER o descrizione...">
-            <datalist id="cer_suggestions">
-              <option value="17 05 04 - Terre e rocce non pericolose">
-              <option value="17 05 03* - Terre e rocce pericolose">
-              <option value="17 01 01 - Cemento">
-              <option value="17 01 07 - Miscele di cemento, mattoni, mattonelle">
-              <option value="17 09 04 - Rifiuti misti dell'attività di costruzione">
-              <option value="19 13 02 - Fanghi da Bonifica / Trattamento">
-            </datalist>
-          `;
-        }
-      } else {
-        if (headerCell) headerCell.innerText = "Tipologia (*)";
-
-        const opzioni = matrixTipologieConfig[matrice] || matrixTipologieConfig["Sottoprodotto"];
-        for (let i = 1; i <= 10; i++) {
-          const cell = document.getElementById(`cell_tipologia_${i}`);
-          if (!cell) continue;
-
-          let optionsHTML = `<select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[8.5px]">`;
-          
-          if (opzioni.length > 1) {
-            optionsHTML += `<option value="">-- Seleziona --</option>`;
-          }
-          
-          opzioni.forEach(opt => {
-            optionsHTML += `<option value="${opt}">${opt}</option>`;
-          });
-          optionsHTML += `</select>`;
-          cell.innerHTML = optionsHTML;
-        }
-      }
-    }
-
-    function renderAnalisiTable() {
-      const matrice = document.getElementById('matrice_selezionata').value;
-      document.getElementById('label_matrice_corrente').innerText = matrice;
-      
-      const noteNormative = document.getElementById('note_normative_rifiuti');
-      if (matrice.toLowerCase() === "rifiuto") {
-        if (noteNormative) noteNormative.classList.remove('hidden');
-      } else {
-        if (noteNormative) noteNormative.classList.add('hidden');
-      }
-
-      const cols = matrixAnalysesConfig[matrice] || matrixAnalysesConfig["Sottoprodotto"];
-
-      const thead = document.getElementById('analisi_thead');
-      const tbody = document.getElementById('rows-analisi');
-
-      let headerHTML = `<tr class="bg-slate-200 text-slate-700 border-b border-slate-300"><th class="p-0.5 border-r text-center w-6">Rif.</th>`;
-      cols.forEach(col => {
-        headerHTML += `<th class="p-0.5 border-r text-center">${col.label}</th>`;
-      });
-      headerHTML += `</tr>`;
-      thead.innerHTML = headerHTML;
-
-      tbody.innerHTML = '';
-      for (let i = 1; i <= 10; i++) {
-        const idStr = i < 10 ? `0${i}` : `${i}`;
-        const isFirst = (i === 1);
-        const analClass = isFirst ? "" : "row-analisi-vuota";
-
-        let trHTML = `<tr id="tr_analisi_${i}" class="${analClass}">
-          <td class="p-1 border-r text-center font-bold bg-slate-50">${idStr}</td>`;
-        
-        cols.forEach(col => {
-          trHTML += `<td class="p-1 border-r text-center"><input type="checkbox" data-key="${col.key}" onchange="checkAnalisiVuota(${i})"></td>`;
-        });
-        trHTML += `</tr>`;
-        tbody.innerHTML += trHTML;
-      }
-    }
-
-    function onMatriceChange() {
-      renderAnalisiTable();
-      updateTipologieColumn();
-    }
-
     const canvas = document.getElementById('signature-pad');
     const ctx = canvas.getContext('2d');
     let isDrawing = false;
@@ -538,10 +443,10 @@
       document.getElementById('label_matrice_corrente').innerText = matrice;
       
       const noteNormative = document.getElementById('note_normative_rifiuti');
-      if (matrice === "Rifiuto") {
-        noteNormative.classList.remove('hidden');
+      if (matrice.toLowerCase() === "rifiuto") {
+        if (noteNormative) noteNormative.classList.remove('hidden');
       } else {
-        noteNormative.classList.add('hidden');
+        if (noteNormative) noteNormative.classList.add('hidden');
       }
 
       const cols = matrixAnalysesConfig[matrice] || matrixAnalysesConfig["Sottoprodotto"];
@@ -577,22 +482,18 @@
       const matrice = document.getElementById('matrice_selezionata').value;
       const headerCell = document.getElementById('header_tipologia_eer');
 
-      if (matrice === "Rifiuto") {
-        headerCell.innerText = "Potenziale EER (*)";
-      } else {
-        headerCell.innerText = "Tipologia (*)";
-      }
+      if (matrice.toLowerCase() === "rifiuto") {
+        if (headerCell) headerCell.innerText = "Potenziale EER (*)";
 
-      for (let i = 1; i <= 10; i++) {
-        const cell = document.getElementById(`cell_tipologia_${i}`);
-        if (!cell) continue;
+        for (let i = 1; i <= 10; i++) {
+          const cell = document.getElementById(`cell_tipologia_${i}`);
+          if (!cell) continue;
 
-        if (matrice === "RIFIUTO") {
           cell.innerHTML = `
             <input type="text" id="c_${i}_tipologia" list="cer_suggestions" 
                    oninput="checkCampioneCompilato(${i})" 
                    class="w-full border rounded p-0.5 bg-white text-[8.5px]" 
-                   placeholder="EER o descrizione...">
+                   placeholder="Codice EER o descrizione...">
             <datalist id="cer_suggestions">
               <option value="17 05 04 - Terre e rocce non pericolose">
               <option value="17 05 03* - Terre e rocce pericolose">
@@ -602,8 +503,15 @@
               <option value="19 13 02 - Fanghi da Bonifica / Trattamento">
             </datalist>
           `;
-        } else {
-          const opzioni = matrixTipologieConfig[matrice] || matrixTipologieConfig["Sottoprodotto"];
+        }
+      } else {
+        if (headerCell) headerCell.innerText = "Tipologia (*)";
+
+        const opzioni = matrixTipologieConfig[matrice] || matrixTipologieConfig["Sottoprodotto"];
+        for (let i = 1; i <= 10; i++) {
+          const cell = document.getElementById(`cell_tipologia_${i}`);
+          if (!cell) continue;
+
           let optionsHTML = `<select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[8.5px]">`;
           
           if (opzioni.length > 1) {
