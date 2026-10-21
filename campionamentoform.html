@@ -14,27 +14,37 @@
   <style>
     @media print {
       .no-print { display: none !important; }
-      body { background-color: #fff !important; font-size: 9pt; color: #000 !important; }
+      body { background-color: #fff !important; font-size: 8.5pt; color: #000 !important; }
       
-      /* Rimuove bordi e sfondi dai campi di input e dalle tendine in stampa */
+      /* Ottimizzazione input e tendine in stampa senza tagliare il testo */
       input, select, textarea { 
         border: none !important; 
         background: transparent !important; 
         appearance: none !important;
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
-        padding: 0 !important;
+        padding: 1px !important;
         margin: 0 !important;
         color: #000 !important;
-        font-size: 9pt !important;
+        font-size: 8pt !important;
       }
 
       select::-ms-expand { display: none; }
       select { background-image: none !important; }
 
+      /* Mantiene visibili le checkbox e le spunte in stampa PDF */
+      input[type="checkbox"] {
+        -webkit-appearance: checkbox !important;
+        appearance: checkbox !important;
+        border: 1px solid #000 !important;
+        width: 12px !important;
+        height: 12px !important;
+        background-color: #fff !important;
+      }
+
       canvas { 
         border: 1px solid #94a3b8 !important; 
-        max-height: 80px !important;
+        max-height: 70px !important;
       }
     }
   </style>
@@ -75,7 +85,6 @@
       <div class="border-2 border-slate-900 p-4 bg-slate-50">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-3">
           <div class="flex items-center gap-4">
-            <!-- LOGO / IMMAGINE AZIENDALE -->
             <div class="bg-white p-1 border border-slate-300 rounded flex items-center justify-center">
               <img src="logo.png" alt="Logo" class="h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
               <span class="text-xs font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
@@ -89,7 +98,6 @@
             <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo (Composizione Automatica)</label>
             <input type="text" id="identificativo" readonly class="border border-slate-400 rounded p-1 text-xs font-bold text-right bg-slate-100 w-full cursor-not-allowed">
             
-            <!-- Campo progressivo evidenziato in giallo -->
             <div class="mt-1 flex items-center justify-end gap-1">
               <span class="text-[10px] text-slate-500">Progressivo:</span>
               <input type="text" id="prog_custom" placeholder="Es. 001" oninput="updateIdentificativo()" class="border border-amber-400 rounded p-1 text-xs font-bold text-center bg-amber-50 focus:bg-white w-20 transition">
@@ -145,19 +153,19 @@
         </div>
 
         <div class="overflow-x-auto border border-slate-300 rounded-lg">
-          <table class="w-full text-left border-collapse text-[11px]">
+          <table class="w-full text-left border-collapse text-[10px]">
             <thead>
               <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
-                <th class="p-2 border-r text-center w-12">Rif.</th>
-                <th class="p-2 border-r">Tipologia Punto (*)[cite: 13]</th>
-                <th class="p-2 border-r">WBS / Pk o Sez</th>
-                <th class="p-2 border-r">Codice Campione [Etichetta][cite: 13]</th>
-                <th class="p-2 border-r">Profondità / Anello</th>
-                <th class="p-2 border-r">Natura e Stato (**)[cite: 13]</th>
-                <th class="p-2 border-r">Metodo Campionatura (***)[cite: 13]</th>
-                <th class="p-2 border-r text-center">N. Incr.</th>
-                <th class="p-2 border-r">Contenitore (****)[cite: 13]</th>
-                <th class="p-2 text-center w-12">Repl.</th>
+                <th class="p-1.5 border-r text-center w-8">Rif.</th>
+                <th class="p-1.5 border-r w-28">Tipologia (*)[cite: 13]</th>
+                <th class="p-1.5 border-r w-20">WBS / Pk</th>
+                <th class="p-1.5 border-r w-24">Codice [Etichetta][cite: 13]</th>
+                <th class="p-1.5 border-r w-20">Profondità</th>
+                <th class="p-1.5 border-r w-24">Natura / Stato (**)[cite: 13]</th>
+                <th class="p-1.5 border-r w-28">Metodo (***)[cite: 13]</th>
+                <th class="p-1.5 border-r text-center w-10">Incr.</th>
+                <th class="p-1.5 border-r w-24">Contenitore (****)[cite: 13]</th>
+                <th class="p-1.5 text-center w-10">Repl.</th>
               </tr>
             </thead>
             <tbody id="rows-campionamento" class="divide-y divide-slate-200">
@@ -172,7 +180,7 @@
             <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):[cite: 13]</label>
             <textarea id="note_campo" rows="2" placeholder="Indicare se tal quale, scarto frazione >20mm, materiale antropico..." class="w-full border rounded p-1 bg-white"></textarea>
           </div>
-          <div class="space-y-1 text-slate-600">
+          <div class="space-y-1 text-slate-600 text-[10px]">
             <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento[cite: 13].</p>
             <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido[cite: 13].</p>
             <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva[cite: 13].</p>
@@ -189,17 +197,17 @@
         </h3>
 
         <div class="overflow-x-auto border border-slate-300 rounded-lg">
-          <table class="w-full text-left border-collapse text-[11px]">
+          <table class="w-full text-left border-collapse text-[10px]">
             <thead>
               <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
-                <th class="p-2 border-r text-center w-12">Rif.</th>
-                <th class="p-2 border-r text-center">Amianto (MOCF/SEM)</th>
-                <th class="p-2 border-r text-center">DM 161/12 Tab. 4.1 [Ridotta (+)]</th>
-                <th class="p-2 border-r text-center">DM 161/12 Tab. 4.1 [Completa (++))]</th>
-                <th class="p-2 border-r text-center">D.Lgs 152/06 All.5 Tab.1 (Terre)</th>
-                <th class="p-2 border-r text-center">DM 05/02/98 Test Cessione (Recupero)</th>
-                <th class="p-2 border-r text-center">D.Lgs 121/20 Test Cessione (Discarica)</th>
-                <th class="p-2 text-center">D.Lgs 152/06 Pericolosità Rifiuto</th>
+                <th class="p-1.5 border-r text-center w-8">Rif.</th>
+                <th class="p-1.5 border-r text-center">Amianto (MOCF/SEM)</th>
+                <th class="p-1.5 border-r text-center">DM 161/12 Tab. 4.1 [Ridotta (+)]</th>
+                <th class="p-1.5 border-r text-center">DM 161/12 Tab. 4.1 [Completa (++))]</th>
+                <th class="p-1.5 border-r text-center">D.Lgs 152/06 All.5 Tab.1 (Terre)</th>
+                <th class="p-1.5 border-r text-center">DM 05/02/98 Test Cessione (Recupero)</th>
+                <th class="p-1.5 border-r text-center">D.Lgs 121/20 Test Cessione (Discarica)</th>
+                <th class="p-1.5 text-center">D.Lgs 152/06 Pericolosità Rifiuto</th>
               </tr>
             </thead>
             <tbody id="rows-analisi" class="divide-y divide-slate-200">
@@ -354,14 +362,13 @@
       document.getElementById('identificativo').value = idFinale;
     }
 
-    // Ascolta globalmente qualsiasi modifica per aggiornare l'ID in tempo reale
     document.addEventListener('input', (e) => {
       if (e.target.id === 'datetime' || e.target.id === 'prog_custom' || (e.target.id && e.target.id.startsWith('c_'))) {
         updateIdentificativo();
       }
     });
 
-    // Generazione righe 1-10 per tabella campioni e analisi con tendine integrate
+    // Generazione righe 1-10 con spaziatura e dimensioni ottimizzate
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -375,9 +382,9 @@
         
         rowsCamps.innerHTML += `
           <tr>
-            <td class="p-2 border-r text-center font-bold bg-slate-50">${idStr}</td>
-            <td class="p-2 border-r">
-              <select id="c_${i}_tipologia" class="w-full border rounded p-1 bg-white text-[10px]">
+            <td class="p-1 border-r text-center font-bold bg-slate-50">${idStr}</td>
+            <td class="p-1 border-r">
+              <select id="c_${i}_tipologia" class="w-full border rounded p-1 bg-white text-[9.55px]">
                 <option value="">-- Seleziona --</option>
                 <option value="TBM nastro">TBM nastro</option>
                 <option value="Fronte di scavo">Fronte di scavo</option>
@@ -390,18 +397,18 @@
                 <option value="Affioramento superficiale">Affioramento superficiale</option>
               </select>
             </td>
-            <td class="p-2 border-r"><input type="text" id="c_${i}_wbs" class="w-full border rounded p-1 bg-white" placeholder="WBS / Pk"></td>
-            <td class="p-2 border-r"><input type="text" id="c_${i}_codice" class="w-full border rounded p-1 bg-white font-bold" placeholder="Etichetta"></td>
-            <td class="p-2 border-r"><input type="text" id="c_${i}_prof" class="w-full border rounded p-1 bg-white" placeholder="Profondità"></td>
-            <td class="p-2 border-r">
-              <div class="flex gap-1">
-                <select id="c_${i}_natura" class="w-1/2 border rounded p-1 bg-white text-[10px]">
+            <td class="p-1 border-r"><input type="text" id="c_${i}_wbs" class="w-full border rounded p-1 bg-white text-[10px]" placeholder="WBS / Pk"></td>
+            <td class="p-1 border-r"><input type="text" id="c_${i}_codice" class="w-full border rounded p-1 bg-white font-bold text-[10px]" placeholder="Etichetta"></td>
+            <td class="p-1 border-r"><input type="text" id="c_${i}_prof" class="w-full border rounded p-1 bg-white text-[10px]" placeholder="Profondità"></td>
+            <td class="p-1 border-r">
+              <div class="flex gap-0.5">
+                <select id="c_${i}_natura" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
                   <option value="">Nat.</option>
                   <option value="TER">TER</option>
                   <option value="RIP">RIP</option>
                   <option value="RIF">RIF</option>
                 </select>
-                <select id="c_${i}_stato" class="w-1/2 border rounded p-1 bg-white text-[10px]">
+                <select id="c_${i}_stato" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
                   <option value="">Stato</option>
                   <option value="Solido">Solido</option>
                   <option value="Polverulento">Polv.</option>
@@ -410,16 +417,16 @@
                 </select>
               </div>
             </td>
-            <td class="p-2 border-r">
-              <div class="flex gap-1">
-                <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-1 bg-white text-[10px]">
+            <td class="p-1 border-r">
+              <div class="flex gap-0.5">
+                <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
                   <option value="">Tipo</option>
                   <option value="Grezzo">Grezzo</option>
                   <option value="Composito">Composito</option>
                   <option value="Puntuale">Puntuale</option>
                   <option value="Talquale">Talquale</option>
                 </select>
-                <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-1 bg-white text-[10px]">
+                <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-0.5 bg-white text-[9px]">
                   <option value="">Norma</option>
                   <option value="Casuale">Casuale</option>
                   <option value="Stratificata">Strat.</option>
@@ -429,9 +436,9 @@
                 </select>
               </div>
             </td>
-            <td class="p-2 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
-            <td class="p-2 border-r">
-              <select id="c_${i}_contenitore" class="w-full border rounded p-1 bg-white text-[10px]">
+            <td class="p-1 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-1 text-center bg-white text-[10px]" value="1"></td>
+            <td class="p-1 border-r">
+              <select id="c_${i}_contenitore" class="w-full border rounded p-1 bg-white text-[9.5px]">
                 <option value="">-- Cont. --</option>
                 <option value="(1) Busta in plastica">(1) Busta PE</option>
                 <option value="(2) Barattolo in PE">(2) Barattolo PE</option>
@@ -440,20 +447,20 @@
                 <option value="(5) Bottiglia in PE">(5) Bottiglia PE</option>
               </select>
             </td>
-            <td class="p-2 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
+            <td class="p-1 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-1 text-center bg-white text-[10px]" value="1"></td>
           </tr>
         `;
 
         rowsAnals.innerHTML += `
           <tr>
-            <td class="p-2 border-r text-center font-bold bg-slate-50">${idStr}</td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_amianto" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 text-center"><input type="checkbox" id="b_${i}_peric" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center font-bold bg-slate-50">${idStr}</td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_amianto" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-1.5 text-center"><input type="checkbox" id="b_${i}_peric" class="w-4 h-4 accent-emerald-600"></td>
           </tr>
         `;
       }
