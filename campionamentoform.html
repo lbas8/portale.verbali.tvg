@@ -29,11 +29,9 @@
         font-size: 9pt !important;
       }
 
-      /* Nasconde le freccette dei menu a tendina e adatta le celle */
       select::-ms-expand { display: none; }
       select { background-image: none !important; }
 
-      /* Ottimizzazione canvas firma per la stampa */
       canvas { 
         border: 1px solid #94a3b8 !important; 
         max-height: 80px !important;
@@ -88,8 +86,14 @@
             </div>
           </div>
           <div class="text-right">
-            <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo</label>
-            <input type="text" id="identificativo" placeholder="CDC/AAAAMMGG/..." class="border border-slate-400 rounded p-1 text-xs font-bold text-right bg-white w-48">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo (Composizione Automatica)</label>
+            <input type="text" id="identificativo" readonly class="border border-slate-400 rounded p-1 text-xs font-bold text-right bg-slate-100 w-full cursor-not-allowed">
+            
+            <!-- Campo progressivo evidenziato in giallo -->
+            <div class="mt-1 flex items-center justify-end gap-1">
+              <span class="text-[10px] text-slate-500">Progressivo:</span>
+              <input type="text" id="prog_custom" placeholder="Es. 001" oninput="updateIdentificativo()" class="border border-amber-400 rounded p-1 text-xs font-bold text-center bg-amber-50 focus:bg-white w-20 transition">
+            </div>
           </div>
         </div>
 
@@ -108,7 +112,7 @@
           </div>
           <div>
             <label class="block font-bold text-slate-600 mb-1">Data e Ora Campionamento:</label>
-            <input type="datetime-local" id="datetime" class="w-full border rounded p-1.5 bg-white">
+            <input type="datetime-local" id="datetime" oninput="updateIdentificativo()" class="w-full border rounded p-1.5 bg-white">
           </div>
           <div>
             <label class="block font-bold text-slate-600 mb-1">Per conto di:</label>
@@ -316,6 +320,47 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+    // Funzione per aggiornare dinamicamente il Numero Identificativo
+    function updateIdentificativo() {
+      const prefisso = "CDC";
+      
+      const datetimeVal = document.getElementById('datetime').value;
+      let dataStr = "AAAAMMGG";
+      if (datetimeVal) {
+        const d = new Date(datetimeVal);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        dataStr = `${yyyy}${mm}${dd}`;
+      }
+
+      const progInput = document.getElementById('prog_custom');
+      const progVal = progInput.value.trim() || "XXX";
+      if (progInput.value.trim() !== "") {
+        progInput.classList.remove('bg-amber-50', 'border-amber-400');
+        progInput.classList.add('bg-white', 'border-slate-300');
+      } else {
+        progInput.classList.remove('bg-white', 'border-slate-300');
+        progInput.classList.add('bg-amber-50', 'border-amber-400');
+      }
+
+      let wbsVal = "WBS";
+      const wbsFirstRow = document.getElementById('c_1_wbs');
+      if (wbsFirstRow && wbsFirstRow.value.trim() !== "") {
+        wbsVal = wbsFirstRow.value.trim().replace(/[\/\\#$[[\]]/g, "_");
+      }
+
+      const idFinale = `${prefisso}/${dataStr}/${progVal}/${wbsVal}`;
+      document.getElementById('identificativo').value = idFinale;
+    }
+
+    // Ascolta variazioni per aggiornare l'ID
+    document.addEventListener('input', (e) => {
+      if (e.target.id === 'datetime' || e.target.id === 'c_1_wbs' || e.target.id === 'prog_custom') {
+        updateIdentificativo();
+      }
+    });
+
     // Generazione righe 1-10 per tabella campioni e analisi con tendine integrate
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
@@ -345,7 +390,7 @@
                 <option value="Affioramento superficiale">Affioramento superficiale</option>
               </select>
             </td>
-            <td class="p-2 border-r"><input type="text" id="c_${i}_wbs" class="w-full border rounded p-1 bg-white" placeholder="WBS / Pk"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_wbs" oninput="updateIdentificativo()" class="w-full border rounded p-1 bg-white" placeholder="WBS / Pk"></td>
             <td class="p-2 border-r"><input type="text" id="c_${i}_codice" class="w-full border rounded p-1 bg-white font-bold" placeholder="Etichetta"></td>
             <td class="p-2 border-r"><input type="text" id="c_${i}_prof" class="w-full border rounded p-1 bg-white" placeholder="Profondità"></td>
             <td class="p-2 border-r">
@@ -356,200 +401,3 @@
                   <option value="RIP">RIP</option>
                   <option value="RIF">RIF</option>
                 </select>
-                <select id="c_${i}_stato" class="w-1/2 border rounded p-1 bg-white text-[10px]">
-                  <option value="">Stato</option>
-                  <option value="Solido">Solido</option>
-                  <option value="Polverulento">Polv.</option>
-                  <option value="Fangoso">Fang.</option>
-                  <option value="Liquido">Liq.</option>
-                </select>
-              </div>
-            </td>
-            <td class="p-2 border-r">
-              <div class="flex gap-1">
-                <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-1 bg-white text-[10px]">
-                  <option value="">Tipo</option>
-                  <option value="Grezzo">Grezzo</option>
-                  <option value="Composito">Composito</option>
-                  <option value="Puntuale">Puntuale</option>
-                  <option value="Talquale">Talquale</option>
-                </select>
-                <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-1 bg-white text-[10px]">
-                  <option value="">Norma</option>
-                  <option value="Casuale">Casuale</option>
-                  <option value="Stratificata">Strat.</option>
-                  <option value="Sistematica">Sistem.</option>
-                  <option value="Dinamica">Dinam.</option>
-                  <option value="Selettiva">Selett.</option>
-                </select>
-              </div>
-            </td>
-            <td class="p-2 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
-            <td class="p-2 border-r">
-              <select id="c_${i}_contenitore" class="w-full border rounded p-1 bg-white text-[10px]">
-                <option value="">-- Cont. --</option>
-                <option value="(1) Busta in plastica">(1) Busta PE</option>
-                <option value="(2) Barattolo in PE">(2) Barattolo PE</option>
-                <option value="(3) Bottiglia in vetro">(3) Bottiglia vetro</option>
-                <option value="(4) Vials">(4) Vials</option>
-                <option value="(5) Bottiglia in PE">(5) Bottiglia PE</option>
-              </select>
-            </td>
-            <td class="p-2 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
-          </tr>
-        `;
-
-        rowsAnals.innerHTML += `
-          <tr>
-            <td class="p-2 border-r text-center font-bold bg-slate-50">${idStr}</td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_amianto" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" class="w-4 h-4 accent-emerald-600"></td>
-            <td class="p-2 text-center"><input type="checkbox" id="b_${i}_peric" class="w-4 h-4 accent-emerald-600"></td>
-          </tr>
-        `;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const loadKey = urlParams.get('load');
-      if (loadKey) {
-        setTimeout(() => loadFromCloud(loadKey), 400);
-      }
-    });
-
-    function saveCampionamentoToCloud() {
-      const identificativo = document.getElementById('identificativo').value.trim() || "Campionamento_" + Date.now();
-      const cantiere = document.getElementById('localita').value.trim() || "Localita_N.D.";
-
-      const campioniData = {};
-      const analisiData = {};
-
-      for (let i = 1; i <= 10; i++) {
-        campioniData[i] = {
-          tipologia: document.getElementById(`c_${i}_tipologia`).value,
-          wbs: document.getElementById(`c_${i}_wbs`).value,
-          codice: document.getElementById(`c_${i}_codice`).value,
-          prof: document.getElementById(`c_${i}_prof`).value,
-          natura: document.getElementById(`c_${i}_natura`).value,
-          stato: document.getElementById(`c_${i}_stato`).value,
-          metodo_tipo: document.getElementById(`c_${i}_metodo_tipo`).value,
-          metodo_norma: document.getElementById(`c_${i}_metodo_norma`).value,
-          incr: document.getElementById(`c_${i}_incr`).value,
-          contenitore: document.getElementById(`c_${i}_contenitore`).value,
-          repl: document.getElementById(`c_${i}_repl`).value
-        };
-
-        analisiData[i] = {
-          amianto: document.getElementById(`b_${i}_amianto`).checked,
-          dm161_rid: document.getElementById(`b_${i}_dm161_rid`).checked,
-          dm161_com: document.getElementById(`b_${i}_dm161_com`).checked,
-          dlgs152_terre: document.getElementById(`b_${i}_dlgs152_terre`).checked,
-          cess_rec: document.getElementById(`b_${i}_cess_rec`).checked,
-          cess_disc: document.getElementById(`b_${i}_cess_disc`).checked,
-          peric: document.getElementById(`b_${i}_peric`).checked
-        };
-      }
-
-      const formData = {
-        identificativo: identificativo,
-        cantiere: cantiere,
-        laboratorio: document.getElementById('laboratorio').value,
-        esecutore: document.getElementById('esecutore').value,
-        datetime: document.getElementById('datetime').value,
-        per_conto: document.getElementById('per_conto').value,
-        note_campo: document.getElementById('note_campo').value,
-        altre_analisi: document.getElementById('altre_analisi').value,
-        campioni: campioniData,
-        analisi: analisiData,
-        firma_campionatore: canvas.toDataURL(),
-        timestamp: Date.now()
-      };
-
-      db.ref('campionamenti/' + identificativo.replace(/[.#$/[\]]/g, "_")).set(formData, (error) => {
-        if (error) {
-          alert("Errore salvataggio: " + error.message);
-        } else {
-          alert("☁️ Campionamento salvato con successo nel Cloud!");
-          window.location.href = "campionamenti.html";
-        }
-      });
-    }
-
-    function loadFromCloud(key) {
-      db.ref('campionamenti/' + key).once('value', (snapshot) => {
-        const record = snapshot.val();
-        if (record) {
-          if (record.identificativo) document.getElementById('identificativo').value = record.identificativo;
-          if (record.cantiere) document.getElementById('localita').value = record.cantiere;
-          if (record.laboratorio) document.getElementById('laboratorio').value = record.laboratorio;
-          if (record.esecutore) document.getElementById('esecutore').value = record.esecutore;
-          if (record.datetime) document.getElementById('datetime').value = record.datetime;
-          if (record.per_conto) document.getElementById('per_conto').value = record.per_conto;
-          if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
-          if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
-
-          if (record.firma_campionatore) {
-            const img = new Image();
-            img.onload = () => ctx.drawImage(img, 0, 0);
-            img.src = record.firma_campionatore;
-          }
-
-          if (record.campioni) {
-            for (let i = 1; i <= 10; i++) {
-              const c = record.campioni[i];
-              if (c) {
-                if (c.tipologia) document.getElementById(`c_${i}_tipologia`).value = c.tipologia;
-                if (c.wbs) document.getElementById(`c_${i}_wbs`).value = c.wbs;
-                if (c.codice) document.getElementById(`c_${i}_codice`).value = c.codice;
-                if (c.prof) document.getElementById(`c_${i}_prof`).value = c.prof;
-                if (c.natura) document.getElementById(`c_${i}_natura`).value = c.natura;
-                if (c.stato) document.getElementById(`c_${i}_stato`).value = c.stato;
-                if (c.metodo_tipo) document.getElementById(`c_${i}_metodo_tipo`).value = c.metodo_tipo;
-                if (c.metodo_norma) document.getElementById(`c_${i}_metodo_norma`).value = c.metodo_norma;
-                if (c.incr) document.getElementById(`c_${i}_incr`).value = c.incr;
-                if (c.contenitore) document.getElementById(`c_${i}_contenitore`).value = c.contenitore;
-                if (c.repl) document.getElementById(`c_${i}_repl`).value = c.repl;
-              }
-            }
-          }
-
-          if (record.analisi) {
-            for (let i = 1; i <= 10; i++) {
-              const a = record.analisi[i];
-              if (a) {
-                if (a.amianto !== undefined) document.getElementById(`b_${i}_amianto`).checked = a.amianto;
-                if (a.dm161_rid !== undefined) document.getElementById(`b_${i}_dm161_rid`).checked = a.dm161_rid;
-                if (a.dm161_com !== undefined) document.getElementById(`b_${i}_dm161_com`).checked = a.dm161_com;
-                if (a.dlgs152_terre !== undefined) document.getElementById(`b_${i}_dlgs152_terre`).checked = a.dlgs152_terre;
-                if (a.cess_rec !== undefined) document.getElementById(`b_${i}_cess_rec`).checked = a.cess_rec;
-                if (a.cess_disc !== undefined) document.getElementById(`b_${i}_cess_disc`).checked = a.cess_disc;
-                if (a.peric !== undefined) document.getElementById(`b_${i}_peric`).checked = a.peric;
-              }
-            }
-          }
-        }
-      });
-    }
-
-    function sendEmailReport() {
-      const dest = document.getElementById('email_destinatari').value;
-      const cc = document.getElementById('email_cc').value;
-      const id = document.getElementById('identificativo').value || "CDC-N.D.";
-      const localita = document.getElementById('localita').value || "N.D.";
-
-      const subject = encodeURIComponent(`Catena di Custodia - ${id} - ${localita}`);
-      const body = encodeURIComponent(`Buongiorno,\n\nSi trasmette in allegato la Catena di Custodia n. ${id} relativa al cantiere: ${localita}.\n\nCordiali saluti.`);
-
-      let mailtoLink = `mailto:${dest}?subject=${subject}&body=${body}`;
-      if (cc.trim() !== "") {
-        mailtoLink += `&cc=${encodeURIComponent(cc)}`;
-      }
-
-      window.location.href = mailtoLink;
-    }
-  </script>
-</body>
-</html>
