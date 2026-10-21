@@ -370,6 +370,21 @@
         esecutore: document.getElementById('esecutore').value,
         datetime: document.getElementById('datetime').value,
         per_conto: document.getElementById('per_conto').value,
+        
+        // Nuovi campi delle opzioni a tendina e note
+        tipologia: document.getElementById('legenda_tipologia').value,
+        natura: document.getElementById('legenda_natura').value,
+        stato: document.getElementById('legenda_stato').value,
+        metodo_campione: document.getElementById('legenda_campione').value,
+        norma_uni: document.getElementById('legenda_norma').value,
+        contenitore: document.getElementById('legenda_contenitore').value,
+        
+        // Checkbox note (A, B, C, D)
+        nota_a: document.getElementById('note_a').checked,
+        nota_b: document.getElementById('note_b').checked,
+        nota_c: document.getElementById('note_c').checked,
+        nota_d: document.getElementById('note_d').checked,
+
         note_campo: document.getElementById('note_campo').value,
         altre_analisi: document.getElementById('altre_analisi').value,
         timestamp: Date.now()
@@ -385,7 +400,7 @@
       });
     }
 
-    // Caricamento dati da Cloud
+    // Caricamento dati da Cloud (integrazione nuovi campi)
     function loadFromCloud(key) {
       db.ref('campionamenti/' + key).once('value', (snapshot) => {
         const record = snapshot.val();
@@ -396,9 +411,22 @@
           if (record.esecutore) document.getElementById('esecutore').value = record.esecutore;
           if (record.datetime) document.getElementById('datetime').value = record.datetime;
           if (record.per_conto) document.getElementById('per_conto').value = record.per_conto;
+          
+          // Ricarica tendine e note
+          if (record.tipologia) document.getElementById('legenda_tipologia').value = record.tipologia;
+          if (record.natura) document.getElementById('legenda_natura').value = record.natura;
+          if (record.stato) document.getElementById('legenda_stato').value = record.stato;
+          if (record.metodo_campione) document.getElementById('legenda_campione').value = record.metodo_campione;
+          if (record.norma_uni) document.getElementById('legenda_norma').value = record.norma_uni;
+          if (record.contenitore) document.getElementById('legenda_contenitore').value = record.contenitore;
+          
+          if (record.nota_a !== undefined) document.getElementById('note_a').checked = record.nota_a;
+          if (record.nota_b !== undefined) document.getElementById('note_b').checked = record.nota_b;
+          if (record.nota_c !== undefined) document.getElementById('note_c').checked = record.nota_c;
+          if (record.nota_d !== undefined) document.getElementById('note_d').checked = record.nota_d;
+
           if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
           if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
-          console.log("Dati campionamento caricati.");
         }
       });
     }
