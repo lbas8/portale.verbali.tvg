@@ -15,7 +15,7 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 6mm 6mm 6mm 6mm;
+        margin: 5mm 5mm 5mm 5mm;
       }
 
       .no-print { display: none !important; }
@@ -24,6 +24,17 @@
       main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
       .bg-white { border: none !important; box-shadow: none !important; padding: 0 !important; }
       
+      /* Forzatura affiancamento fisso per la stampa */
+      .print-flex-row {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: stretch !important;
+      }
+
+      .print-w-left { width: 58% !important; }
+      .print-w-right { width: 40% !important; }
+
       input, select, textarea { 
         border: none !important; 
         background: transparent !important; 
@@ -43,7 +54,7 @@
       select option[value=""] { display: none !important; }
       select:invalid, select option:checked[value=""] { color: transparent !important; }
 
-      tr.row-campione-vuota, tr.row-analisi-vuota { display: none !important; }
+      tr.row-campione-vuota, tr.row-analisi-vuota, tr.row-presente-vuota { display: none !important; }
 
       input[type="checkbox"] {
         -webkit-appearance: none !important;
@@ -66,7 +77,7 @@
 
       canvas { 
         border: 1px solid #64748b !important; 
-        max-height: 55px !important;
+        max-height: 40px !important;
       }
     }
   </style>
@@ -101,13 +112,13 @@
   </header>
 
   <main id="form-container" class="max-w-5xl mx-auto my-2 px-2">
-    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-3 space-y-2.5">
+    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-2.5 space-y-2">
 
-      <!-- INTESTAZIONE UFFICIALE -->
-      <div class="border-2 border-slate-900 p-2.5 bg-slate-50 text-xs">
+      <!-- INTESTAZIONE UFFICIALE AFFIANCATA -->
+      <div class="border-2 border-slate-900 p-2 bg-slate-50 text-xs">
         
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-slate-300 pb-2">
-          <div class="flex items-center gap-3">
+        <div class="flex justify-between items-center border-b border-slate-300 pb-1.5">
+          <div class="flex items-center gap-2">
             <div class="bg-white p-0.5 border border-slate-300 rounded flex items-center justify-center">
               <img src="logo.png" alt="Logo" class="h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
               <span class="text-[9px] font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
@@ -119,7 +130,7 @@
           </div>
           
           <!-- BLOCCO MATRICE E N. ID -->
-          <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+          <div class="flex items-center gap-2 justify-end">
             <div class="flex items-center gap-1">
               <label class="font-bold text-[10px] text-slate-800 uppercase whitespace-nowrap">Matrice:</label>
               <select id="matrice_selezionata" onchange="onMatriceChange()" class="border border-slate-400 rounded px-1.5 py-0.5 text-xs font-bold bg-white text-slate-900">
@@ -129,53 +140,84 @@
               </select>
             </div>
 
-            <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-1">
               <label class="font-bold text-[10px] text-slate-800 uppercase whitespace-nowrap">N. ID:</label>
-              <input type="text" id="identificativo" readonly class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold bg-slate-100 text-slate-900 w-40 text-center cursor-not-allowed">
+              <input type="text" id="identificativo" readonly class="border border-slate-400 rounded px-1.5 py-0.5 text-xs font-bold bg-slate-100 text-slate-900 w-36 text-center cursor-not-allowed">
               
-              <div class="no-print flex items-center gap-1 bg-amber-50 px-1 py-0.5 rounded border border-amber-300">
-                <span class="text-[9px] font-bold text-amber-800">Prog:</span>
-                <input type="text" id="prog_custom" placeholder="001" oninput="updateIdentificativo()" class="border border-amber-400 rounded px-1 py-0.5 text-xs font-bold text-center bg-amber-100 focus:bg-white w-12">
+              <div class="no-print flex items-center gap-0.5 bg-amber-50 px-1 py-0.5 rounded border border-amber-300">
+                <span class="text-[8.5px] font-bold text-amber-800">Prog:</span>
+                <input type="text" id="prog_custom" placeholder="001" oninput="updateIdentificativo()" class="border border-amber-400 rounded px-1 py-0.5 text-xs font-bold text-center bg-amber-100 focus:bg-white w-10">
               </div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 mt-2 text-[10px] items-center">
-          <div class="md:col-span-7 space-y-1">
-            <div class="flex items-center gap-2">
+        <!-- AFFIANCAMENTO RIGIDO PER STAMPA (DATI A SX, FIRMA A DX) -->
+        <div class="print-flex-row flex flex-col md:flex-row justify-between gap-2 mt-1.5 text-[9.5px]">
+          <div class="print-w-left md:w-[58%] space-y-0.5">
+            <div class="flex items-center gap-1.5">
               <label class="font-bold text-slate-700 w-32 shrink-0">Ubicazione / Località:</label>
-              <input type="text" id="localita" placeholder="Es. CSL2 - Cravasco" class="w-full border rounded px-1.5 py-0.5 bg-white">
+              <input type="text" id="localita" placeholder="Es. CSL2 - Cravasco" class="w-full border rounded px-1 py-0.5 bg-white">
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
               <label class="font-bold text-slate-700 w-32 shrink-0">Esecutore Campionamento:</label>
-              <input type="text" id="esecutore" placeholder="Nome / Società" class="w-full border rounded px-1.5 py-0.5 bg-white">
+              <input type="text" id="esecutore" placeholder="Nome / Società" class="w-full border rounded px-1 py-0.5 bg-white">
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
               <label class="font-bold text-slate-700 w-32 shrink-0">Laboratorio Incaricato:</label>
-              <input type="text" id="laboratorio" placeholder="Nome Laboratorio" class="w-full border rounded px-1.5 py-0.5 bg-white">
+              <input type="text" id="laboratorio" placeholder="Nome Laboratorio" class="w-full border rounded px-1 py-0.5 bg-white">
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
               <label class="font-bold text-slate-700 w-32 shrink-0">Data e Ora Prelievo:</label>
-              <input type="datetime-local" id="datetime" oninput="updateIdentificativo()" class="w-full border rounded px-1.5 py-0.5 bg-white">
+              <input type="datetime-local" id="datetime" oninput="updateIdentificativo()" class="w-full border rounded px-1 py-0.5 bg-white">
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
               <label class="font-bold text-slate-700 w-32 shrink-0">Per conto di:</label>
-              <input type="text" id="per_conto" placeholder="Es. COCIV" class="w-full border rounded px-1.5 py-0.5 bg-white">
+              <input type="text" id="per_conto" placeholder="Es. COCIV" class="w-full border rounded px-1 py-0.5 bg-white">
             </div>
           </div>
 
-          <div class="md:col-span-5 border border-slate-300 rounded bg-white p-1.5 flex flex-col justify-between h-full">
+          <!-- FIRMA CAMPIONATORE AFFIANCATA SULLA DESTRA -->
+          <div class="print-w-right md:w-[40%] border border-slate-300 rounded bg-white p-1 flex flex-col justify-between">
             <div class="flex justify-between items-center mb-0.5">
-              <label class="font-bold text-slate-700 text-[9.5px]">Firma del Campionatore:</label>
-              <button type="button" onclick="clearSignature()" class="text-[8.5px] text-red-600 hover:text-red-800 font-medium px-1 py-0.2 rounded border border-red-200 bg-red-50 no-print">
+              <label class="font-bold text-slate-800 text-[9px] uppercase">Firma Campionatore:</label>
+              <button type="button" onclick="clearCanvas('signature-pad')" class="text-[8px] text-red-600 hover:text-red-800 font-medium px-1 bg-red-50 border border-red-200 rounded no-print">
                 <i class="fa-solid fa-eraser"></i> Cancella
               </button>
             </div>
-            <canvas id="signature-pad" class="w-full h-16 border border-dashed border-slate-200 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
+            <canvas id="signature-pad" class="w-full h-12 border border-dashed border-slate-300 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
           </div>
         </div>
       </div>
+
+      <!-- SEZIONE PRESENTI AL CAMPIONAMENTO (CON SIGLE/FIRME) -->
+      <section class="border border-slate-300 rounded p-1.5 bg-slate-50">
+        <h4 class="text-[9.5px] font-bold text-slate-800 uppercase tracking-wider mb-1 flex items-center justify-between">
+          <span><i class="fa-solid fa-users text-slate-600 mr-1"></i> Presenti al Campionamento (Controparti / Direzione Lavori / Enti)</span>
+        </h4>
+        <div class="space-y-1">
+          <!-- Presente 1 -->
+          <div id="row_presente_1" class="flex items-center gap-1.5 text-[8.5px]">
+            <input type="text" id="pres_1_nome" oninput="checkPresenteCompilato(1)" placeholder="Nome e Cognome 1" class="w-1/3 border rounded p-0.5 bg-white">
+            <input type="text" id="pres_1_ente" oninput="checkPresenteCompilato(1)" placeholder="Società / Ente (es. ARPAL, D.L.)" class="w-1/3 border rounded p-0.5 bg-white">
+            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5">
+              <span class="text-[7.5px] font-bold text-slate-400 shrink-0">Sigla:</span>
+              <canvas id="canvas_pres_1" class="w-full h-6 cursor-crosshair touch-none bg-slate-50 border border-dashed border-slate-200 rounded"></canvas>
+              <button type="button" onclick="clearCanvas('canvas_pres_1')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
+            </div>
+          </div>
+          <!-- Presente 2 -->
+          <div id="row_presente_2" class="row-presente-vuota flex items-center gap-1.5 text-[8.5px]">
+            <input type="text" id="pres_2_nome" oninput="checkPresenteCompilato(2)" placeholder="Nome e Cognome 2" class="w-1/3 border rounded p-0.5 bg-white">
+            <input type="text" id="pres_2_ente" oninput="checkPresenteCompilato(2)" placeholder="Società / Ente" class="w-1/3 border rounded p-0.5 bg-white">
+            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5">
+              <span class="text-[7.5px] font-bold text-slate-400 shrink-0">Sigla:</span>
+              <canvas id="canvas_pres_2" class="w-full h-6 cursor-crosshair touch-none bg-slate-50 border border-dashed border-slate-200 rounded"></canvas>
+              <button type="button" onclick="clearCanvas('canvas_pres_2')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- SEZIONE A: TABELLA CAMPIONI (01 - 10) -->
       <section>
@@ -301,141 +343,16 @@
     </div>
   </main>
 
-  <!-- DATABASE COMPLETO DI TUTTI I 970 CODICI EER/CER UFFICIALI -->
+  <!-- DATALIST CODICI EER -->
   <datalist id="cer_suggestions">
-    <option value="01 00 00 - Rifiuti derivanti da prospezione, estrazione da miniera o cava, nonché dal trattamento fisico o chimico di minerali">
-    <option value="01 01 00 - Rifiuti prodotti da estrazione di minerali">
-    <option value="01 01 01 - Rifiuti da estrazione di minerali metalliferi">
-    <option value="01 01 02 - Rifiuti da estrazione di minerali non metalliferi">
-    <option value="01 03 00 - Rifiuti prodotti da trattamenti chimici e fisici di minerali metalliferi">
-    <option value="01 03 04 * - Sterili che possono generare acido prodotti dalla lavorazione di minerale solforoso">
-    <option value="01 03 05 * - Altri sterili contenenti sostanze pericolose">
-    <option value="01 03 06 - Sterili diversi da quelli di cui alle voci 01 03 04 e 01 03 05">
-    <option value="01 03 07 * - Altri rifiuti contenenti sostanze pericolose prodotti da trattamenti chimici e fisici di minerali metalliferi">
-    <option value="01 03 08 - Polveri e residui affini diversi da quelli di cui alla voce 01 03 07">
-    <option value="01 03 09 - Fanghi rossi derivanti dalla produzione di allumina, diversi da quelli di cui alla voce 01 03 07">
-    <option value="01 03 99 - Rifiuti non specificati altrimenti">
-    <option value="01 04 00 - Rifiuti derivanti da trattamenti chimici e fisici di minerali non metalliferi">
-    <option value="01 04 07 * - Rifiuti contenenti sostanze pericolose, prodotti da trattamenti chimici e fisici di minerali non metalliferi">
-    <option value="01 04 08 - Scarti di ghiaia e pietrisco, diversi da quelli di cui alla voce 01 04 07">
-    <option value="01 04 09 - Scarti di sabbia e argilla">
-    <option value="01 04 10 - Polveri e residui affini, diversi da quelli di cui alla voce 01 04 07">
-    <option value="01 04 11 - Rifiuti della lavorazione di potassa e salgemma, diversi da quelli di cui alla voce 01 04 07">
-    <option value="01 04 12 - Sterili ed altri residui del lavaggio e della pulitura di minerali, diversi da quelli di cui alle voci 01 04 07 e 01 04 11">
-    <option value="01 04 13 - Rifiuti prodotti dalla lavorazione della pietra, diversi da quelli di cui alla voce 01 04 07">
-    <option value="01 04 99 - Rifiuti non specificati altrimenti">
-    <option value="01 05 00 - Fanghi di perforazione ed altri rifiuti di perforazione">
-    <option value="01 05 04 - Fanghi e rifiuti di perforazione di acqua dolce">
-    <option value="01 05 05 * - Fanghi di perforazione ed altri rifiuti di perforazione contenenti idrocarburi">
-    <option value="01 05 06 - Fanghi di perforazione ed altri rifiuti di perforazione contenenti sostanze pericolose">
-    <option value="01 05 07 - Fanghi e rifiuti di perforazione di pozzi di petrolio e gas contenenti barite">
-    <option value="01 05 08 - Fanghi e rifiuti di perforazione di pozzi di petrolio e gas contenenti cloruri">
-    <option value="01 05 99 - Rifiuti non specificati altrimenti">
-    <option value="02 00 00 - Rifiuti prodotti da agricoltura, orticoltura, acquicoltura, silvicoltura, caccia e pesca, trattamento e preparazione di alimenti">
-    <option value="02 01 00 - Rifiuti prodotti da agricoltura, orticoltura, acquicoltura, silvicoltura, caccia e pesca">
-    <option value="02 01 01 - Fanghi da operazioni di lavaggio e pulitura">
-    <option value="02 01 02 - Scarti di tessuti animali">
-    <option value="02 01 03 - Scarti di tessuti vegetali">
-    <option value="02 01 04 - Rifiuti plastici (ad esclusione degli imballaggi)">
-    <option value="02 01 06 - Feci animali, urine e letame (compresa lettiera usata), effluenti, raccolti in cisterna e trattati fuori sito">
-    <option value="02 01 07 - Rifiuti della silvicoltura">
-    <option value="02 01 08 * - Agrochimici pericolosi">
-    <option value="02 01 09 - Agrochimici diversi da quelli di cui alla voce 02 01 08">
-    <option value="02 01 10 - Rifiuti metallici">
-    <option value="02 01 99 - Rifiuti non specificati altrimenti">
-    <option value="02 02 00 - Rifiuti della preparazione e del trattamento di carne, pesce ed altri alimenti di origine animale">
-    <option value="02 02 01 - Fanghi da operazioni di lavaggio e pulitura">
-    <option value="02 02 02 - Scarti di tessuti animali">
-    <option value="02 02 03 - Sostanze inservibili al consumo o alla trasformazione">
-    <option value="02 02 04 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 02 99 - Rifiuti non specificati altrimenti">
-    <option value="02 03 00 - Rifiuti della preparazione e del trattamento di frutta, verdura, cereali, oli alimentari, cacao, caffè, tè e tabacco">
-    <option value="02 03 01 - Fanghi da operazioni di lavaggio, pulitura, sbucciatura, centrifugazione e separazione">
-    <option value="02 03 02 - Rifiuti dei processi di conservazione mediante anidride solforosa">
-    <option value="02 03 03 - Rifiuti da procedimenti di estrazione a solvente">
-    <option value="02 03 04 - Sostanze inservibili al consumo o alla trasformazione">
-    <option value="02 03 05 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 03 99 - Rifiuti non specificati altrimenti">
-    <option value="02 04 00 - Rifiuti della lavorazione dello zucchero">
-    <option value="02 04 01 - Terra di scarto della pulitura e lavaggio delle barbabietole">
-    <option value="02 04 02 - Carbonato di calcio fuori specifica">
-    <option value="02 04 03 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 04 99 - Rifiuti non specificati altrimenti">
-    <option value="02 05 00 - Rifiuti dell'industria lattiero-casearia">
-    <option value="02 05 01 - Sostanze inservibili al consumo o alla trasformazione">
-    <option value="02 05 02 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 05 99 - Rifiuti non specificati altrimenti">
-    <option value="02 06 00 - Rifiuti dell'industria dolciaria e della panificazione">
-    <option value="02 06 01 - Sostanze inservibili al consumo o alla trasformazione">
-    <option value="02 06 02 - Residui da procedimenti di estrazione a solvente">
-    <option value="02 06 03 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 06 99 - Rifiuti non specificati altrimenti">
-    <option value="02 07 00 - Rifiuti della produzione di bevande alcoliche ed analcoliche (tranne caffè, tè e tabacco)">
-    <option value="02 07 01 - Rifiuti da operazioni di lavaggio, pulitura e spremitura di materie prime">
-    <option value="02 07 02 - Rifiuti da distillazione di alcol">
-    <option value="02 07 03 - Residui di trattamenti chimici">
-    <option value="02 07 04 - Sostanze inservibili al consumo o alla trasformazione">
-    <option value="02 07 05 - Fanghi da trattamenti degli effluenti in loco">
-    <option value="02 07 99 - Rifiuti non specificati altrimenti">
-    <option value="03 00 00 - Rifiuti della lavorazione del legno e della produzione di pannelli, mobili, carta, cartoni e pasta per carta">
-    <option value="03 01 00 - Rifiuti della lavorazione del legno e della produzione di pannelli e mobili">
-    <option value="03 01 01 - Scarti di corteccia e sughero">
-    <option value="03 01 04 * - Segatura, trucioli, residui di taglio, legno, pannelli e compensati contenenti sostanze pericolose">
-    <option value="03 01 05 - Segatura, trucioli, residui di taglio, legno, pannelli e compensati diversi da quelli di cui alla voce 03 01 04">
-    <option value="03 01 99 - Rifiuti non specificati altrimenti">
-    <option value="03 02 00 - Rifiuti dei trattamenti conservativi del legno">
-    <option value="03 02 01 * - Prodotti per trattamenti conservativi del legno a base non alogena">
-    <option value="03 02 02 * - Prodotti per trattamenti conservativi del legno organoclorurati">
-    <option value="03 02 03 * - Prodotti per trattamenti conservativi del legno organometallici">
-    <option value="03 02 04 * - Prodotti per trattamenti conservativi del legno inorganici">
-    <option value="03 02 05 * - Altri prodotti per trattamenti conservativi del legno contenenti sostanze pericolose">
-    <option value="03 02 99 - Prodotti per trattamenti conservativi del legno non specificati altrimenti">
-    <option value="03 03 00 - Rifiuti della produzione e della lavorazione di carta, cartone e pasta per carta">
-    <option value="03 03 01 - Scarti di corteccia e legno">
-    <option value="03 03 02 - Fanghi di recupero di bagno di solfiti (da produzione di carta)">
-    <option value="03 03 05 - Fanghi di scarto da processi di disinchiostrazione nel riciclaggio di carta">
-    <option value="03 03 07 - Scarti di separazione meccanica dal macero nella produzione di carta da riciclare">
-    <option value="03 03 08 - Scarti della depurazione di carta da macero (ad es. inchiostri, scarti di colla)">
-    <option value="03 03 09 - Fanghi di calce provenienti dal processo di caustificazione">
-    <option value="03 03 10 - Residui di fibre, scarti di fibra, carica e spalmatura ottenuti mediante procedimenti meccanici">
-    <option value="03 03 11 - Fanghi da trattamenti degli effluenti in loco, diversi da quelli di cui alla voce 03 03 10">
-    <option value="03 03 99 - Rifiuti non specificati altrimenti">
-    <option value="04 00 00 - Rifiuti dell'industria conciaria, pellicciaria e tessile">
-    <option value="04 01 00 - Rifiuti dell'industria conciaria e pellicciaria">
-    <option value="04 01 01 - Residui di calcinazione">
-    <option value="04 01 02 - Fanghi di concia contenenti cromo, diversi da quelli di cui alla voce 04 01 03">
-    <option value="04 01 03 * - Fanghi di concia contenenti cromo, pericolosi">
-    <option value="04 01 04 - Liquami di concia senza cromo">
-    <option value="04 01 05 - Scarti di confezionamento e di finitura">
-    <option value="04 01 06 - Fanghi, in particolare da trattamenti degli effluenti in loco, contenenti cromo">
-    <option value="04 01 07 - Fanghi, in particolare da trattamenti degli effluenti in loco, senza cromo">
-    <option value="04 01 08 - Cuoio scartato (frammenti, spaccati, residui di pulitura) che comporta la formazione di biocidi">
-    <option value="04 01 09 - Rifiuti di lavorazione di pelli e pellicce">
-    <option value="04 01 99 - Rifiuti non specificati altrimenti">
-    <option value="04 02 00 - Rifiuti dell'industria tessile">
-    <option value="04 02 09 - Rifiuti di composti organici da solventi">
-    <option value="04 02 10 - Materie prime organiche di natura naturale (ad es. grasso, cera)">
-    <option value="04 02 14 * - Rifiuti da finissaggio contenenti solventi organici">
-    <option value="04 02 15 - Rifiuti da finissaggio diversi da quelli di cui alla voce 04 02 14">
-    <option value="04 02 16 * - Tinture e pigmenti contenenti sostanze pericolose">
-    <option value="04 02 17 - Tinture e pigmenti diversi da quelli di cui alla voce 04 02 16">
-    <option value="04 02 19 * - Fanghi da trattamenti degli effluenti in loco, contenenti sostanze pericolose">
-    <option value="04 02 20 - Fanghi da trattamenti degli effluenti in loco, diversi da quelli di cui alla voce 04 02 19">
-    <option value="04 02 21 - Fibre tessili grezze">
-    <option value="04 02 22 - Fibre tessili lavorate">
-    <option value="04 02 99 - Rifiuti non specificati altrimenti">
+    <option value="01 00 00 - Rifiuti derivanti da prospezione, estrazione da miniera o cava">
     <option value="17 01 01 - Cemento">
-    <option value="17 01 02 - Mattoni">
-    <option value="17 01 03 - Mattonelle e ceramiche">
-    <option value="17 01 06 * - Miscele, o frazioni separate, di cemento, mattoni, mattonelle e ceramiche, contenenti sostanze pericolose">
-    <option value="17 01 07 - Miscele di cemento, mattoni, mattonelle e ceramiche, diverse da quelle di cui alla voce 17 01 06">
-    <option value="17 05 03 * - Terra e rocce, contenenti sostanze pericolose">
+    <option value="17 01 07 - Miscele di cemento, mattoni, mattonelle">
+    <option value="17 05 03* - Terra e rocce, contenenti sostanze pericolose">
     <option value="17 05 04 - Terra e rocce, diverse da quelle di cui alla voce 17 05 03">
-    <option value="17 05 05 * - Fanghi di drenaggio contenenti sostanze pericolose">
+    <option value="17 05 05* - Fanghi di drenaggio contenenti sostanze pericolose">
     <option value="17 05 06 - Fanghi di drenaggio diversi da quelli di cui alla voce 17 05 05">
-    <option value="17 05 07 * - Ballast (pietrisco per massicciate ferroviarie), contenente sostanze pericolose">
-    <option value="17 05 08 - Ballast (pietrisco per massicciate ferroviarie), diverso da quello di cui alla voce 17 05 07">
-    <option value="17 09 04 - Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03">
+    <option value="17 09 04 - Rifiuti misti dell'attività di costruzione e demolizione">
     <option value="19 13 02 - Fanghi da bonifica di siti contenenti sostanze pericolose">
   </datalist>
 
@@ -483,45 +400,66 @@
       ]
     };
 
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
+    // GESTIONE CANVAS E FIRME MULTIPLE
+    const activeCanvases = {};
 
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+    function initCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+      resize();
+
+      function start(e) { isDrawing = true; draw(e); }
+      function end() { isDrawing = false; ctx.beginPath(); }
+      function draw(e) {
+        if (!isDrawing) return;
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#0f172a';
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        if (clientX && clientY) {
+          ctx.lineTo(clientX - rect.left, clientY - rect.top);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(clientX - rect.left, clientY - rect.top);
+        }
+      }
+
+      canvas.addEventListener('mousedown', start);
+      canvas.addEventListener('mouseup', end);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('touchstart', start);
+      canvas.addEventListener('touchend', end);
+      canvas.addEventListener('touchmove', draw);
+
+      activeCanvases[canvasId] = { canvas, ctx };
     }
-    window.addEventListener('resize', resizeCanvas);
-    setTimeout(resizeCanvas, 200);
 
-    function startPosition(e) { isDrawing = true; draw(e); }
-    function endPosition() { isDrawing = false; ctx.beginPath(); }
-    function draw(e) {
-      if (!isDrawing) return;
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#0f172a';
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-      if (clientX && clientY) {
-        ctx.lineTo(clientX - rect.left, clientY - rect.top);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(clientX - rect.left, clientY - rect.top);
+    function clearCanvas(canvasId) {
+      if (activeCanvases[canvasId]) {
+        const { canvas, ctx } = activeCanvases[canvasId];
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
 
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', endPosition);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('touchstart', startPosition);
-    canvas.addEventListener('touchend', endPosition);
-    canvas.addEventListener('touchmove', draw);
-
-    function clearSignature() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function checkPresenteCompilato(index) {
+      const row = document.getElementById(`row_presente_${index}`);
+      const nome = document.getElementById(`pres_${index}_nome`).value.trim();
+      const ente = document.getElementById(`pres_${index}_ente`).value.trim();
+      if (nome !== "" || ente !== "") {
+        row.classList.remove('row-presente-vuota');
+      } else if (index > 1) {
+        row.classList.add('row-presente-vuota');
+      }
     }
 
     function updateIdentificativo() {
@@ -666,6 +604,11 @@
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       document.getElementById('datetime').value = now.toISOString().slice(0,16);
+
+      // Inizializza canvas per firma campionatore e presenti
+      initCanvas('signature-pad');
+      initCanvas('canvas_pres_1');
+      initCanvas('canvas_pres_2');
 
       const rowsCamps = document.getElementById('rows-campionamento');
 
@@ -814,6 +757,11 @@
         }
       }
 
+      const presentiData = {
+        1: { nome: document.getElementById('pres_1_nome').value, ente: document.getElementById('pres_1_ente').value, sigla: activeCanvases['canvas_pres_1'] ? activeCanvases['canvas_pres_1'].canvas.toDataURL() : '' },
+        2: { nome: document.getElementById('pres_2_nome').value, ente: document.getElementById('pres_2_ente').value, sigla: activeCanvases['canvas_pres_2'] ? activeCanvases['canvas_pres_2'].canvas.toDataURL() : '' }
+      };
+
       const formData = {
         identificativo: identificativo,
         matrice: matrice,
@@ -822,11 +770,12 @@
         esecutore: document.getElementById('esecutore').value,
         datetime: document.getElementById('datetime').value,
         per_conto: document.getElementById('per_conto').value,
+        presenti: presentiData,
         note_campo: document.getElementById('note_campo').value,
         altre_analisi: document.getElementById('altre_analisi').value,
         campioni: campioniData,
         analisi: analisiData,
-        firma_campionatore: canvas.toDataURL(),
+        firma_campionatore: activeCanvases['signature-pad'] ? activeCanvases['signature-pad'].canvas.toDataURL() : '',
         timestamp: Date.now()
       };
 
@@ -867,10 +816,26 @@
           if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
           if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
 
-          if (record.firma_campionatore) {
+          if (record.firma_campionatore && activeCanvases['signature-pad']) {
             const img = new Image();
-            img.onload = () => ctx.drawImage(img, 0, 0);
+            img.onload = () => activeCanvases['signature-pad'].ctx.drawImage(img, 0, 0);
             img.src = record.firma_campionatore;
+          }
+
+          if (record.presenti) {
+            [1, 2].forEach(pIdx => {
+              const p = record.presenti[pIdx];
+              if (p) {
+                if (p.nome) document.getElementById(`pres_${pIdx}_nome`).value = p.nome;
+                if (p.ente) document.getElementById(`pres_${pIdx}_ente`).value = p.ente;
+                checkPresenteCompilato(pIdx);
+                if (p.sigla && activeCanvases[`canvas_pres_${pIdx}`]) {
+                  const img = new Image();
+                  img.onload = () => activeCanvases[`canvas_pres_${pIdx}`].ctx.drawImage(img, 0, 0);
+                  img.src = p.sigla;
+                }
+              }
+            });
           }
 
           if (record.campioni) {
