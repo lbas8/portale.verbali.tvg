@@ -56,10 +56,17 @@
       <!-- INTESTAZIONE UFFICIALE -->
       <div class="border-2 border-slate-900 p-4 bg-slate-50">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-3">
-          <div>
-            <span class="text-xs font-black tracking-widest text-red-600 uppercase">CC KEO</span>
-            <h2 class="text-lg font-black text-slate-900 uppercase">Verbale di Campionamento e Catena di Custodia</h2>
-            <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo</p>
+          <div class="flex items-center gap-4">
+            <!-- LOGO / IMMAGINE AL POSTO DI CC KEO -->
+            <div class="bg-white p-1 border border-slate-300 rounded flex items-center justify-center">
+              <!-- Sostituisci l'attributo src con il link o il percorso della tua immagine -->
+              <img src="tuo-logo.png" alt="Logo Aziendale" class="h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <span class="text-xs font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
+            </div>
+            <div>
+              <h2 class="text-lg font-black text-slate-900 uppercase">Verbale di Campionamento e Catena di Custodia</h2>
+              <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo</p>
+            </div>
           </div>
           <div class="text-right">
             <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo</label>
@@ -87,6 +94,14 @@
           <div>
             <label class="block font-bold text-slate-600 mb-1">Per conto di:</label>
             <input type="text" id="per_conto" placeholder="Es. COCIV / General Contractor" class="w-full border rounded p-1.5 bg-white">
+          </div>
+          
+          <!-- SPAZIO FIRMA DEL CAMPIONATORE -->
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Firma del Campionatore:</label>
+            <div class="h-9 border border-slate-400 rounded bg-white flex items-center px-2 text-slate-400 text-[11px]">
+              <span>Firmato digitalmente / autografo</span>
+            </div>
           </div>
         </div>
       </div>
