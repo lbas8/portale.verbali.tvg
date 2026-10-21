@@ -211,7 +211,7 @@
       }
     }
 
-    // Helper per creare la scheda del verbale
+    // Helper per creare la scheda del verbale con pulsante di eliminazione
     function createVerbaleCard(vKey, verbale, folderKeys) {
       const dateStr = verbale.datetime ? new Date(verbale.datetime).toLocaleString() : 'Data N.D.';
       
@@ -245,6 +245,10 @@
           <a href="verbale.html?load=${encodeURIComponent(vKey)}" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1 shadow-sm transition whitespace-nowrap">
             <i class="fa-solid fa-eye"></i> Apri
           </a>
+
+          <button onclick="deleteVerbale('${vKey}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-2.5 py-1.5 rounded text-xs font-medium flex items-center gap-1 transition" title="Elimina Verbale">
+            <i class="fa-solid fa-trash"></i>
+          </button>
         </div>
       `;
       return div;
