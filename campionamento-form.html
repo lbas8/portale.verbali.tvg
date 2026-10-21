@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catena di Custodia e Verbale di Campionamento - Terzo Valico AV/AC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #fff !important; font-size: 9pt; }
+      input, select, textarea { border: none !important; background: transparent !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
+
+  <!-- TOP BAR COMANDI -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-vial-circle-check text-emerald-400 text-2xl"></i>
+        <div>
+          <h1 class="font-bold text-base leading-tight">Catena di Custodia - Campionamento</h1>
+          <p class="text-[11px] text-slate-400">Terzo Valico dei Giovi | Matrice: Suolo e Sottosuolo</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="campionamenti.html" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-sm flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-arrow-left"><span> Indietro</span></i>
+        </a>
+        <button onclick="saveCampionamentoToCloud()" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 transition font-medium">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Salva nel Cloud
+        </button>
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-sm flex items-center gap-2 transition font-medium">
+          <i class="fa-solid fa-file-pdf"></i> Stampa / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto my-6 px-4">
+    <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-8 space-y-8">
+
+      <!-- INTESTAZIONE UFFICIALE -->
+      <div class="border-2 border-slate-900 p-4 bg-slate-50">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-3">
+          <div>
+            <span class="text-xs font-black tracking-widest text-red-600 uppercase">CC KEO</span>
+            <h2 class="text-lg font-black text-slate-900 uppercase">Verbale di Campionamento e Catena di Custodia</h2>
+            <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo[cite: 13]</p>
+          </div>
+          <div class="text-right">
+            <label class="block text-[10px] font-bold text-slate-500 uppercase">Numero Identificativo</label>
+            <input type="text" id="identificativo" placeholder="CDC/AAAAMMGG/..." class="border border-slate-400 rounded p-1 text-xs font-bold text-right bg-white w-48">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-3">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">In Località / Ubicazione prelievo:</label>
+            <input type="text" id="localita" placeholder="Es. Area San Bovo / Cantiere..." class="w-full border rounded p-1.5 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Esecutore Campionamento / Nominativo:</label>
+            <input type="text" id="esecutore" placeholder="Nome e Cognome / Società" class="w-full border rounded p-1.5 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Laboratorio / Ente Incaricato:</label>
+            <input type="text" id="laboratorio" placeholder="Nome Laboratorio" class="w-full border rounded p-1.5 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Data e Ora Campionamento:</label>
+            <input type="datetime-local" id="datetime" class="w-full border rounded p-1.5 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Per conto di:</label>
+            <input type="text" id="per_conto" placeholder="Es. COCIV / General Contractor" class="w-full border rounded p-1.5 bg-white">
+          </div>
+        </div>
+      </div>
+
+      <!-- SEZIONE A: TABELLA CAMPIONI (01 - 10) -->
+      <section>
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+            <span class="bg-emerald-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">A</span> 
+            Tabella dei Campioni Prelievi (01 - 10)[cite: 13]
+          </h3>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-300 rounded-lg">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
+                <th class="p-2 border-r text-center w-12">Rif.</th>
+                <th class="p-2 border-r">Tipologia Punto (*)[cite: 13]</th>
+                <th class="p-2 border-r">WBS / Pk o Sez</th>
+                <th class="p-2 border-r">Codice Campione [Etichetta][cite: 13]</th>
+                <th class="p-2 border-r">Profondità / Anello</th>
+                <th class="p-2 border-r">Natura e Stato (**)[cite: 13]</th>
+                <th class="p-2 border-r">Metodo Campionatura (***)[cite: 13]</th>
+                <th class="p-2 border-r text-center">N. Incr.</th>
+                <th class="p-2 border-r">Contenitore (****)[cite: 13]</th>
+                <th class="p-2 text-center w-12">Repl.</th>
+              </tr>
+            </thead>
+            <tbody id="rows-campionamento" class="divide-y divide-slate-200">
+              <!-- Generato via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Note della sezione A -->
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] bg-slate-50 p-3 rounded-lg border">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):[cite: 13]</label>
+            <textarea id="note_campo" rows="2" placeholder="Indicare se tal quale, scarto frazione >20mm, materiale antropico..." class="w-full border rounded p-1 bg-white"></textarea>
+          </div>
+          <div class="space-y-1 text-slate-600">
+            <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento[cite: 13].</p>
+            <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido[cite: 13].</p>
+            <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva[cite: 13].</p>
+            <p><strong>(****) Contenitore:</strong> (1) Busta PE, (2) Barattolo PE, (3) Bottiglia vetro, (4) Vials, (5) Bottiglia PE[cite: 13].</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEZIONE B: ANALISI DA ESEGUIRE -->
+      <section>
+        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+          <span class="bg-emerald-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">B</span> 
+          Analisi da Eseguire presso il Laboratorio Incaricato
+        </h3>
+
+        <div class="overflow-x-auto border border-slate-300 rounded-lg">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
+                <th class="p-2 border-r text-center w-12">Rif.</th>
+                <th class="p-2 border-r text-center">Amianto (MOCF/SEM)[cite: 14]</th>
+                <th class="p-2 border-r text-center">DM 161/12 Tab. 4.1 [Ridotta (+)][cite: 14]</th>
+                <th class="p-2 border-r text-center">DM 161/12 Tab. 4.1 [Completa (++))][cite: 14]</th>
+                <th class="p-2 border-r text-center">D.Lgs 152/06 All.5 Tab.1 (Terre)[cite: 14]</th>
+                <th class="p-2 border-r text-center">DM 05/02/98 Test Cessione (Recupero)[cite: 14]</th>
+                <th class="p-2 border-r text-center">D.Lgs 121/20 Test Cessione (Discarica)[cite: 14]</th>
+                <th class="p-2 text-center">D.Lgs 152/06 Pericolosità Rifiuto[cite: 14]</th>
+              </tr>
+            </thead>
+            <tbody id="rows-analisi" class="divide-y divide-slate-200">
+              <!-- Generato via JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-3">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Altre analisi da eseguire:[cite: 14]</label>
+          <input type="text" id="altre_analisi" placeholder="Eventuali parametri specifici richiesti..." class="w-full border rounded p-1.5 text-xs bg-white">
+        </div>
+      </section>
+
+      <!-- SEZIONE C, D, E: DELEGA, TRASPORTO E VERIFICA -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="border rounded-lg p-4 bg-slate-50 space-y-3">
+          <h4 class="font-bold text-slate-800 uppercase">C) Eventuale Delega Consegna Aliquota[cite: 14]</h4>
+          <input type="text" id="delega_info" placeholder="Dati delegato / motivazione" class="w-full border rounded p-1.5 bg-white">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="delega_consegnato" placeholder="Consegnato da (Firma)" class="border rounded p-1 bg-white">
+            <input type="text" id="delega_ricevuto" placeholder="Ricevuto da (Firma)" class="border rounded p-1 bg-white">
+          </div>
+        </div>
+
+        <div class="border rounded-lg p-4 bg-slate-50 space-y-3">
+          <h4 class="font-bold text-slate-800 uppercase">D) Trasporto e Consegna al Laboratorio[cite: 14]</h4>
+          <input type="text" id="trasporto_societa" placeholder="Società trasportatrice / incaricato" class="w-full border rounded p-1.5 bg-white">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="trasporto_data" placeholder="Data e Ora consegna" class="border rounded p-1 bg-white">
+            <input type="text" id="trasporto_ricevuto" placeholder="Ricevuto c/o Laboratorio (Firma)" class="border rounded p-1 bg-white">
+          </div>
+        </div>
+      </section>
+
+      <!-- SEZIONE INVIO EMAIL (SPECIFICA UTENTE) -->
+      <section class="border-t-2 border-emerald-600 pt-6 bg-emerald-50/50 p-6 rounded-xl">
+        <h3 class="text-sm font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-envelope text-emerald-700"></i> Invio Modulo via E-mail[cite: 14]
+        </h3>
+        <p class="text-xs text-slate-600 mb-4">
+          La presente catena di custodia dovrà essere anticipata via e-mail e successivamente restituita in originale firmata assieme ai certificati di analisi[cite: 14].
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Destinatari Principali (@cociv.it):[cite: 14]</label>
+            <input type="text" id="email_destinatari" value="@cociv.it" class="w-full border rounded p-2 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Copia Conoscenza (Cc):</label>
+            <input type="text" id="email_cc" placeholder="Altre e-mail separate da virgola" class="w-full border rounded p-2 bg-white">
+          </div>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button onclick="sendEmailReport()" class="bg-teal-700 hover:bg-teal-600 text-white px-4 py-2 rounded text-xs font-medium flex items-center gap-2 shadow transition">
+            <i class="fa-solid fa-paper-plane"></i> Genera e Invia E-mail con Dati
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // Configurazione Firebase (Stesso database del portale)
+    const firebaseConfig = {
+      databaseURL: "https://vstvg-1f2f6-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Generazione righe 1-10 per tabella campioni e analisi
+    document.addEventListener("DOMContentLoaded", () => {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      document.getElementById('datetime').value = now.toISOString().slice(0,16);
+
+      const rowsCamps = document.getElementById('rows-campionamento');
+      const rowsAnals = document.getElementById('rows-analisi');
+
+      for (let i = 1; i <= 10; i++) {
+        const idStr = i < 10 ? `0${i}` : `${i}`;
+        
+        // Tabella A
+        rowsCamps.innerHTML += `
+          <tr>
+            <td class="p-2 border-r text-center font-bold bg-slate-50">${idStr}</td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_tipologia" class="w-full border rounded p-1 bg-white" placeholder="Es. TBM"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_wbs" class="w-full border rounded p-1 bg-white" placeholder="WBS / Pk"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_codice" class="w-full border rounded p-1 bg-white font-bold" placeholder="Codice Campione"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_prof" class="w-full border rounded p-1 bg-white" placeholder="Profondità"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_natura" class="w-full border rounded p-1 bg-white" placeholder="TER / Solido"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_metodo" class="w-full border rounded p-1 bg-white" placeholder="Grezzo / Casuale"></td>
+            <td class="p-2 border-r text-center"><input type="text" id="c_${i}_incr" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
+            <td class="p-2 border-r"><input type="text" id="c_${i}_cont" class="w-full border rounded p-1 bg-white" placeholder="(2) Barattolo PE"></td>
+            <td class="p-2 text-center"><input type="text" id="c_${i}_repl" class="w-full border rounded p-1 text-center bg-white" value="1"></td>
+          </tr>
+        `;
+
+        // Tabella B (Checkbox Analisi)
+        rowsAnals.innerHTML += `
+          <tr>
+            <td class="p-2 border-r text-center font-bold bg-slate-50">${idStr}</td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_amianto" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_rid" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dm161_com" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_dlgs152_terre" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_rec" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 border-r text-center"><input type="checkbox" id="b_${i}_cess_disc" class="w-4 h-4 accent-emerald-600"></td>
+            <td class="p-2 text-center"><input type="checkbox" id="b_${i}_peric" class="w-4 h-4 accent-emerald-600"></td>
+          </tr>
+        `;
+      }
+
+      // Controllo se stiamo caricando un elemento esistente dall'URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const loadKey = urlParams.get('load');
+      if (loadKey) {
+        setTimeout(() => loadFromCloud(loadKey), 400);
+      }
+    });
+
+    // Salvataggio nel Cloud
+    function saveCampionamentoToCloud() {
+      const identificativo = document.getElementById('identificativo').value.trim() || "Campionamento_" + Date.now();
+      const cantiere = document.getElementById('localita').value.trim() || "Localita_N.D.";
+
+      const formData = {
+        identificativo: identificativo,
+        cantiere: cantiere,
+        laboratorio: document.getElementById('laboratorio').value,
+        esecutore: document.getElementById('esecutore').value,
+        datetime: document.getElementById('datetime').value,
+        per_conto: document.getElementById('per_conto').value,
+        note_campo: document.getElementById('note_campo').value,
+        altre_analisi: document.getElementById('altre_analisi').value,
+        timestamp: Date.now()
+      };
+
+      db.ref('campionamenti/' + identificativo.replace(/[.#$/[\]]/g, "_")).set(formData, (error) => {
+        if (error) {
+          alert("Errore salvataggio: " + error.message);
+        } else {
+          alert("☁️ Campionamento salvato con successo nel Cloud!");
+          window.location.href = "campionamenti.html";
+        }
+      });
+    }
+
+    // Caricamento dati da Cloud
+    function loadFromCloud(key) {
+      db.ref('campionamenti/' + key).once('value', (snapshot) => {
+        const record = snapshot.val();
+        if (record) {
+          if (record.identificativo) document.getElementById('identificativo').value = record.identificativo;
+          if (record.cantiere) document.getElementById('localita').value = record.cantiere;
+          if (record.laboratorio) document.getElementById('laboratorio').value = record.laboratorio;
+          if (record.esecutore) document.getElementById('esecutore').value = record.esecutore;
+          if (record.datetime) document.getElementById('datetime').value = record.datetime;
+          if (record.per_conto) document.getElementById('per_conto').value = record.per_conto;
+          if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
+          if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
+          console.log("Dati campionamento caricati.");
+        }
+      });
+    }
+
+    // Funzione invio e-mail tramite client di posta predefinito
+    function sendEmailReport() {
+      const dest = document.getElementById('email_destinatari').value;
+      const cc = document.getElementById('email_cc').value;
+      const id = document.getElementById('identificativo').value || "CDC-N.D.";
+      const localita = document.getElementById('localita').value || "N.D.";
+
+      const subject = encodeURIComponent(`Catena di Custodia - ${id} - ${localita}`);
+      const body = encodeURIComponent(`Buongiorno,\n\nSi trasmette in allegato / si anticipa la Catena di Custodia n. ${id} relativa al cantiere: ${localita}.\n\nCordiali saluti.`);
+
+      window.location.href = `mailto:${dest}?cc=${cc}&subject=${subject}&body=${body}`;
+    }
+  </script>
+</body>
+</html>
