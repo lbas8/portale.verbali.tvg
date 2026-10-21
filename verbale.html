@@ -429,9 +429,10 @@
       container.innerHTML = '';
       (photoStore[key] || []).forEach((src, idx) => {
         container.innerHTML += `
-          <div class="relative inline-block">
-            <img src="${src}" class="w-12 h-12 object-cover rounded border">
-            <button onclick="photoStore['${key}'].splice(${idx},1); renderPhotos('${key}')" class="no-print absolute -top-1 -right-1 bg-red-600 text-white rounded-full w-4 h-4 text-[10px]">&times;</button>
+          <div class="relative inline-block mr-2 mb-2">
+            <!-- Modifica w-24 h-24 a piacimento (es. w-32 h-32 per farle ancora più grandi) -->
+            <img src="${src}" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
+            <button onclick="photoStore['${key}'].splice(${idx},1); renderPhotos('${key}')" class="no-print absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center font-bold shadow">&times;</button>
           </div>
         `;
       });
