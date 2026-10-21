@@ -434,9 +434,14 @@
       const localita = document.getElementById('localita').value || "N.D.";
 
       const subject = encodeURIComponent(`Catena di Custodia - ${id} - ${localita}`);
-      const body = encodeURIComponent(`Buongiorno,\n\nSi trasmette in allegato / si anticipa la Catena di Custodia n. ${id} relativa al cantiere: ${localita}.\n\nCordiali saluti.`);
+      const body = encodeURIComponent(`Buongiorno,\n\nSi trasmette in allegato la Catena di Custodia n. ${id} relativa al cantiere: ${localita}.\n\nCordiali saluti.`);
 
-      window.location.href = `mailto:${dest}?cc=${cc}&subject=${subject}&body=${body}`;
+      let mailtoLink = `mailto:${dest}?subject=${subject}&body=${body}`;
+      if (cc.trim() !== "") {
+        mailtoLink += `&cc=${encodeURIComponent(cc)}`;
+      }
+
+      window.location.href = mailtoLink;
     }
   </script>
 </body>
