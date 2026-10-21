@@ -60,8 +60,8 @@
     </div>
   </div>
 
-  <script>
-    // CONFIGURAZIONE FIREBASE (Usa il tuo URL Firebase reale)
+ <script>
+    // CONFIGURAZIONE FIREBASE (Assicurati che l'URL sia corretto)
     const firebaseConfig = {
       databaseURL: "https://verbale-ambientale-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -71,11 +71,14 @@
     let allFolders = {};
     let allVerbali = {};
 
-    // Ascolta sia le cartelle che i verbali
-    db.ref().on('value', (snapshot) => {
-      const rootData = snapshot.val() || {};
-      allFolders = rootData.cartelle || {};
-      allVerbali = rootData.verbali || {};
+    // Ascolto separato dei nodi per evitare blocchi se la cartella non esiste ancora
+    db.ref('verbali').on('value', (snapshot) => {
+      allVerbali = snapshot.val() || {};
+      renderPortal();
+    });
+
+    db.ref('cartelle').on('value', (snapshot) => {
+      allFolders = snapshot.val() || {};
       renderPortal();
     });
 
@@ -89,7 +92,11 @@
         nome: folderName.trim(),
         createdAt: Date.now()
       }, (err) => {
-        if (err) alert("Errore creazione cartella: " + err.message);
+        if (err) {
+          alert("Errore creazione cartella: " + err.message);
+        } else {
+          alert("📁 Cartella creata con successo!");
+        }
       });
     }
 
@@ -105,7 +112,6 @@
     // Eliminazione cartella
     function deleteFolder(folderId, folderName) {
       if (confirm(`Sei sicuro di voler eliminare la cartella "${folderName}"?\nI verbali contenuti torneranno nella sezione "Da Classificare".`)) {
-        // Ripristina i verbali della cartella come non classificati
         Object.keys(allVerbali).forEach(vKey => {
           if (allVerbali[vKey].folderId === folderId) {
             db.ref('verbali/' + vKey + '/folderId').remove();
@@ -126,7 +132,7 @@
       const folderKeys = Object.keys(allFolders);
       const verbaleKeys = Object.keys(allVerbali);
 
-      // 1. Render dei Verbali da Classificare (folderId non presente o vuoto)
+      // 1. Render dei Verbali da Classificare
       const unclassified = verbaleKeys.filter(k => !allVerbali[k].folderId);
 
       if (unclassified.length === 0) {
@@ -150,7 +156,7 @@
 
           let verbaliListHTML = '';
           if (folderVerbali.length === 0) {
-            verbaliListHTML = '<p class="text-xs text-slate-400 italic p-3">Cartella vuota. Sposta qui i verbali utilizzando il selettore "Sposta in...".</p>';
+            verbaliListHTML = '<p class="text-xs text-slate-400 italic p-3">Cartella vuota. Sposta qui i verbali utilizzando il selettore.</p>';
           }
 
           folderEl.innerHTML = `
@@ -174,7 +180,6 @@
 
           foldersContainer.appendChild(folderEl);
 
-          // Se ci sono verbali nella cartella, li appendiamo via JavaScript per mantenere le interazioni
           if (folderVerbali.length > 0) {
             const contentBox = folderEl.querySelector(`#content_folder_${fKey}`);
             folderVerbali.forEach(vKey => {
@@ -185,7 +190,7 @@
       }
     }
 
-    // Helper per creare la scheda del singolo verbale con menu di spostamento
+    // Helper per creare la scheda del singolo verbale
     function createVerbaleCard(vKey, verbale, folderKeys) {
       const dateStr = verbale.datetime ? new Date(verbale.datetime).toLocaleString() : 'Data N.D.';
       
