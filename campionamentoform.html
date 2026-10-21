@@ -16,6 +16,7 @@
       .no-print { display: none !important; }
       body { background-color: #fff !important; font-size: 9pt; }
       input, select, textarea { border: none !important; background: transparent !important; }
+      canvas { border: 1px solid #cbd5e1 !important; }
     }
   </style>
 </head>
@@ -32,11 +33,9 @@
         </div>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <!-- Tasto Home -->
         <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded text-sm flex items-center gap-1.5 transition border border-slate-700">
           <i class="fa-solid fa-house"><span> Home</span></i>
         </a>
-        <!-- Tasto Indietro (Torna ai Campionamenti) -->
         <a href="campionamenti.html" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-sm flex items-center gap-1.5 transition">
           <i class="fa-solid fa-arrow-left"><span> Indietro</span></i>
         </a>
@@ -57,15 +56,14 @@
       <div class="border-2 border-slate-900 p-4 bg-slate-50">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-300 pb-3">
           <div class="flex items-center gap-4">
-            <!-- LOGO / IMMAGINE AL POSTO DI CC KEO -->
+            <!-- LOGO / IMMAGINE AZIENDALE -->
             <div class="bg-white p-1 border border-slate-300 rounded flex items-center justify-center">
-              <!-- Sostituisci l'attributo src con il link o il percorso della tua immagine -->
-              <img src="tuo-logo.png" alt="Logo Aziendale" class="h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <img src="logo.png" alt="Logo" class="h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
               <span class="text-xs font-black tracking-widest text-red-600 uppercase hidden">LOGO</span>
             </div>
             <div>
               <h2 class="text-lg font-black text-slate-900 uppercase">Verbale di Campionamento e Catena di Custodia</h2>
-              <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo</p>
+              <p class="text-xs font-semibold text-slate-700">Lavori del Terzo Valico dei Giovi — Matrice ambientale: Suolo e Sottosuolo[cite: 13]</p>
             </div>
           </div>
           <div class="text-right">
@@ -95,12 +93,18 @@
             <label class="block font-bold text-slate-600 mb-1">Per conto di:</label>
             <input type="text" id="per_conto" placeholder="Es. COCIV / General Contractor" class="w-full border rounded p-1.5 bg-white">
           </div>
-          
-          <!-- SPAZIO FIRMA DEL CAMPIONATORE -->
-          <div>
+
+          <!-- SPAZIO FIRMA A MANO LIBERA (CANVAS) -->
+          <div class="md:col-span-3">
             <label class="block font-bold text-slate-600 mb-1">Firma del Campionatore:</label>
-            <div class="h-9 border border-slate-400 rounded bg-white flex items-center px-2 text-slate-400 text-[11px]">
-              <span>Firmato digitalmente / autografo</span>
+            <div class="border border-slate-400 rounded bg-white p-2 flex flex-col items-center">
+              <canvas id="signature-pad" class="w-full h-24 border border-dashed border-slate-300 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
+              <div class="flex justify-between w-full mt-1">
+                <span class="text-[10px] text-slate-400">Usa il dito o il mouse per firmare</span>
+                <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-0.5 rounded border border-red-200 bg-red-50 no-print">
+                  <i class="fa-solid fa-eraser"></i> Cancella Firma
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -111,7 +115,7 @@
         <div class="flex justify-between items-center mb-2">
           <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
             <span class="bg-emerald-700 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">A</span> 
-            Tabella dei Campioni Prelievi (01 - 10)
+            Tabella dei Campioni Prelievi (01 - 10)[cite: 13]
           </h3>
         </div>
 
@@ -120,14 +124,14 @@
             <thead>
               <tr class="bg-slate-200 text-slate-700 border-b border-slate-300">
                 <th class="p-2 border-r text-center w-12">Rif.</th>
-                <th class="p-2 border-r">Tipologia Punto (*)</th>
+                <th class="p-2 border-r">Tipologia Punto (*)[cite: 13]</th>
                 <th class="p-2 border-r">WBS / Pk o Sez</th>
-                <th class="p-2 border-r">Codice Campione [Etichetta]</th>
+                <th class="p-2 border-r">Codice Campione [Etichetta][cite: 13]</th>
                 <th class="p-2 border-r">Profondità / Anello</th>
-                <th class="p-2 border-r">Natura e Stato (**)</th>
-                <th class="p-2 border-r">Metodo Campionatura (***)</th>
+                <th class="p-2 border-r">Natura e Stato (**)[cite: 13]</th>
+                <th class="p-2 border-r">Metodo Campionatura (***)[cite: 13]</th>
                 <th class="p-2 border-r text-center">N. Incr.</th>
-                <th class="p-2 border-r">Contenitore (****)</th>
+                <th class="p-2 border-r">Contenitore (****)[cite: 13]</th>
                 <th class="p-2 text-center w-12">Repl.</th>
               </tr>
             </thead>
@@ -140,14 +144,14 @@
         <!-- Note della sezione A -->
         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] bg-slate-50 p-3 rounded-lg border">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):</label>
+            <label class="block font-bold text-slate-700 mb-1">Note di Campo (*****):[cite: 13]</label>
             <textarea id="note_campo" rows="2" placeholder="Indicare se tal quale, scarto frazione >20mm, materiale antropico..." class="w-full border rounded p-1 bg-white"></textarea>
           </div>
           <div class="space-y-1 text-slate-600">
-            <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento.</p>
-            <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido.</p>
-            <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva.</p>
-            <p><strong>(****) Contenitore:</strong> (1) Busta PE, (2) Barattolo PE, (3) Bottiglia vetro, (4) Vials, (5) Bottiglia PE.</p>
+            <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento[cite: 13].</p>
+            <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido[cite: 13].</p>
+            <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva[cite: 13].</p>
+            <p><strong>(****) Contenitore:</strong> (1) Busta PE, (2) Barattolo PE, (3) Bottiglia vetro, (4) Vials, (5) Bottiglia PE[cite: 13].</p>
           </div>
         </div>
       </section>
@@ -206,10 +210,13 @@
       </section>
 
       <!-- SEZIONE INVIO EMAIL -->
-      <section class="border-t-2 border-emerald-600 pt-6 bg-emerald-50/50 p-6 rounded-xl">
+      <section class="border-t-2 border-emerald-600 pt-6 bg-emerald-50/50 p-6 rounded-xl no-print">
         <h3 class="text-sm font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
           <i class="fa-solid fa-envelope text-emerald-700"></i> Invio Modulo via E-mail
         </h3>
+        <p class="text-xs text-slate-600 mb-4">
+          La presente catena di custodia dovrà essere anticipata via e-mail e successivamente restituita in originale firmata assieme ai certificati di analisi.
+        </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Destinatari Principali (@cociv.it):</label>
@@ -237,6 +244,58 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Gestione Canvas Firma
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 200);
+
+    function startPosition(e) {
+      isDrawing = true;
+      draw(e);
+    }
+    function endPosition() {
+      isDrawing = false;
+      ctx.beginPath();
+    }
+    function draw(e) {
+      if (!isDrawing) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#0f172a';
+
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      if (clientX && clientY) {
+        ctx.lineTo(clientX - rect.left, clientY - rect.top);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(clientX - rect.left, clientY - rect.top);
+      }
+    }
+
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw);
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Generazione righe 1-10 per tabella campioni e analisi con tendine integrate
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -384,6 +443,7 @@
         altre_analisi: document.getElementById('altre_analisi').value,
         campioni: campioniData,
         analisi: analisiData,
+        firma_campionatore: canvas.toDataURL(),
         timestamp: Date.now()
       };
 
@@ -409,6 +469,12 @@
           if (record.per_conto) document.getElementById('per_conto').value = record.per_conto;
           if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
           if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
+
+          if (record.firma_campionatore) {
+            const img = new Image();
+            img.onload = () => ctx.drawImage(img, 0, 0);
+            img.src = record.firma_campionatore;
+          }
 
           if (record.campioni) {
             for (let i = 1; i <= 10; i++) {
