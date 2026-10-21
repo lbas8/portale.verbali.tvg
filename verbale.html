@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -494,7 +495,7 @@
       canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // SALVATAGGIO IN CLOUD (Firebase)
+    // SALVATAGGIO IN CLOUD (Firebase) con reindirizzamento automatico
     function saveToCloud() {
       const cantiere = document.getElementById('cantiere').value.trim() || "Cantiere";
       const area = document.getElementById('area').value.trim() || "Area";
@@ -558,8 +559,17 @@
           alert("Errore nel salvataggio Cloud: " + error.message);
         } else {
           alert("☁️ Bozza salvata in Cloud con successo!\nIdentificativo: " + docId);
+          // Reindirizzamento automatico alla home page dopo il salvataggio
+          window.location.href = "index.html";
         }
       });
+    }
+
+    // Funzione per stampare / esportare e tornare alla home
+    function exportAndGoHome() {
+      window.print();
+      // Opzionalmente, se vuoi rimandare alla home dopo la stampa:
+      // window.location.href = "index.html";
     }
 
     // CARICAMENTO DAL CLOUD (Firebase)
