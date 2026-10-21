@@ -225,9 +225,9 @@
             <textarea id="note_campo" rows="1" placeholder="Tal quale, scarto >20mm..." class="w-full border rounded p-1 bg-white text-[8.5px] h-7"></textarea>
           </div>
           <div class="text-slate-600 text-[8px] leading-tight space-y-0.2">
-            <p><strong>(*) Tipologia:</strong> TBM nastro, Fronte scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento.</p>
-            <p><strong>(**) Natura/Stato:</strong> TER (Terra), RIP (Riporto), RIF (Rifiuto) / Solido, Fangoso, Liquido.</p>
-            <p><strong>(***) Metodo:</strong> Grezzo, Composito, Puntuale / Casuale, Stratificata, Sistematica, Selettiva.</p>
+            <p><strong>(*) Tipologia:</strong> TBM, Fronte Scavo, Cumulo, Vasca, Trincea, Sondaggio, Topsoil, Affioramento.</p>
+            <p><strong>(**) Natura/Stato:</strong> TERRA, RIPORTO/VEGETALE, RIFIUTO / SOLIDO, FANGOSO, LIQUIDO.</p>
+            <p><strong>(***) Metodo:</strong> GREZZO, COMPOSITO, PUNTUALE / CASUALE, STRATIFICATO, SISTEMATICO, SELETTIVO.</p>
             <p><strong>(****) Contenitore:</strong> (1) Busta PE, (2) Barattolo PE, (3) Bottiglia vetro, (4) Vials, (5) Bottiglia PE.</p>
           </div>
         </div>
@@ -466,15 +466,15 @@
             <td class="p-0.5 border-r">
               <select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[8.5px]">
                 <option value="">-- Seleziona --</option>
-                <option value="TBM nastro">TBM nastro</option>
-                <option value="Fronte di scavo">Fronte di scavo</option>
-                <option value="Cumulo di stoccaggio">Cumulo di stoccaggio</option>
-                <option value="Vasca di stoccaggio">Vasca di stoccaggio</option>
-                <option value="Trincea o scavo">Trincea o scavo</option>
-                <option value="Sondaggio a carotaggio">Sondaggio a carotaggio</option>
-                <option value="Perforazione a distruzione">Perforazione a distruzione</option>
+                <option value="TBM">TBM</option>
+                <option value="Fronte Scavo">Fronte Scavo</option>
+                <option value="Cumulo">Cumulo</option>
+                <option value="Vasca">Vasca</option>
+                <option value="Trincea">Trincea</option>
+                <option value="Sondaggio Carotaggio">Sondaggio</option>
+                <option value="Perforazione Distruzione">Perforazione</option>
                 <option value="Topsoil">Topsoil</option>
-                <option value="Affioramento superficiale">Affioramento superficiale</option>
+                <option value="Affioramento Superficiale">Affioramento</option>
               </select>
             </td>
             <td class="p-0.5 border-r"><input type="text" id="c_${i}_wbs" oninput="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[8.5px]" placeholder="WBS / Pk"></td>
@@ -484,16 +484,16 @@
               <div class="flex gap-0.5">
                 <select id="c_${i}_natura" class="w-1/2 border rounded p-0.5 bg-white text-[8px]">
                   <option value="">Nat.</option>
-                  <option value="TER">TER</option>
-                  <option value="RIP">RIP</option>
-                  <option value="RIF">RIF</option>
+                  <option value="TERRA">TER</option>
+                  <option value="RIPORTO">RIP</option>
+                  <option value="RIFIUTO">RIF</option>
                 </select>
                 <select id="c_${i}_stato" class="w-1/2 border rounded p-0.5 bg-white text-[8px]">
                   <option value="">Stato</option>
-                  <option value="Solido">Solido</option>
-                  <option value="Polverulento">Polv.</option>
-                  <option value="Fangoso">Fang.</option>
-                  <option value="Liquido">Liq.</option>
+                  <option value="Solido">SOL</option>
+                  <option value="Polverulento">POL</option>
+                  <option value="Fangoso">FAN</option>
+                  <option value="Liquido">LIQ</option>
                 </select>
               </div>
             </td>
@@ -501,18 +501,18 @@
               <div class="flex gap-0.5">
                 <select id="c_${i}_metodo_tipo" class="w-1/2 border rounded p-0.5 bg-white text-[8px]">
                   <option value="">Tipo</option>
-                  <option value="Grezzo">Grezzo</option>
-                  <option value="Composito">Composito</option>
-                  <option value="Puntuale">Puntuale</option>
-                  <option value="Talquale">Talquale</option>
+                  <option value="Grezzo">GRE</option>
+                  <option value="Composito">COM</option>
+                  <option value="Puntuale">PUN</option>
+                  <option value="Talquale">TAL</option>
                 </select>
                 <select id="c_${i}_metodo_norma" class="w-1/2 border rounded p-0.5 bg-white text-[8px]">
                   <option value="">Norma</option>
-                  <option value="Casuale">Casuale</option>
-                  <option value="Stratificata">Strat.</option>
-                  <option value="Sistematica">Sistem.</option>
-                  <option value="Dinamica">Dinam.</option>
-                  <option value="Selettiva">Selett.</option>
+                  <option value="Casuale">CAS</option>
+                  <option value="Stratificata">STRAT</option>
+                  <option value="Sistematica">SIS</option>
+                  <option value="Dinamica">DIN</option>
+                  <option value="Selettiva">SEL</option>
                 </select>
               </div>
             </td>
@@ -522,8 +522,8 @@
                 <option value="">-- Cont. --</option>
                 <option value="(1) Busta in plastica">(1) Busta PE</option>
                 <option value="(2) Barattolo in PE">(2) Barattolo PE</option>
-                <option value="(3) Bottiglia in vetro">(3) Bottiglia vetro</option>
-                <option value="(4) Vials">(4) Vials</option>
+                <option value="(3) Bottiglia in vetro">(3) Bottiglia VE</option>
+                <option value="(4) Vials">(4) Vial</option>
                 <option value="(5) Bottiglia in PE">(5) Bottiglia PE</option>
               </select>
             </td>
