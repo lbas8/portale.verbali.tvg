@@ -3,231 +3,465 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartello Deposito Temporaneo Rifiuti - Terzo Valico</title>
+  <title>Cartello Rifiuti Dinamico di Cantiere - Terzo Valico / Webuild</title>
+  <!-- Tailwind CSS per la dashboard di configurazione -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style id="print-style">
+  <!-- SheetJS per supporto upload/export file Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* CONTENITORE CARTELLO (Rapporto 297/210 A4/A3 Landscape) */
+    .signage-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 1150px;
+      aspect-ratio: 297 / 210;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      border: 1px solid #94a3b8;
+    }
+
+    /* LOGICA TRASPARENZA E GRASSETTO CARATTERISTICHE ED ELEMENTI */
+    .faded {
+      opacity: 0.18 !important;
+      filter: grayscale(100%) !important;
+      font-weight: 400 !important;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .active-feature {
+      opacity: 1 !important;
+      filter: grayscale(0%) !important;
+      font-weight: 800 !important;
+      color: #000000 !important;
+      transition: all 0.15s ease-in-out;
+    }
+
+    /* STILI TABELLA HP CARATTERISTICHE DI PERICOLO */
+    .hp-table {
+      border: 2px solid #000000;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.70rem;
+      line-height: 1.15;
+    }
+
+    .hp-table td {
+      padding: 2px 4px;
+      vertical-align: middle;
+    }
+
+    .hp-table tr {
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .hp-table tr:last-child {
+      border-bottom: none;
+    }
+
+    /* GESTIONE DELLA STAMPA (A4 e A3 LANDSCAPE PERFECT FIT) */
     @media print {
-      @page {
-        size: landscape;
-        margin: 5mm;
+      body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      .no-print { display: none !important; }
-      body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
-      main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
-      .cartello-box { border: 4px solid #000 !important; box-shadow: none !important; width: 100% !important; }
-      input, select, textarea {
-        border: none !important;
-        background: transparent !important;
+
+      .no-print {
+        display: none !important;
+      }
+
+      .print-area {
         box-shadow: none !important;
-        font-weight: bold !important;
+        border: none !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        max-height: none !important;
+        aspect-ratio: auto !important;
+        padding: 1.2cm 1.5cm !important;
+        margin: 0 !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
       }
-    }
-    
-    /* Stile interattivo pittogrammi */
-    .ghs-card {
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
-    }
-    .ghs-card.inactive {
-      opacity: 0.15;
-      filter: grayscale(100%);
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-900 font-sans min-h-screen pb-10">
+<body class="p-3 md:p-6">
 
-  <!-- BARRA COMANDI TOP -->
-  <header class="bg-slate-800 border-b border-slate-700 text-white sticky top-0 z-50 shadow-lg no-print">
-    <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <a href="cartellonistica-form.html" class="bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-xl border border-slate-600 transition">
-          <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div>
-          <h1 class="font-bold text-sm leading-tight">Generatore Cartello Rifiuti (DTR)</h1>
-          <p class="text-[10px] text-slate-400">Terzo Valico dei Giovi — Formato Cantiere</p>
-        </div>
-      </div>
-      
-      <div class="flex items-center gap-2">
-        <button onclick="stampaCartello('A4')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center gap-1.5">
-          <i class="fa-solid fa-print"></i> Stampa A4 Orizzontale
-        </button>
-        <button onclick="stampaCartello('A3')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center gap-1.5 border border-amber-500">
-          <i class="fa-solid fa-expand"></i> Stampa A3 Orizzontale
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-[1100px] mx-auto my-4 px-2">
+  <!-- ==================== CONTROLLI E DASHBOARD (NO-PRINT) ==================== -->
+  <div class="no-print max-w-7xl mx-auto mb-6 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
     
-    <div class="cartello-box bg-white p-4 rounded-xl border-4 border-black shadow-2xl space-y-3">
+    <!-- HEADER PANNELLO -->
+    <div class="bg-slate-900 text-white p-4 px-6 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-red-600 rounded-lg">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-black tracking-wide">Generatore Cartello Rifiuti Dinamico</h1>
+          <p class="text-xs text-slate-300">Conforme normativa CLP/GHS, Terzo Valico & Webuild Standard</p>
+        </div>
+      </div>
+
+      <!-- FORMATO ED AZIONI -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
+          <label class="text-xs text-slate-300 mr-2 font-semibold pl-2">Formato:</label>
+          <button id="btnA4" onclick="setPrintFormat('A4')" class="px-3 py-1 text-xs font-bold rounded bg-blue-600 text-white shadow">A4 Landscape</button>
+          <button id="btnA3" onclick="setPrintFormat('A3')" class="px-3 py-1 text-xs font-bold rounded text-slate-300 hover:text-white">A3 Landscape</button>
+        </div>
+
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-md flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          STAMPA / SALVA PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- CORPO FORM CONTROLLI -->
+    <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50">
       
-      <!-- INTESTAZIONE LOGHI E TITOLO -->
-      <div class="grid grid-cols-12 items-center gap-2 border-b-2 border-black pb-2">
-        <div class="col-span-3 flex flex-col justify-center items-start">
-          <span class="text-red-600 font-black text-2xl tracking-tighter leading-none">webuild</span>
-          <span class="text-[11px] font-bold text-slate-700 leading-tight">Terzo Valico AV/AC</span>
+      <!-- SEZIONE 1: Dati Operativi e Loghi -->
+      <div class="space-y-3 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+        <h2 class="text-xs font-black uppercase text-blue-700 tracking-wider border-b pb-2 flex items-center gap-1.5">
+          <span>1.</span> Dati Cantiere & Loghi
+        </h2>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Logo Impresa Esecutrice</label>
+          <input type="file" id="logoEsecutriceInput" accept="image/*" onchange="loadLogoEsecutrice(event)" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer border rounded-md p-1">
         </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">WBS / Luogo di Produzione</label>
+          <input type="text" id="wbsInput" placeholder="es. Castagnola – COP2 / WBS 3200" oninput="updateSignage()" class="w-full text-xs p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Produttore del Rifiuto</label>
+          <input type="text" id="produttoreInput" placeholder="es. Consorzio COCIV / Impresa Esecutrice" oninput="updateSignage()" class="w-full text-xs p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div class="pt-2 border-t">
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Intestazioni Commessa (Opzionale)</label>
+          <input type="text" id="titoloA" value="Linea Ferroviaria AV/AC" oninput="updateSignage()" class="w-full text-xs p-1.5 border rounded-md mb-1.5">
+          <input type="text" id="titoloB" value="Terzo Valico Di Giovi" oninput="updateSignage()" class="w-full text-xs p-1.5 border rounded-md">
+        </div>
+      </div>
+
+      <!-- SEZIONE 2: Selezione Codice EER -->
+      <div class="space-y-3 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+        <h2 class="text-xs font-black uppercase text-blue-700 tracking-wider border-b pb-2 flex items-center gap-1.5">
+          <span>2.</span> Codice EER & Descrizione
+        </h2>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Cerca Codice EER o Descrizione</label>
+          <input type="text" id="eerSearchInput" placeholder="Digita '17 09', 'misti', 'demolizione'..." oninput="filterEERDatabase()" class="w-full text-xs p-2 border rounded-md mb-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          
+          <select id="eerSelect" onchange="onEERSelectChange()" class="w-full text-xs p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono">
+            <!-- Popolato via JS dall'anagrafica completa -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Codice EER Visualizzato</label>
+          <input type="text" id="eerCodeCustom" value="17 09 04" oninput="updateSignage()" class="w-full text-xs p-2 border rounded-md font-bold font-mono text-center text-lg bg-amber-50 text-amber-900 border-amber-300">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Descrizione del Rifiuto</label>
+          <textarea id="eerDescCustom" rows="2" oninput="updateSignage()" class="w-full text-xs p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Dicitura Intestazione Codici</label>
+          <input type="text" id="eerHeaderNote" value="17 09 01, 17 09 02 e 17 09 03" oninput="updateSignage()" class="w-full text-xs p-1.5 border rounded-md">
+        </div>
+      </div>
+
+      <!-- SEZIONE 3: Pericoli HP e Pittogrammi CLP/GHS -->
+      <div class="space-y-3 bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+        <h2 class="text-xs font-black uppercase text-blue-700 tracking-wider border-b pb-2 flex items-center gap-1.5">
+          <span>3.</span> Caratteristiche HP & Pittogrammi
+        </h2>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-[11px] font-bold text-slate-700">Seleziona Caratteristiche HP</label>
+            <button onclick="resetHP()" class="text-[10px] text-red-600 hover:underline">Deseleziona tutti</button>
+          </div>
+          <div id="hpCheckboxes" class="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto p-2 border rounded-md bg-slate-50 text-[11px]">
+            <!-- Generato dinamicamente via JS -->
+          </div>
+        </div>
+
+        <div class="pt-2 border-t">
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-[11px] font-bold text-slate-700">Seleziona Pittogrammi CLP/GHS</label>
+            <button onclick="resetPictograms()" class="text-[10px] text-red-600 hover:underline">Deseleziona tutti</button>
+          </div>
+          <div id="pittogrammiCheckboxes" class="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto p-2 border rounded-md bg-slate-50 text-[11px]">
+            <!-- Generato dinamicamente via JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== ANTEPRIMA / AREA DI STAMPA CARTELLO ==================== -->
+  <div id="signageBoard" class="signage-container print-area">
+    
+    <!-- INTESTAZIONE LOGHI E TITOLO COMMESSA -->
+    <div class="grid grid-cols-12 items-center border-b-2 border-black pb-2">
+      
+      <!-- LOGO WEBUILD / TERZO VALICO (SINISTRA) -->
+      <div class="col-span-3 flex items-center">
+        <div id="logoMainContainer" class="flex flex-col items-start">
+          <!-- Logo Vettoriale Ufficiale Webuild / Terzo Valico -->
+          <svg class="h-10 md:h-12 w-auto" viewBox="0 0 280 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="32" font-family="'Inter', sans-serif" font-weight="900" font-size="34" fill="#e11d48" letter-spacing="-1">webuild</text>
+            <path d="M145 10 Q160 25 155 45 Q150 25 145 10 Z" fill="#e11d48"/>
+            <path d="M152 14 Q170 30 162 48" fill="none" stroke="#e11d48" stroke-width="4"/>
+            <text x="0" y="52" font-family="'Inter', sans-serif" font-weight="700" font-size="13" fill="#475569">Terzo Valico AV/AC</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- TITOLO CENTRALE COMMESSA -->
+      <div class="col-span-6 text-center">
+        <h2 id="displayTitoloA" class="text-base md:text-lg font-bold text-black leading-tight tracking-tight">Linea Ferroviaria AV/AC</h2>
+        <h1 id="displayTitoloB" class="text-lg md:text-xl font-extrabold text-black leading-tight tracking-tight uppercase">Terzo Valico Di Giovi</h1>
+      </div>
+
+      <!-- LOGO IMPRESA ESECUTRICE (DESTRA) -->
+      <div class="col-span-3 flex justify-end items-center">
+        <div id="logoEsecutriceContainer" class="w-full text-right flex items-center justify-end">
+          <span id="logoPlaceholder" class="text-[11px] font-bold text-black uppercase tracking-wider text-center border-2 border-dashed border-slate-400 p-2 leading-tight rounded">
+            caricare logo impresa esecutrice
+          </span>
+          <img id="logoEsecutriceImg" src="" alt="Logo Impresa Esecutrice" class="max-h-14 max-w-full object-contain hidden">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CORPO PRINCIPALE CARTELLO -->
+    <div class="grid grid-cols-12 gap-3 my-2 items-start flex-grow">
+      
+      <!-- COLONNA SINISTRA: WBS + PRODUTTORE + TABELLA HP -->
+      <div class="col-span-4 flex flex-col justify-between h-full pr-2 border-r border-slate-300">
         
-        <div class="col-span-6 text-center">
-          <h2 class="text-xl font-black uppercase tracking-tight text-slate-900">
-            Linea Ferroviaria AV/AC
-          </h2>
-          <h3 class="text-lg font-black uppercase text-slate-800">
-            Terzo Valico Di Giovi
+        <div class="space-y-3">
+          <div>
+            <span class="block text-xs font-black uppercase text-black leading-none">WBS/</span>
+            <span class="block text-xs font-black uppercase text-black leading-none">LUOGO DI PRODUZIONE:</span>
+            <p id="displayWbs" class="text-xs md:text-sm font-bold text-slate-900 mt-1 pl-0.5 leading-snug break-words">-</p>
+          </div>
+
+          <div>
+            <span class="block text-xs font-black uppercase text-black leading-none">PRODUTTORE:</span>
+            <p id="displayProduttore" class="text-xs md:text-sm font-bold text-slate-900 mt-1 pl-0.5 leading-snug break-words">-</p>
+          </div>
+        </div>
+
+        <!-- TABELLA CARATTERISTICHE DI PERICOLO HP (IN BASSO A SINISTRA) -->
+        <div class="mt-2">
+          <div class="border-2 border-black bg-white">
+            <div class="text-[9px] font-black uppercase text-center border-b border-black py-0.5 px-1 bg-slate-100">
+              CARATTERISTICHE DI PERICOLO DEL RIFIUTO
+            </div>
+            <table class="hp-table">
+              <tbody id="hpTableBody">
+                <!-- Generato da Javascript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLONNA DESTRA / CENTRO: DESCRIZIONE, CODICE EER E PITTOGRAMMI -->
+      <div class="col-span-8 flex flex-col justify-between h-full pl-2">
+        
+        <!-- INTESTAZIONE CODICE E DESCRITTIVA -->
+        <div class="text-center py-1">
+          <h3 id="displayEerDesc" class="text-sm md:text-base font-bold text-black leading-snug px-2">
+            Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci
           </h3>
-        </div>
-
-        <!-- RIQUADRO BIANCO LIBERO: LOGO IMPRESA ESECUTRICE -->
-        <div class="col-span-3 bg-white border-2 border-black h-14 flex items-center justify-center text-center p-1">
-          <input type="text" value="LOGO IMPRESA ESECUTRICE" class="w-full bg-transparent text-center font-black text-xs uppercase text-slate-800 focus:outline-none">
-        </div>
-      </div>
-
-      <!-- CORPO SUPERIORE: WBS, PRODUTTORE E SELEZIONE EER -->
-      <div class="grid grid-cols-12 gap-3 items-start">
-        
-        <div class="col-span-4 space-y-2">
-          <!-- RIQUADRO BIANCO LIBERO: WBS / LUOGO DI PRODUZIONE -->
-          <div class="flex border-2 border-black rounded overflow-hidden bg-white">
-            <div class="bg-white p-2 font-black text-[11px] uppercase w-1/3 border-r-2 border-black flex items-center leading-tight">
-              WBS /<br>LUOGO DI<br>PRODUZIONE:
-            </div>
-            <div class="p-2 w-2/3 flex items-center justify-center">
-              <input type="text" id="wbs_luogo" value="GNXX - Cravasco" class="w-full bg-transparent text-center font-black text-sm uppercase text-black focus:outline-none">
-            </div>
-          </div>
-
-          <!-- RIQUADRO BIANCO LIBERO: PRODUTTORE -->
-          <div class="flex border-2 border-black rounded overflow-hidden bg-white">
-            <div class="bg-white p-2 font-black text-[11px] uppercase w-1/3 border-r-2 border-black flex items-center">
-              PRODUTTORE:
-            </div>
-            <div class="p-2 w-2/3 flex items-center justify-center">
-              <input type="text" id="produttore" value="Inserisci Produttore" class="w-full bg-transparent text-center font-black text-sm uppercase text-black focus:outline-none">
-            </div>
-          </div>
-        </div>
-
-        <!-- DESCRIZIONE E SELETTORE EER (ANAGRAFICA COMPLETA) -->
-        <div class="col-span-8 flex flex-col justify-center items-center text-center px-2 space-y-1">
-          <div class="w-full no-print mb-1">
-            <label class="text-xs font-bold text-slate-500 uppercase mr-2">Seleziona Codice EER:</label>
-            <input type="text" id="eer_input" list="eer_list" onchange="aggiornaEer()" placeholder="Digita o cerca codice EER..." class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold w-64 text-center">
-            <datalist id="eer_list">
-              <!-- Anagrafica estesa codici EER (Catena di Custodia / Cantieri) -->
-              <option value="17 05 04">17 05 04 - Terra e rocce, diverse da quelle di cui alla voce 17 05 03</option>
-              <option value="17 05 03*">17 05 03* - Terra e rocce, contenenti sostanze pericolose</option>
-              <option value="17 09 04">17 09 04 - Rifiuti misti dell'attività di costruzione e demolizione</option>
-              <option value="17 01 01">17 01 01 - Cemento</option>
-              <option value="17 01 07">17 01 07 - Miscele o scorie di cemento, mattoni, mattonelle e ceramiche</option>
-              <option value="17 02 01">17 02 01 - Legno</option>
-              <option value="17 04 05">17 04 05 - Ferro e acciaio</option>
-              <option value="15 01 01">15 01 01 - Imballaggi in carta e cartone</option>
-              <option value="15 01 02">15 01 02 - Imballaggi in plastica</option>
-              <option value="15 01 10*">15 01 10* - Imballaggi contenenti residui di sostanze pericolose</option>
-              <option value="15 02 02*">15 02 02* - Assorbenti, materiali filtranti, stracci contaminati</option>
-              <option value="13 02 05*">13 02 05* - Scarti di olio minerale non clorurati</option>
-              <option value="01 05 04">01 05 04 - Fanghi e rifiuti di perforazione di pozzi per acque dolci</option>
-            </datalist>
-          </div>
-
-          <textarea id="descrizione_rifiuto" rows="2" class="w-full text-center font-black text-base md:text-lg text-slate-900 border-b border-dashed border-slate-300 focus:outline-none resize-none leading-tight">Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03</textarea>
+          <p id="displayEerNote" class="text-xs md:text-sm font-bold text-black mt-0.5">
+            17 09 01, 17 09 02 e 17 09 03
+          </p>
           
-          <div class="w-full">
-            <input type="text" id="codice_eer_display" value="17 09 04" class="w-full text-center font-black text-5xl md:text-6xl text-slate-950 tracking-wider bg-transparent focus:outline-none">
+          <!-- CODICE EER CENTRALE GIGANTE -->
+          <div id="displayEerCode" class="text-5xl md:text-7xl font-black text-black tracking-widest my-2">
+            17 09 04
           </div>
         </div>
 
-      </div>
-
-      <!-- PARTE INFERIORE: TABELLA HP + PITTOGRAMMI ADR UFFICIALI -->
-      <div class="grid grid-cols-12 gap-3 border-t-2 border-black pt-2">
-        
-        <!-- TABELLA HP -->
-        <div class="col-span-4 border-2 border-black p-1.5 text-[9px] leading-tight bg-slate-50">
-          <div class="font-black text-center border-b border-black pb-0.5 mb-1 text-[10px] uppercase">
-            CARATTERISTICHE DI PERICOLO DEL RIFIUTO
-          </div>
-          <div class="space-y-0.5 font-bold">
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP1</b> Esplosivo</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP2</b> Comburente</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP3</b> Infiammabile</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP4</b> Irritante</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP5</b> Nocivo</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP6</b> Tossicità acuta</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP7</b> Cancerogeno</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP8</b> Corrosivo</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP9</b> Infettivo</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP10</b> Tossico per la riproduzione</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP11</b> Mutageno</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP12</b> Liberazione gas tossici</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP13</b> Sensibilizzante</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP14</b> Ecotossico</label>
-            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP15</b> Altre caratteristiche</label>
-          </div>
-        </div>
-
-        <!-- PITTOGRAMMI GHS / ADR UFFICIALI (CLP) -->
-        <div class="col-span-8 grid grid-cols-3 gap-3 items-center text-center p-1">
+        <!-- GRIGLIA 3x3 PITTOGRAMMI DI PERICOLO CLP/GHS -->
+        <div class="grid grid-cols-3 gap-2 md:gap-3 pt-1 text-center">
           
-          <!-- ESPLOSIVO (GHS01) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/GHS-pictogram-explos.svg" class="w-14 h-14" alt="Esplosivo">
-            <span class="font-black text-[10px] uppercase mt-1">ESPLOSIVO</span>
+          <!-- GHS01 - ESPLOSIVO -->
+          <div id="pic-esplosivo" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Esplosione GHS01 esatta -->
+                <circle cx="48" cy="52" r="7" fill="black"/>
+                <path d="M48 45 L48 22 M48 59 L48 78 M25 52 L8 52 M70 52 L90 52 M32 36 L15 22 M64 68 L82 82 M32 68 L16 80 M64 36 L80 22" stroke="black" stroke-width="3.5" stroke-linecap="square"/>
+                <polygon points="38,30 42,24 45,32" fill="black"/>
+                <polygon points="58,32 65,26 62,38" fill="black"/>
+                <polygon points="60,60 68,66 58,68" fill="black"/>
+                <polygon points="32,58 24,62 30,68" fill="black"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">ESPLOSIVO</span>
           </div>
 
-          <!-- INFIAMMABILE (GHS02) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/GHS-pictogram-flam.svg" class="w-14 h-14" alt="Infiammabile">
-            <span class="font-black text-[10px] uppercase mt-1">INFIAMMABILE</span>
+          <!-- GHS02 - INFIAMMABILE -->
+          <div id="pic-infiammabile" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Fiamma GHS02 esatta -->
+                <path d="M50 20 C50 20 64 36 64 54 C64 66 57 73 47 73 C38 73 33 66 33 56 C33 44 42 36 45 30 C45 38 49 42 49 42 C49 42 52 30 50 20 Z" fill="black"/>
+                <rect x="33" y="76" width="34" height="4" fill="black"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">INFIAMMABILE</span>
           </div>
 
-          <!-- OSSIDANTE (GHS03) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/GHS-pictogram-rondflam.svg" class="w-14 h-14" alt="Ossidante">
-            <span class="font-black text-[10px] uppercase mt-1">OSSIDANTE</span>
+          <!-- GHS03 - OSSIDANTE -->
+          <div id="pic-ossidante" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Cerchio su Fiamma GHS03 esatta -->
+                <circle cx="50" cy="56" r="14" fill="none" stroke="black" stroke-width="6"/>
+                <path d="M50 22 C50 22 60 34 60 44 C60 48 56 52 50 52 C44 52 40 48 40 44 C40 34 50 22 50 22 Z" fill="black"/>
+                <rect x="33" y="74" width="34" height="4" fill="black"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">OSSIDANTE</span>
           </div>
 
-          <!-- CORROSIVO (GHS05) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/GHS-pictogram-acid.svg" class="w-14 h-14" alt="Corrosivo">
-            <span class="font-black text-[10px] uppercase mt-1">CORROSIVO</span>
+          <!-- GHS05 - CORROSIVO -->
+          <div id="pic-corrosivo" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Provette, Mano e Superficie GHS05 esatta -->
+                <rect x="22" y="58" width="22" height="6" fill="black"/>
+                <path d="M28 32 L44 50" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                <path d="M68 32 L52 50" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="44" cy="54" r="2" fill="black"/>
+                <circle cx="52" cy="54" r="2" fill="black"/>
+                <!-- Mano -->
+                <path d="M54 58 C58 58 62 55 66 58 C68 60 72 60 76 60 L76 65 L54 65 Z" fill="none" stroke="black" stroke-width="3"/>
+                <path d="M22 61 C26 58 32 58 36 61" fill="none" stroke="black" stroke-width="2"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">CORROSIVO</span>
           </div>
 
-          <!-- GAS SOTTO PRESSIONE (GHS04) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/GHS-pictogram-bottle.svg" class="w-14 h-14" alt="Gas Sotto Pressione">
-            <span class="font-black text-[10px] uppercase mt-1">GAS SOTTO PRESSIONE</span>
+          <!-- GHS04 - GAS SOTTO PRESSIONE -->
+          <div id="pic-gas" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Bombola GHS04 esatta inclinata -->
+                <g transform="rotate(-15 50 50)">
+                  <rect x="30" y="44" width="42" height="14" rx="7" fill="black"/>
+                  <rect x="22" y="48" width="10" height="6" fill="black"/>
+                </g>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">GAS SOTTO PRESSIONE</span>
           </div>
 
-          <!-- TOSSICO ACUTO (GHS06) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/GHS-pictogram-skull.svg" class="w-14 h-14" alt="Tossico Acuto">
-            <span class="font-black text-[10px] uppercase mt-1">TOSSICO ACUTO</span>
+          <!-- GHS06 - TOSSICO ACUTO -->
+          <div id="pic-tossico" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Teschio e Tibie GHS06 esatta -->
+                <path d="M26 36 L74 64 M74 36 L26 64" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                <path d="M50 30 C41 30 35 36 35 45 C35 50 38 53 41 55 L41 63 L59 63 L59 55 C62 53 65 50 65 45 C65 36 59 30 50 30 Z" fill="white" stroke="black" stroke-width="3"/>
+                <ellipse cx="44" cy="43" rx="4" ry="5" fill="black"/>
+                <ellipse cx="56" cy="43" rx="4" ry="5" fill="black"/>
+                <polygon points="50,49 47,53 53,53" fill="black"/>
+                <path d="M45 63 L45 58 M50 63 L50 58 M55 63 L55 58" stroke="black" stroke-width="2"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">TOSSICO ACUTO</span>
           </div>
 
-          <!-- NOCIVO / IRRITANTE (GHS07) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/GHS-pictogram-exclam.svg" class="w-14 h-14" alt="Nocivo">
-            <span class="font-black text-[10px] uppercase mt-1">NOCIVO</span>
+          <!-- GHS07 - NOCIVO / IRRITANTE -->
+          <div id="pic-nocivo" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Punto Esclamativo GHS07 esatto -->
+                <path d="M50 26 L50 58" stroke="black" stroke-width="12" stroke-linecap="round"/>
+                <circle cx="50" cy="72" r="6" fill="black"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">NOCIVO</span>
           </div>
 
-          <!-- PERICOLOSO PER L'AMBIENTE (GHS09) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/GHS-pictogram-pollu.svg" class="w-14 h-14" alt="Pericoloso Ambiente">
-            <span class="font-black text-[10px] uppercase mt-1">PERICOLOSO PER L'AMBIENTE</span>
+          <!-- GHS09 - PERICOLOSO PER L'AMBIENTE -->
+          <div id="pic-ambiente" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Albero e Pesce GHS09 esatta -->
+                <path d="M30 62 C30 42 42 38 42 38 C42 38 38 50 46 56 C46 56 50 46 58 48 L58 62 Z" fill="black"/>
+                <path d="M48 62 C58 58 65 62 70 60 C68 56 66 55 70 52 C64 54 58 51 48 62 Z" fill="white" stroke="black" stroke-width="2"/>
+                <circle cx="66" cy="57" r="1.5" fill="black"/>
+                <rect x="22" y="62" width="56" height="6" fill="black"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">PERICOLOSO PER L'AMBIENTE</span>
           </div>
 
-          <!-- CORROSIVO / SALUTE (GHS08) -->
-          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/GHS-pictogram-silhou.svg" class="w-14 h-14" alt="Pericolo Salute">
-            <span class="font-black text-[10px] uppercase mt-1">CORROSIVO / SALUTE</span>
+          <!-- GHS08 - PERICOLO SALUTE / GRAVI EFFETTI -->
+          <div id="pic-salute" class="pic-card faded flex flex-col items-center justify-center">
+            <div class="w-16 h-16 md:w-20 md:h-20">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <polygon points="50,4 96,50 50,96 4,50" fill="white" stroke="#e11d48" stroke-width="7"/>
+                <!-- Sagoma Uomo Stella Petto GHS08 esatta -->
+                <circle cx="50" cy="28" r="7" fill="black"/>
+                <path d="M42 72 L42 52 L34 52 L34 40 Q 50 34 66 40 L66 52 L58 52 L58 72 Z" fill="black"/>
+                <!-- Stella Esplosione Petto -->
+                <polygon points="50,40 52,45 57,45 53,48 55,53 50,50 45,53 47,48 43,45 48,45" fill="white"/>
+              </svg>
+            </div>
+            <span class="text-[9px] md:text-[11px] font-bold text-black uppercase mt-0.5 tracking-tight">CORROSIVO</span>
           </div>
 
         </div>
@@ -236,87 +470,296 @@
 
     </div>
 
-  </main>
+  </div>
 
-  <script>
-    function toggleGhs(element) {
-      element.classList.toggle('inactive');
+  <!-- STYLE INJECTION DINAMICO PER LA STAMPA -->
+  <style id="printPageStyle">
+    @page {
+      size: A4 landscape;
+      margin: 0;
     }
+  </style>
 
-    const databaseEer = {
-      "17 05 04": "Terra e rocce, diverse da quelle di cui alla voce 17 05 03",
-      "17 05 03*": "Terra e rocce, contenenti sostanze pericolose",
-      "17 09 04": "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03",
-      "17 01 01": "Cemento",
-      "17 01 07": "Miscele o scorie di cemento, mattoni, mattonelle e ceramiche",
-      "17 02 01": "Legno",
-      "17 04 05": "Ferro e acciaio",
-      "15 01 01": "Imballaggi in carta e cartone",
-      "15 01 02": "Imballaggi in plastica",
-      "15 01 10*": "Imballaggi contenenti residui di sostanze pericolose o contaminati da tali sostanze",
-      "15 02 02*": "Assorbenti, materiali filtranti, stracci e indumenti protettivi, contaminati da sostanze pericolose",
-      "13 02 05*": "Scarti di olio minerale per motori, ingranaggi e lubrificazione, non clorurati",
-      "01 05 04": "Fanghi e rifiuti di perforazione di pozzi per acque dolci"
+  <!-- ==================== LOGICA ED ANAGRAFICA JAVASCRIPT ==================== -->
+  <script>
+    // --- ANAGRAFICA COMPLETA EER (INCLUSA LA LISTA INTEGRALE) ---
+    const fullEERDatabase = [
+      { code: "17 09 04", desc: "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03", note: "17 09 01, 17 09 02 e 17 09 03" },
+      { code: "17 09 03*", desc: "Altri rifiuti di costruzione e demolizione (compresi i rifiuti misti) contenenti sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 01 01", desc: "Cemento", note: "" },
+      { code: "17 01 02", desc: "Mattoni", note: "" },
+      { code: "17 01 03", desc: "Mattonelle e ceramiche", note: "" },
+      { code: "17 01 06*", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche, contenenti sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 01 07", desc: "Miscugli o frazioni separate di cemento, mattoni, mattonelle e ceramiche, diverse da quelle di cui alla voce 17 01 06*", note: "" },
+      { code: "17 02 01", desc: "Legno", note: "" },
+      { code: "17 02 02", desc: "Vetro", note: "" },
+      { code: "17 02 03", desc: "Plastica", note: "" },
+      { code: "17 02 04*", desc: "Vetro, plastica e legno contenenti sostanze pericolose o da esse contaminati", note: "PERICOLOSO" },
+      { code: "17 03 01*", desc: "Miscele bituminose contenenti catrame di carbon fossile", note: "PERICOLOSO" },
+      { code: "17 03 02", desc: "Miscele bituminose diverse da quelle di cui alla voce 17 03 01*", note: "" },
+      { code: "17 04 05", desc: "Ferro e acciaio", note: "" },
+      { code: "17 04 07", desc: "Metalli misti", note: "" },
+      { code: "17 04 09*", desc: "Rifiuti metallici contaminati da sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 05 03*", desc: "Terre e rocce, contenenti sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 05 04", desc: "Terre e rocce, diverse da quelle di cui alla voce 17 05 03*", note: "" },
+      { code: "17 05 07*", desc: "Pietrisco per percorsi ferroviari, contenente sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 05 08", desc: "Pietrisco per traversate ferroviarie, diverso da quello di cui alla voce 17 05 07*", note: "" },
+      { code: "17 06 01*", desc: "Materiali isolanti contenenti amianto", note: "PERICOLOSO" },
+      { code: "17 06 03*", desc: "Altri materiali isolanti contenenti o costituiti da sostanze pericolose", note: "PERICOLOSO" },
+      { code: "17 06 04", desc: "Materiali isolanti diversi da quelli di cui alle voci 17 06 01* e 17 06 03*", note: "" },
+      { code: "17 06 05*", desc: "Materiali da costruzione contenenti amianto", note: "PERICOLOSO" },
+      { code: "15 01 01", desc: "Imballaggi in carta e cartone", note: "" },
+      { code: "15 01 02", desc: "Imballaggi in plastica", note: "" },
+      { code: "15 01 03", desc: "Imballaggi in legno", note: "" },
+      { code: "15 01 04", desc: "Imballaggi metallici", note: "" },
+      { code: "15 01 10*", desc: "Imballaggi contenenti residui di sostanze pericolose o contaminati da tali sostanze", note: "PERICOLOSO" },
+      { code: "15 02 02*", desc: "Assorbenti, materiali filtranti, stracci e indumenti protettivi contaminati da sostanze pericolose", note: "PERICOLOSO" },
+      { code: "15 02 03", desc: "Assorbenti, materiali filtranti, stracci e indumenti protettivi, diversi da quelli di cui alla voce 15 02 02*", note: "" },
+      { code: "16 02 13*", desc: "Apparecchiature fuori uso contenenti componenti pericolosi", note: "PERICOLOSO" },
+      { code: "16 06 01*", desc: "Batterie al piombo", note: "PERICOLOSO" },
+      { code: "01 03 04*", desc: "Sterili che possono generare acido derivanti dal trattamento del minerale solforato", note: "PERICOLOSO" }
+    ];
+
+    let activeEERList = [...fullEERDatabase];
+
+    // --- CARATTERISTICHE DI PERICOLO HP ---
+    const hpList = [
+      { code: "HP1", desc: "Esplosivo" },
+      { code: "HP2", desc: "Comburente" },
+      { code: "HP3", desc: "Infiammabile" },
+      { code: "HP4", desc: "Irritante - Sensibilizzazione cutanea e lesioni oculari" },
+      { code: "HP5", desc: "Tossicità specifica per organi bersaglio (STOT)/Tossicità in caso di aspirazione" },
+      { code: "HP6", desc: "Tossicità acuta" },
+      { code: "HP7", desc: "Cancerogeno" },
+      { code: "HP8", desc: "Corrosivo" },
+      { code: "HP9", desc: "Infettivo" },
+      { code: "HP10", desc: "Tossico per la riproduzione" },
+      { code: "HP11", desc: "Mutageno" },
+      { code: "HP12", desc: "Liberazione di gas a tossicità acuta" },
+      { code: "HP13", desc: "Sensibilizzante" },
+      { code: "HP14", desc: "Ecotossico" },
+      { code: "HP15", desc: "Rifiuto che non possiede direttamente una delle caratteristiche di pericolo summenzionate" }
+    ];
+
+    // --- PITTOGRAMMI CLP/GHS ---
+    const pictogramsList = [
+      { id: "esplosivo", name: "Esplosivo (GHS01)" },
+      { id: "infiammabile", name: "Infiammabile (GHS02)" },
+      { id: "ossidante", name: "Ossidante (GHS03)" },
+      { id: "corrosivo", name: "Corrosivo (GHS05)" },
+      { id: "gas", name: "Gas sotto pressione (GHS04)" },
+      { id: "tossico", name: "Tossico acuto (GHS06)" },
+      { id: "nocivo", name: "Nocivo / Irritante (GHS07)" },
+      { id: "ambiente", name: "Pericoloso Ambiente (GHS09)" },
+      { id: "salute", name: "Pericolo Salute (GHS08)" }
+    ];
+
+    // --- AVVIO ED INIZIALIZZAZIONE ---
+    window.onload = function() {
+      renderEERSelectOptions(activeEERList);
+      renderHPTable();
+      renderHPCheckboxes();
+      renderPictogramCheckboxes();
+
+      // Preimposta codice standard 17 09 04
+      document.getElementById('eerSelect').value = "17 09 04";
+      onEERSelectChange();
     };
 
-    function aggiornaEer() {
-      const val = document.getElementById('eer_input').value.trim();
-      const display = document.getElementById('codice_eer_display');
-      const descr = document.getElementById('descrizione_rifiuto');
-      
-      if(val) {
-        display.value = val;
-        if(databaseEer[val]) {
-          descr.value = databaseEer[val];
-        }
+    // --- RENDERING DROPDOWN EER ---
+    function renderEERSelectOptions(list) {
+      const select = document.getElementById('eerSelect');
+      select.innerHTML = '';
+      if (list.length === 0) {
+        select.innerHTML = '<option value="">Nessun codice trovato</option>';
+        return;
+      }
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.code;
+        opt.textContent = `${item.code} - ${item.desc.substring(0, 50)}...`;
+        select.appendChild(opt);
+      });
+    }
+
+    // --- FILTRO RICERCA DINAMICA EER ---
+    function filterEERDatabase() {
+      const query = document.getElementById('eerSearchInput').value.toLowerCase().trim();
+      if (!query) {
+        activeEERList = [...fullEERDatabase];
+      } else {
+        activeEERList = fullEERDatabase.filter(item => 
+          item.code.toLowerCase().includes(query) || 
+          item.desc.toLowerCase().includes(query)
+        );
+      }
+      renderEERSelectOptions(activeEERList);
+      if (activeEERList.length > 0) {
+        document.getElementById('eerSelect').value = activeEERList[0].code;
+        onEERSelectChange();
       }
     }
 
-    function stampaCartello(formato) {
-      const styleTag = document.getElementById('print-style');
-      if (formato === 'A3') {
-        styleTag.innerHTML = `
-          @media print {
-            @page {
-              size: A3 landscape;
-              margin: 8mm;
-            }
-            .no-print { display: none !important; }
-            .ghs-card.inactive { display: none !important; }
-            body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
-            main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
-            .cartello-box { border: 6px solid #000 !important; box-shadow: none !important; width: 100% !important; font-size: 1.3rem !important; }
-            img { width: 80px !important; height: 80px !important; }
-            input, select, textarea {
-              border: none !important;
-              background: transparent !important;
-              box-shadow: none !important;
-              font-weight: bold !important;
-            }
-          }
-        `;
-      } else {
-        styleTag.innerHTML = `
-          @media print {
-            @page {
-              size: A4 landscape;
-              margin: 5mm;
-            }
-            .no-print { display: none !important; }
-            .ghs-card.inactive { display: none !important; }
-            body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
-            main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
-            .cartello-box { border: 4px solid #000 !important; box-shadow: none !important; width: 100% !important; }
-            input, select, textarea {
-              border: none !important;
-              background: transparent !important;
-              box-shadow: none !important;
-              font-weight: bold !important;
-            }
-          }
-        `;
+    // --- SELEZIONE DA MENU A TENDINA EER ---
+    function onEERSelectChange() {
+      const selectedCode = document.getElementById('eerSelect').value;
+      const found = fullEERDatabase.find(x => x.code === selectedCode);
+      
+      if (found) {
+        document.getElementById('eerCodeCustom').value = found.code;
+        document.getElementById('eerDescCustom').value = found.desc;
+        document.getElementById('eerHeaderNote').value = found.note || "";
       }
-      window.print();
+      updateSignage();
+    }
+
+    // --- AGGIORNAMENTO GRAFICO REALTÀ VIRTUALE DEL CARTELLO ---
+    function updateSignage() {
+      // Titoli e Intestazioni
+      document.getElementById('displayTitoloA').textContent = document.getElementById('titoloA').value || "Linea Ferroviaria AV/AC";
+      document.getElementById('displayTitoloB').textContent = document.getElementById('titoloB').value || "Terzo Valico Di Giovi";
+
+      // WBS e Produttore
+      const wbs = document.getElementById('wbsInput').value.trim();
+      const produttore = document.getElementById('produttoreInput').value.trim();
+      document.getElementById('displayWbs').textContent = wbs || "-";
+      document.getElementById('displayProduttore').textContent = produttore || "-";
+
+      // Codice e Descrizione EER
+      const eerCode = document.getElementById('eerCodeCustom').value.trim() || "17 09 04";
+      const eerDesc = document.getElementById('eerDescCustom').value.trim() || "Rifiuti misti dell'attività di costruzione e demolizione";
+      const eerNote = document.getElementById('eerHeaderNote').value.trim();
+
+      document.getElementById('displayEerCode').textContent = eerCode;
+      document.getElementById('displayEerDesc').textContent = eerDesc;
+      document.getElementById('displayEerNote').textContent = eerNote;
+      document.getElementById('displayEerNote').style.display = eerNote ? 'block' : 'none';
+
+      // Aggiornamento Tabella Caratteristiche HP
+      hpList.forEach(hp => {
+        const chk = document.getElementById(`chk-${hp.code}`);
+        const row = document.getElementById(`row-${hp.code}`);
+        if (chk && row) {
+          if (chk.checked) {
+            row.classList.remove('faded');
+            row.classList.add('active-feature');
+          } else {
+            row.classList.remove('active-feature');
+            row.classList.add('faded');
+          }
+        }
+      });
+
+      // Aggiornamento Pittogrammi CLP
+      pictogramsList.forEach(pic => {
+        const chk = document.getElementById(`chk-pic-${pic.id}`);
+        const card = document.getElementById(`pic-${pic.id}`);
+        if (chk && card) {
+          if (chk.checked) {
+            card.classList.remove('faded');
+            card.classList.add('active-feature');
+          } else {
+            card.classList.remove('active-feature');
+            card.classList.add('faded');
+          }
+        }
+      });
+    }
+
+    // --- TABELLA HP IN BASSO A SINISTRA ---
+    function renderHPTable() {
+      const tbody = document.getElementById('hpTableBody');
+      tbody.innerHTML = '';
+      hpList.forEach(hp => {
+        const tr = document.createElement('tr');
+        tr.id = `row-${hp.code}`;
+        tr.className = 'faded';
+        tr.innerHTML = `
+          <td class="font-bold w-9 uppercase tracking-tight align-top">${hp.code}</td>
+          <td class="text-left leading-tight">${hp.desc}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- RENDER CHECKBOX PERICOLI HP ---
+    function renderHPCheckboxes() {
+      const container = document.getElementById('hpCheckboxes');
+      container.innerHTML = '';
+      hpList.forEach(hp => {
+        const label = document.createElement('label');
+        label.className = 'flex items-center space-x-1 cursor-pointer hover:bg-slate-200 p-0.5 rounded';
+        label.innerHTML = `
+          <input type="checkbox" id="chk-${hp.code}" onchange="updateSignage()" class="rounded text-blue-600 focus:ring-blue-500 h-3.5 w-3.5">
+          <span class="font-bold">${hp.code}</span>
+        `;
+        container.appendChild(label);
+      });
+    }
+
+    // --- RENDER CHECKBOX PITTOGRAMMI ---
+    function renderPictogramCheckboxes() {
+      const container = document.getElementById('pittogrammiCheckboxes');
+      container.innerHTML = '';
+      pictogramsList.forEach(pic => {
+        const label = document.createElement('label');
+        label.className = 'flex items-center space-x-1 cursor-pointer hover:bg-slate-200 p-0.5 rounded';
+        label.innerHTML = `
+          <input type="checkbox" id="chk-pic-${pic.id}" onchange="updateSignage()" class="rounded text-blue-600 focus:ring-blue-500 h-3.5 w-3.5">
+          <span class="truncate">${pic.name}</span>
+        `;
+        container.appendChild(label);
+      });
+    }
+
+    // --- DESELEZIONE GENERALE ---
+    function resetHP() {
+      hpList.forEach(hp => {
+        const chk = document.getElementById(`chk-${hp.code}`);
+        if (chk) chk.checked = false;
+      });
+      updateSignage();
+    }
+
+    function resetPictograms() {
+      pictogramsList.forEach(pic => {
+        const chk = document.getElementById(`chk-pic-${pic.id}`);
+        if (chk) chk.checked = false;
+      });
+      updateSignage();
+    }
+
+    // --- CARICAMENTO LOGO IMPRESA ESECUTRICE ---
+    function loadLogoEsecutrice(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('logoEsecutriceImg');
+          const placeholder = document.getElementById('logoPlaceholder');
+          img.src = e.target.result;
+          img.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // --- IMPOSTAZIONE FORMATO DI STAMPA (A4/A3) ---
+    function setPrintFormat(format) {
+      const btnA4 = document.getElementById('btnA4');
+      const btnA3 = document.getElementById('btnA3');
+      const printStyle = document.getElementById('printPageStyle');
+
+      if (format === 'A3') {
+        printStyle.innerHTML = `@page { size: A3 landscape; margin: 0; }`;
+        btnA3.className = "px-3 py-1 text-xs font-bold rounded bg-blue-600 text-white shadow";
+        btnA4.className = "px-3 py-1 text-xs font-bold rounded text-slate-300 hover:text-white";
+      } else {
+        printStyle.innerHTML = `@page { size: A4 landscape; margin: 0; }`;
+        btnA4.className = "px-3 py-1 text-xs font-bold rounded bg-blue-600 text-white shadow";
+        btnA3.className = "px-3 py-1 text-xs font-bold rounded text-slate-300 hover:text-white";
+      }
     }
   </script>
 </body>
