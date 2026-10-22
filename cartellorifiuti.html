@@ -142,16 +142,19 @@
       background-color: #059669;
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.65rem 1.25rem;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: background 0.2s;
     }
     .btn-print:hover { background-color: #047857; }
+    .btn-print.btn-a3 { background-color: #0284c7; }
+    .btn-print.btn-a3:hover { background-color: #0369a1; }
 
     /* CARTELLO SHEET */
     .cartello-sheet {
@@ -159,7 +162,7 @@
       width: 1000px;
       height: 650px;
       padding: 24px;
-      border: 1px solid #cbd5e1;
+      border: 2px solid #000;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       display: grid;
       grid-template-columns: 320px 1fr;
@@ -242,7 +245,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      opacity: 0.20;
+      opacity: 0.15;
       transition: opacity 0.2s;
       width: 100%;
     }
@@ -262,7 +265,7 @@
       color: #000;
     }
 
-    /* Stampa */
+    /* Stampa Ottimizzata */
     @media print {
       body { background: white; }
       header, .controls-panel, .print-actions { display: none !important; }
@@ -275,9 +278,12 @@
         height: 100vh;
         page-break-after: always;
       }
-      @page {
-        size: landscape;
-        margin: 0;
+      /* Nasconde i pittogrammi disattivati durante la stampa */
+      .pit-item:not(.active) {
+        visibility: hidden !important;
+      }
+      .hp-row:not(.active) {
+        opacity: 0.15 !important;
       }
     }
   </style>
@@ -344,8 +350,11 @@
     <!-- Anteprima e Stampa -->
     <div class="preview-area">
       <div class="print-actions">
-        <button class="btn-print" onclick="window.print()">
-          <i class="fas fa-print"></i> Stampa Cartello (A4 / A3 Orizzontale)
+        <button class="btn-print" onclick="stampaFormato('A4')">
+          <i class="fas fa-print"></i> Stampa A4 Orizzontale
+        </button>
+        <button class="btn-print btn-a3" onclick="stampaFormato('A3')">
+          <i class="fas fa-expand"></i> Stampa A3 Orizzontale
         </button>
       </div>
 
@@ -593,6 +602,25 @@
     document.getElementById('inputProduttore').addEventListener('input', e => {
       document.getElementById('viewProduttore').innerText = e.target.value || '—';
     });
+
+    function stampaFormato(formato) {
+      let printStyle = document.getElementById('print-style-dynamic');
+      if (!printStyle) {
+        printStyle = document.createElement('style');
+        printStyle.id = 'print-style-dynamic';
+        document.head.appendChild(printStyle);
+      }
+      
+      printStyle.innerHTML = `
+        @media print {
+          @page {
+            size: ${formato === 'A3' ? 'A3' : 'A4'} landscape;
+            margin: 5mm;
+          }
+        }
+      `;
+      window.print();
+    }
 
     window.onload = function() {
       initControls();
