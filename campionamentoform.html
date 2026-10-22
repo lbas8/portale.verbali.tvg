@@ -24,7 +24,6 @@
       main { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
       .bg-white { border: none !important; box-shadow: none !important; padding: 0 !important; }
       
-      /* Forzatura affiancamento fisso per la stampa */
       .print-flex-row {
         display: flex !important;
         flex-direction: row !important;
@@ -129,7 +128,6 @@
             </div>
           </div>
           
-          <!-- BLOCCO MATRICE E N. ID -->
           <div class="flex items-center gap-2 justify-end">
             <div class="flex items-center gap-1">
               <label class="font-bold text-[10px] text-slate-800 uppercase whitespace-nowrap">Matrice:</label>
@@ -152,7 +150,6 @@
           </div>
         </div>
 
-        <!-- AFFIANCAMENTO RIGIDO PER STAMPA (DATI A SX, FIRMA A DX) -->
         <div class="print-flex-row flex flex-col md:flex-row justify-between gap-2 mt-1.5 text-[9.5px]">
           <div class="print-w-left md:w-[58%] space-y-0.5">
             <div class="flex items-center gap-1.5">
@@ -177,20 +174,25 @@
             </div>
           </div>
 
-          <!-- FIRMA CAMPIONATORE AFFIANCATA SULLA DESTRA -->
+          <!-- FIRMA CAMPIONATORE (CLICCABILE PER INGRANDIRE) -->
           <div class="print-w-right md:w-[40%] border border-slate-300 rounded bg-white p-1 flex flex-col justify-between">
             <div class="flex justify-between items-center mb-0.5">
               <label class="font-bold text-slate-800 text-[9px] uppercase">Firma Campionatore:</label>
-              <button type="button" onclick="clearCanvas('signature-pad')" class="text-[8px] text-red-600 hover:text-red-800 font-medium px-1 bg-red-50 border border-red-200 rounded no-print">
+              <button type="button" onclick="clearSignature('signature-pad')" class="text-[8px] text-red-600 hover:text-red-800 font-medium px-1 bg-red-50 border border-red-200 rounded no-print">
                 <i class="fa-solid fa-eraser"></i> Cancella
               </button>
             </div>
-            <canvas id="signature-pad" class="w-full h-12 border border-dashed border-slate-300 rounded cursor-crosshair touch-none bg-slate-50"></canvas>
+            <div onclick="openSignModal('signature-pad', 'Firma del Campionatore')" class="w-full h-12 border border-dashed border-slate-300 rounded cursor-pointer bg-slate-50 flex items-center justify-center relative overflow-hidden group">
+              <canvas id="signature-pad" class="w-full h-full pointer-events-none"></canvas>
+              <div class="no-print absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition text-[9px] font-bold text-slate-700 gap-1">
+                <i class="fa-solid fa-pen-nib"></i> Tocca per firmare
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- SEZIONE PRESENTI AL CAMPIONAMENTO (CON SIGLE/FIRME) -->
+      <!-- SEZIONE PRESENTI AL CAMPIONAMENTO -->
       <section class="border border-slate-300 rounded p-1.5 bg-slate-50">
         <h4 class="text-[9.5px] font-bold text-slate-800 uppercase tracking-wider mb-1 flex items-center justify-between">
           <span><i class="fa-solid fa-users text-slate-600 mr-1"></i> Presenti al Campionamento (Controparti / Direzione Lavori / Enti)</span>
@@ -200,20 +202,24 @@
           <div id="row_presente_1" class="flex items-center gap-1.5 text-[8.5px]">
             <input type="text" id="pres_1_nome" oninput="checkPresenteCompilato(1)" placeholder="Nome e Cognome 1" class="w-1/3 border rounded p-0.5 bg-white">
             <input type="text" id="pres_1_ente" oninput="checkPresenteCompilato(1)" placeholder="Società / Ente (es. ARPAL, D.L.)" class="w-1/3 border rounded p-0.5 bg-white">
-            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5">
+            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5 cursor-pointer relative group" onclick="openSignModal('canvas_pres_1', 'Sigla Presente: 1')">
               <span class="text-[7.5px] font-bold text-slate-400 shrink-0">Sigla:</span>
-              <canvas id="canvas_pres_1" class="w-full h-6 cursor-crosshair touch-none bg-slate-50 border border-dashed border-slate-200 rounded"></canvas>
-              <button type="button" onclick="clearCanvas('canvas_pres_1')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
+              <div class="w-full h-6 relative overflow-hidden flex items-center justify-center">
+                <canvas id="canvas_pres_1" class="w-full h-full pointer-events-none"></canvas>
+              </div>
+              <button type="button" onclick="event.stopPropagation(); clearSignature('canvas_pres_1')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
             </div>
           </div>
           <!-- Presente 2 -->
           <div id="row_presente_2" class="row-presente-vuota flex items-center gap-1.5 text-[8.5px]">
             <input type="text" id="pres_2_nome" oninput="checkPresenteCompilato(2)" placeholder="Nome e Cognome 2" class="w-1/3 border rounded p-0.5 bg-white">
             <input type="text" id="pres_2_ente" oninput="checkPresenteCompilato(2)" placeholder="Società / Ente" class="w-1/3 border rounded p-0.5 bg-white">
-            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5">
+            <div class="w-1/3 flex items-center gap-1 border border-slate-200 rounded bg-white p-0.5 cursor-pointer relative group" onclick="openSignModal('canvas_pres_2', 'Sigla Presente: 2')">
               <span class="text-[7.5px] font-bold text-slate-400 shrink-0">Sigla:</span>
-              <canvas id="canvas_pres_2" class="w-full h-6 cursor-crosshair touch-none bg-slate-50 border border-dashed border-slate-200 rounded"></canvas>
-              <button type="button" onclick="clearCanvas('canvas_pres_2')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
+              <div class="w-full h-6 relative overflow-hidden flex items-center justify-center">
+                <canvas id="canvas_pres_2" class="w-full h-full pointer-events-none"></canvas>
+              </div>
+              <button type="button" onclick="event.stopPropagation(); clearSignature('canvas_pres_2')" class="text-[7px] text-red-500 no-print px-0.5">✕</button>
             </div>
           </div>
         </div>
@@ -262,7 +268,7 @@
         </div>
       </section>
 
-      <!-- SEZIONE B: ANALISI DA ESEGUIRE (DINAMICA PERSONALIZZATA) -->
+      <!-- SEZIONE B: ANALISI DA ESEGUIRE -->
       <section>
         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
           <span class="bg-emerald-700 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]">B</span> 
@@ -276,7 +282,6 @@
           </table>
         </div>
 
-        <!-- Riferimenti normativi rifiuti -->
         <div id="note_normative_rifiuti" class="mt-1 text-[8px] text-slate-600 leading-tight space-y-0.5 bg-slate-50 p-1 rounded border hidden">
           <p><strong>*</strong> D.lgs. n. 36 del 13/01/2003 All. 4 Tab. 3/4/5bis (come modificato dal D.lgs. 03/09/2020 n. 121)</p>
           <p><strong>**</strong> D.M. 05/02/1998 (D.M. 186/2006)</p>
@@ -343,6 +348,40 @@
     </div>
   </main>
 
+  <!-- MODALE FIRMA ZOOMATA A SCHERMO INTERO -->
+  <div id="signModal" class="fixed inset-0 bg-slate-900/80 z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-4 space-y-3 border border-slate-700">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 id="modalSignTitle" class="font-bold text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-signature text-emerald-600"></i> Firma Digitale
+        </h3>
+        <button type="button" onclick="closeSignModal(false)" class="text-slate-400 hover:text-slate-700 text-lg font-bold px-2">✕</button>
+      </div>
+      
+      <div class="text-[11px] text-slate-500">
+        Traccia la firma nel riquadro sottostante utilizzando il dito o il pennino:
+      </div>
+
+      <div class="border-2 border-dashed border-slate-400 rounded-xl bg-slate-50 h-56 relative overflow-hidden touch-none">
+        <canvas id="modal-canvas" class="w-full h-full cursor-crosshair"></canvas>
+      </div>
+
+      <div class="flex justify-between items-center pt-2">
+        <button type="button" onclick="clearModalCanvas()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-300 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1">
+          <i class="fa-solid fa-eraser"></i> Pulisci Riquadro
+        </button>
+        <div class="flex gap-2">
+          <button type="button" onclick="closeSignModal(false)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">
+            Annulla
+          </button>
+          <button type="button" onclick="closeSignModal(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-check"></i> Conferma Firma
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DATALIST CODICI EER -->
   <datalist id="cer_suggestions">
     <option value="01 00 00 - Rifiuti derivanti da prospezione, estrazione da miniera o cava">
@@ -385,68 +424,97 @@
 
     const matrixTipologieConfig = {
       "Sottoprodotto": [
-        "TBM nastro",
-        "Fronte di scavo",
-        "Cumulo di stoccaggio",
-        "Vasca di stoccaggio",
-        "Trincea o scavo",
-        "Sondaggio a carotaggio",
-        "Perforazione a distruzione",
-        "Topsoil",
-        "Affioramento superficiale"
+        "TBM nastro", "Fronte di scavo", "Cumulo di stoccaggio", "Vasca di stoccaggio",
+        "Trincea o scavo", "Sondaggio a carotaggio", "Perforazione a distruzione", "Topsoil", "Affioramento superficiale"
       ],
-      "Acque": [
-        "Acque"
-      ]
+      "Acque": ["Acque"]
     };
 
-    // GESTIONE CANVAS E FIRME MULTIPLE
-    const activeCanvases = {};
+    // GESTIONE FIRME E MODALE ZOOM
+    let currentActiveCanvasId = null;
+    const modalCanvas = document.getElementById('modal-canvas');
+    const modalCtx = modalCanvas.getContext('2d');
+    let isModalDrawing = false;
 
-    function initCanvas(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let isDrawing = false;
-
-      function resize() {
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-      }
-      resize();
-
-      function start(e) { isDrawing = true; draw(e); }
-      function end() { isDrawing = false; ctx.beginPath(); }
-      function draw(e) {
-        if (!isDrawing) return;
-        ctx.lineWidth = 1.8;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = '#0f172a';
-        const rect = canvas.getBoundingClientRect();
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-        if (clientX && clientY) {
-          ctx.lineTo(clientX - rect.left, clientY - rect.top);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(clientX - rect.left, clientY - rect.top);
-        }
-      }
-
-      canvas.addEventListener('mousedown', start);
-      canvas.addEventListener('mouseup', end);
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('touchstart', start);
-      canvas.addEventListener('touchend', end);
-      canvas.addEventListener('touchmove', draw);
-
-      activeCanvases[canvasId] = { canvas, ctx };
+    function initModalCanvas() {
+      const rect = modalCanvas.getBoundingClientRect();
+      modalCanvas.width = rect.width * window.devicePixelRatio;
+      modalCanvas.height = rect.height * window.devicePixelRatio;
+      modalCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
 
-    function clearCanvas(canvasId) {
-      if (activeCanvases[canvasId]) {
-        const { canvas, ctx } = activeCanvases[canvasId];
+    function startModalDraw(e) { isModalDrawing = true; drawModal(e); }
+    function endModalDraw() { isModalDrawing = false; modalCtx.beginPath(); }
+    function drawModal(e) {
+      if (!isModalDrawing) return;
+      modalCtx.lineWidth = 3;
+      modalCtx.lineCap = 'round';
+      modalCtx.strokeStyle = '#0f172a';
+      const rect = modalCanvas.getBoundingClientRect();
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      if (clientX && clientY) {
+        modalCtx.lineTo(clientX - rect.left, clientY - rect.top);
+        modalCtx.stroke();
+        modalCtx.beginPath();
+        modalCtx.moveTo(clientX - rect.left, clientY - rect.top);
+      }
+    }
+
+    modalCanvas.addEventListener('mousedown', startModalDraw);
+    modalCanvas.addEventListener('mouseup', endModalDraw);
+    modalCanvas.addEventListener('mousemove', drawModal);
+    modalCanvas.addEventListener('touchstart', startModalDraw);
+    modalCanvas.addEventListener('touchend', endModalDraw);
+    modalCanvas.addEventListener('touchmove', drawModal);
+
+    function openSignModal(canvasId, titleText) {
+      currentActiveCanvasId = canvasId;
+      document.getElementById('modalSignTitle').innerHTML = `<i class="fa-solid fa-signature text-emerald-600"></i> ${titleText}`;
+      document.getElementById('signModal').classList.remove('hidden');
+      setTimeout(initModalCanvas, 100);
+
+      // Copia eventuale firma già presente nel canvas piccolo
+      const sourceCanvas = document.getElementById(canvasId);
+      if (sourceCanvas) {
+        modalCtx.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
+        const img = new Image();
+        img.onload = () => {
+          modalCtx.drawImage(img, 0, 0, modalCanvas.width / window.devicePixelRatio, modalCanvas.height / window.devicePixelRatio);
+        };
+        img.src = sourceCanvas.toDataURL();
+      }
+    }
+
+    function closeSignModal(save) {
+      if (save && currentActiveCanvasId) {
+        const targetCanvas = document.getElementById(currentActiveCanvasId);
+        if (targetCanvas) {
+          const tCtx = targetCanvas.getContext('2d');
+          targetCanvas.width = targetCanvas.offsetWidth * window.devicePixelRatio;
+          targetCanvas.height = targetCanvas.offsetHeight * window.devicePixelRatio;
+          tCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+          tCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+          
+          const img = new Image();
+          img.onload = () => {
+            tCtx.drawImage(img, 0, 0, targetCanvas.width / window.devicePixelRatio, targetCanvas.height / window.devicePixelRatio);
+          };
+          img.src = modalCanvas.toDataURL();
+        }
+      }
+      document.getElementById('signModal').classList.add('hidden');
+      currentActiveCanvasId = null;
+    }
+
+    function clearModalCanvas() {
+      modalCtx.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
+    }
+
+    function clearSignature(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
@@ -526,7 +594,6 @@
       }
 
       const cols = matrixAnalysesConfig[matrice] || matrixAnalysesConfig["Sottoprodotto"];
-
       const thead = document.getElementById('analisi_thead');
       const tbody = document.getElementById('rows-analisi');
 
@@ -581,11 +648,9 @@
           if (!cell) continue;
 
           let optionsHTML = `<select id="c_${i}_tipologia" onchange="checkCampioneCompilato(${i})" class="w-full border rounded p-0.5 bg-white text-[8.5px]">`;
-          
           if (opzioni.length > 1) {
             optionsHTML += `<option value="">-- Seleziona --</option>`;
           }
-          
           opzioni.forEach(opt => {
             optionsHTML += `<option value="${opt}">${opt}</option>`;
           });
@@ -604,11 +669,6 @@
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       document.getElementById('datetime').value = now.toISOString().slice(0,16);
-
-      // Inizializza canvas per firma campionatore e presenti
-      initCanvas('signature-pad');
-      initCanvas('canvas_pres_1');
-      initCanvas('canvas_pres_2');
 
       const rowsCamps = document.getElementById('rows-campionamento');
 
@@ -758,8 +818,8 @@
       }
 
       const presentiData = {
-        1: { nome: document.getElementById('pres_1_nome').value, ente: document.getElementById('pres_1_ente').value, sigla: activeCanvases['canvas_pres_1'] ? activeCanvases['canvas_pres_1'].canvas.toDataURL() : '' },
-        2: { nome: document.getElementById('pres_2_nome').value, ente: document.getElementById('pres_2_ente').value, sigla: activeCanvases['canvas_pres_2'] ? activeCanvases['canvas_pres_2'].canvas.toDataURL() : '' }
+        1: { nome: document.getElementById('pres_1_nome').value, ente: document.getElementById('pres_1_ente').value, sigla: document.getElementById('canvas_pres_1').toDataURL() },
+        2: { nome: document.getElementById('pres_2_nome').value, ente: document.getElementById('pres_2_ente').value, sigla: document.getElementById('canvas_pres_2').toDataURL() }
       };
 
       const formData = {
@@ -775,7 +835,7 @@
         altre_analisi: document.getElementById('altre_analisi').value,
         campioni: campioniData,
         analisi: analisiData,
-        firma_campionatore: activeCanvases['signature-pad'] ? activeCanvases['signature-pad'].canvas.toDataURL() : '',
+        firma_campionatore: document.getElementById('signature-pad').toDataURL(),
         timestamp: Date.now()
       };
 
@@ -816,9 +876,11 @@
           if (record.note_campo) document.getElementById('note_campo').value = record.note_campo;
           if (record.altre_analisi) document.getElementById('altre_analisi').value = record.altre_analisi;
 
-          if (record.firma_campionatore && activeCanvases['signature-pad']) {
+          if (record.firma_campionatore) {
+            const canvas = document.getElementById('signature-pad');
+            const ctx = canvas.getContext('2d');
             const img = new Image();
-            img.onload = () => activeCanvases['signature-pad'].ctx.drawImage(img, 0, 0);
+            img.onload = () => ctx.drawImage(img, 0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
             img.src = record.firma_campionatore;
           }
 
@@ -829,9 +891,11 @@
                 if (p.nome) document.getElementById(`pres_${pIdx}_nome`).value = p.nome;
                 if (p.ente) document.getElementById(`pres_${pIdx}_ente`).value = p.ente;
                 checkPresenteCompilato(pIdx);
-                if (p.sigla && activeCanvases[`canvas_pres_${pIdx}`]) {
+                if (p.sigla) {
+                  const canvas = document.getElementById(`canvas_pres_${pIdx}`);
+                  const ctx = canvas.getContext('2d');
                   const img = new Image();
-                  img.onload = () => activeCanvases[`canvas_pres_${pIdx}`].ctx.drawImage(img, 0, 0);
+                  img.onload = () => ctx.drawImage(img, 0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
                   img.src = p.sigla;
                 }
               }
@@ -866,6 +930,7 @@
               const row = document.getElementById(`tr_analisi_${i}`);
               if (savedRowAnalisi && row) {
                 const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+                checkboxes.isEqualTo = ... // standard checkbox restoration
                 checkboxes.forEach(cb => {
                   const k = cb.getAttribute('data-key');
                   if (savedRowAnalisi[k] !== undefined) {
