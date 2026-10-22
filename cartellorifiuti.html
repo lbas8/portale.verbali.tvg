@@ -617,7 +617,7 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
-          document.getElementById('logoPreview').innerHTML = `<img src="${evt.target.result}" alt="Logo">`;
+          document.getElementById('logoPreview').innerHTML = `<img src="${evt.target.result}" alt="logoWB.jpg">`;
         };
         reader.readAsDataURL(file);
       }
