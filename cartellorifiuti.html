@@ -25,7 +25,7 @@
       }
     }
     
-    /* Stili per pittogrammi interattivi */
+    /* Stile interattivo pittogrammi */
     .ghs-card {
       cursor: pointer;
       user-select: none;
@@ -83,8 +83,9 @@
           </h3>
         </div>
 
-        <div class="col-span-3 bg-yellow-300 border-2 border-black h-14 flex items-center justify-center text-center p-1">
-          <span class="font-black text-xs uppercase leading-tight text-black">LOGO IMPRESA ESECUTRICE</span>
+        <!-- RIQUADRO BIANCO LIBERO: LOGO IMPRESA ESECUTRICE -->
+        <div class="col-span-3 bg-white border-2 border-black h-14 flex items-center justify-center text-center p-1">
+          <input type="text" value="LOGO IMPRESA ESECUTRICE" class="w-full bg-transparent text-center font-black text-xs uppercase text-slate-800 focus:outline-none">
         </div>
       </div>
 
@@ -92,38 +93,47 @@
       <div class="grid grid-cols-12 gap-3 items-start">
         
         <div class="col-span-4 space-y-2">
-          <!-- WBS -->
-          <div class="flex border-2 border-black rounded overflow-hidden">
+          <!-- RIQUADRO BIANCO LIBERO: WBS / LUOGO DI PRODUZIONE -->
+          <div class="flex border-2 border-black rounded overflow-hidden bg-white">
             <div class="bg-white p-2 font-black text-[11px] uppercase w-1/3 border-r-2 border-black flex items-center leading-tight">
               WBS /<br>LUOGO DI<br>PRODUZIONE:
             </div>
-            <div class="bg-emerald-400 p-2 w-2/3 flex items-center justify-center">
+            <div class="p-2 w-2/3 flex items-center justify-center">
               <input type="text" id="wbs_luogo" value="GNXX - Cravasco" class="w-full bg-transparent text-center font-black text-sm uppercase text-black focus:outline-none">
             </div>
           </div>
 
-          <!-- PRODUTTORE -->
-          <div class="flex border-2 border-black rounded overflow-hidden">
+          <!-- RIQUADRO BIANCO LIBERO: PRODUTTORE -->
+          <div class="flex border-2 border-black rounded overflow-hidden bg-white">
             <div class="bg-white p-2 font-black text-[11px] uppercase w-1/3 border-r-2 border-black flex items-center">
               PRODUTTORE:
             </div>
-            <div class="bg-red-600 p-2 w-2/3 flex items-center justify-center">
-              <input type="text" id="produttore" value="XXXXXXXXXXXXXX" class="w-full bg-transparent text-center font-black text-sm uppercase text-white focus:outline-none">
+            <div class="p-2 w-2/3 flex items-center justify-center">
+              <input type="text" id="produttore" value="Inserisci Produttore" class="w-full bg-transparent text-center font-black text-sm uppercase text-black focus:outline-none">
             </div>
           </div>
         </div>
 
-        <!-- DESCRIZIONE E SELETTORE EER -->
+        <!-- DESCRIZIONE E SELETTORE EER (ANAGRAFICA COMPLETA) -->
         <div class="col-span-8 flex flex-col justify-center items-center text-center px-2 space-y-1">
           <div class="w-full no-print mb-1">
             <label class="text-xs font-bold text-slate-500 uppercase mr-2">Seleziona Codice EER:</label>
-            <input type="text" id="eer_input" list="eer_list" onchange="aggiornaEer()" placeholder="Cerca EER (es. 17 09 04)" class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold w-64 text-center">
+            <input type="text" id="eer_input" list="eer_list" onchange="aggiornaEer()" placeholder="Digita o cerca codice EER..." class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold w-64 text-center">
             <datalist id="eer_list">
-              <option value="17 09 04">17 09 04 - Rifiuti misti costruzione e demolizione</option>
-              <option value="17 05 04">17 05 04 - Terra e rocce non pericolose</option>
-              <option value="17 05 03*">17 05 03* - Terra e rocce pericolose</option>
+              <!-- Anagrafica estesa codici EER (Catena di Custodia / Cantieri) -->
+              <option value="17 05 04">17 05 04 - Terra e rocce, diverse da quelle di cui alla voce 17 05 03</option>
+              <option value="17 05 03*">17 05 03* - Terra e rocce, contenenti sostanze pericolose</option>
+              <option value="17 09 04">17 09 04 - Rifiuti misti dell'attività di costruzione e demolizione</option>
               <option value="17 01 01">17 01 01 - Cemento</option>
-              <option value="15 01 10*">15 01 10* - Imballaggi pericolosi</option>
+              <option value="17 01 07">17 01 07 - Miscele o scorie di cemento, mattoni, mattonelle e ceramiche</option>
+              <option value="17 02 01">17 02 01 - Legno</option>
+              <option value="17 04 05">17 04 05 - Ferro e acciaio</option>
+              <option value="15 01 01">15 01 01 - Imballaggi in carta e cartone</option>
+              <option value="15 01 02">15 01 02 - Imballaggi in plastica</option>
+              <option value="15 01 10*">15 01 10* - Imballaggi contenenti residui di sostanze pericolose</option>
+              <option value="15 02 02*">15 02 02* - Assorbenti, materiali filtranti, stracci contaminati</option>
+              <option value="13 02 05*">13 02 05* - Scarti di olio minerale non clorurati</option>
+              <option value="01 05 04">01 05 04 - Fanghi e rifiuti di perforazione di pozzi per acque dolci</option>
             </datalist>
           </div>
 
@@ -136,10 +146,10 @@
 
       </div>
 
-      <!-- PARTE INFERIORE: TABELLA HP (SINISTRA) + PITTOGRAMMI INTERATTIVI (DESTRA) -->
+      <!-- PARTE INFERIORE: TABELLA HP + PITTOGRAMMI ADR UFFICIALI -->
       <div class="grid grid-cols-12 gap-3 border-t-2 border-black pt-2">
         
-        <!-- SELEZIONE/TABELLA HP -->
+        <!-- TABELLA HP -->
         <div class="col-span-4 border-2 border-black p-1.5 text-[9px] leading-tight bg-slate-50">
           <div class="font-black text-center border-b border-black pb-0.5 mb-1 text-[10px] uppercase">
             CARATTERISTICHE DI PERICOLO DEL RIFIUTO
@@ -163,98 +173,60 @@
           </div>
         </div>
 
-        <!-- PITTOGRAMMI GHS VETTORIALI SVG NATIVI (INTERATTIVI) -->
+        <!-- PITTOGRAMMI GHS / ADR UFFICIALI (CLP) -->
         <div class="col-span-8 grid grid-cols-3 gap-3 items-center text-center p-1">
           
-          <!-- GHS01 -->
+          <!-- ESPLOSIVO (GHS01) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <circle cx="50" cy="50" r="12" fill="black"/>
-              <path d="M50 25 L50 15 M25 50 L15 50 M75 50 L85 50 M50 75 L50 85 M32 32 L22 22 M68 32 L78 22 M32 68 L22 78 M68 68 L78 78" stroke="black" stroke-width="4"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/GHS-pictogram-explos.svg" class="w-14 h-14" alt="Esplosivo">
             <span class="font-black text-[10px] uppercase mt-1">ESPLOSIVO</span>
           </div>
 
-          <!-- GHS02 -->
+          <!-- INFIAMMABILE (GHS02) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <path d="M50 20 C40 35 30 45 30 60 C30 72 40 80 50 80 C60 80 70 72 70 60 C70 45 60 35 50 20 Z M50 45 C45 52 40 57 40 65 C40 70 45 74 50 74 C55 74 60 70 60 65 C60 57 55 52 50 45 Z" fill="black"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/GHS-pictogram-flam.svg" class="w-14 h-14" alt="Infiammabile">
             <span class="font-black text-[10px] uppercase mt-1">INFIAMMABILE</span>
           </div>
 
-          <!-- GHS03 -->
+          <!-- OSSIDANTE (GHS03) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <circle cx="50" cy="55" r="14" fill="none" stroke="black" stroke-width="6"/>
-              <path d="M50 22 C45 30 42 35 50 42 C58 35 55 30 50 22 Z" fill="black"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/GHS-pictogram-rondflam.svg" class="w-14 h-14" alt="Ossidante">
             <span class="font-black text-[10px] uppercase mt-1">OSSIDANTE</span>
           </div>
 
-          <!-- GHS05 -->
+          <!-- CORROSIVO (GHS05) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <rect x="25" y="65" width="50" height="8" fill="black"/>
-              <path d="M30 30 L40 45 M70 30 L60 45" stroke="black" stroke-width="5"/>
-              <circle cx="35" cy="60" r="3" fill="black"/>
-              <circle cx="65" cy="60" r="3" fill="black"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/GHS-pictogram-acid.svg" class="w-14 h-14" alt="Corrosivo">
             <span class="font-black text-[10px] uppercase mt-1">CORROSIVO</span>
           </div>
 
-          <!-- GHS04 -->
+          <!-- GAS SOTTO PRESSIONE (GHS04) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <rect x="25" y="44" width="50" height="12" rx="6" fill="black"/>
-              <rect x="70" y="47" width="8" height="6" fill="black"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/GHS-pictogram-bottle.svg" class="w-14 h-14" alt="Gas Sotto Pressione">
             <span class="font-black text-[10px] uppercase mt-1">GAS SOTTO PRESSIONE</span>
           </div>
 
-          <!-- GHS06 -->
+          <!-- TOSSICO ACUTO (GHS06) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <circle cx="50" cy="42" r="14" fill="black"/>
-              <path d="M30 68 L70 68 M35 60 L65 76 M35 76 L65 60" stroke="black" stroke-width="5"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/GHS-pictogram-skull.svg" class="w-14 h-14" alt="Tossico Acuto">
             <span class="font-black text-[10px] uppercase mt-1">TOSSICO ACUTO</span>
           </div>
 
-          <!-- GHS07 -->
+          <!-- NOCIVO / IRRITANTE (GHS07) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <path d="M50 25 L50 55 M50 68 L50 76" stroke="black" stroke-width="10" stroke-linecap="round"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/GHS-pictogram-exclam.svg" class="w-14 h-14" alt="Nocivo">
             <span class="font-black text-[10px] uppercase mt-1">NOCIVO</span>
           </div>
 
-          <!-- GHS09 -->
+          <!-- PERICOLOSO PER L'AMBIENTE (GHS09) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <path d="M25 65 Q40 55 50 65 T75 65" stroke="black" stroke-width="4" fill="none"/>
-              <circle cx="60" cy="40" r="6" fill="black"/>
-              <path d="M30 50 L45 35 L40 50 Z" fill="black"/>
-            </svg>
-            <span class="font-black text-[10px] uppercase mt-1">PERICOLOSO AMBIENTE</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/GHS-pictogram-pollu.svg" class="w-14 h-14" alt="Pericoloso Ambiente">
+            <span class="font-black text-[10px] uppercase mt-1">PERICOLOSO PER L'AMBIENTE</span>
           </div>
 
-          <!-- GHS08 -->
+          <!-- CORROSIVO / SALUTE (GHS08) -->
           <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
-            <svg class="w-14 h-14" viewBox="0 0 100 100">
-              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
-              <circle cx="50" cy="32" r="8" fill="black"/>
-              <path d="M40 45 L60 45 L65 75 L35 75 Z" fill="black"/>
-              <polygon points="50,50 55,60 45,60" fill="white"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/GHS-pictogram-silhou.svg" class="w-14 h-14" alt="Pericolo Salute">
             <span class="font-black text-[10px] uppercase mt-1">CORROSIVO / SALUTE</span>
           </div>
 
@@ -271,19 +243,31 @@
       element.classList.toggle('inactive');
     }
 
+    const databaseEer = {
+      "17 05 04": "Terra e rocce, diverse da quelle di cui alla voce 17 05 03",
+      "17 05 03*": "Terra e rocce, contenenti sostanze pericolose",
+      "17 09 04": "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03",
+      "17 01 01": "Cemento",
+      "17 01 07": "Miscele o scorie di cemento, mattoni, mattonelle e ceramiche",
+      "17 02 01": "Legno",
+      "17 04 05": "Ferro e acciaio",
+      "15 01 01": "Imballaggi in carta e cartone",
+      "15 01 02": "Imballaggi in plastica",
+      "15 01 10*": "Imballaggi contenenti residui di sostanze pericolose o contaminati da tali sostanze",
+      "15 02 02*": "Assorbenti, materiali filtranti, stracci e indumenti protettivi, contaminati da sostanze pericolose",
+      "13 02 05*": "Scarti di olio minerale per motori, ingranaggi e lubrificazione, non clorurati",
+      "01 05 04": "Fanghi e rifiuti di perforazione di pozzi per acque dolci"
+    };
+
     function aggiornaEer() {
-      const input = document.getElementById('eer_input').value;
+      const val = document.getElementById('eer_input').value.trim();
       const display = document.getElementById('codice_eer_display');
       const descr = document.getElementById('descrizione_rifiuto');
       
-      if(input) {
-        display.value = input;
-        if(input.includes("17 05 04")) {
-          descr.value = "Terra e rocce, diverse da quelle di cui alla voce 17 05 03";
-        } else if(input.includes("17 05 03")) {
-          descr.value = "Terra e rocce, contenenti sostanze pericolose";
-        } else if(input.includes("17 09 04")) {
-          descr.value = "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03";
+      if(val) {
+        display.value = val;
+        if(databaseEer[val]) {
+          descr.value = databaseEer[val];
         }
       }
     }
@@ -302,7 +286,7 @@
             body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
             main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
             .cartello-box { border: 6px solid #000 !important; box-shadow: none !important; width: 100% !important; font-size: 1.3rem !important; }
-            svg { width: 80px !important; height: 80px !important; }
+            img { width: 80px !important; height: 80px !important; }
             input, select, textarea {
               border: none !important;
               background: transparent !important;
