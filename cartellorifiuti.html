@@ -65,7 +65,7 @@
       width: 100%;
     }
 
-    /* Panel Controls */
+    /* Controls Panel */
     .controls-panel {
       background: #ffffff;
       border-radius: 12px;
@@ -97,7 +97,7 @@
     }
     .form-control:focus { outline: none; border-color: var(--primary); }
     
-    /* Suggerimenti EER Custom Dropdown */
+    /* Dropdown Suggerimenti EER */
     .eer-suggestions {
       position: absolute;
       top: 100%;
@@ -124,7 +124,7 @@
     .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
     .checkbox-item { font-size: 0.78rem; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; color: #334155; }
 
-    /* Preview Canvas Area */
+    /* Preview Area */
     .preview-area {
       display: flex;
       flex-direction: column;
@@ -153,27 +153,23 @@
     }
     .btn-print:hover { background-color: #047857; }
 
-    /* CARTELLO SHEET (Layout Identico all'Immagine Fornita) */
+    /* CARTELLO SHEET */
     .cartello-sheet {
       background: white;
       width: 1000px;
-      height: 707px;
+      height: 650px;
       padding: 24px;
       border: 1px solid #cbd5e1;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       display: grid;
       grid-template-columns: 320px 1fr;
-      grid-template-rows: 75px 120px 1fr;
+      grid-template-rows: 75px 110px 1fr;
       gap: 12px;
       box-sizing: border-box;
       position: relative;
     }
 
-    /* Sezioni Header Cartello */
-    .c-header-left {
-      display: flex;
-      align-items: center;
-    }
+    .c-header-left { display: flex; align-items: center; }
     .c-header-right {
       display: flex;
       justify-content: space-between;
@@ -196,10 +192,10 @@
 
     .c-wbs-box { font-size: 0.95rem; font-weight: bold; line-height: 1.3; }
     .c-eer-box { text-align: center; display: flex; flex-direction: column; justify-content: center; padding: 0 10px; }
-    .c-eer-desc { font-size: 1.1rem; font-weight: bold; margin-bottom: 6px; line-height: 1.2; color: #000; }
-    .c-eer-code { font-size: 3.2rem; font-weight: 900; letter-spacing: 2px; color: #000; }
+    .c-eer-desc { font-size: 1.15rem; font-weight: bold; margin-bottom: 6px; line-height: 1.2; color: #000; }
+    .c-eer-code { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; color: #000; line-height: 1; }
 
-    .c-produttore-box { font-size: 0.95rem; font-weight: bold; }
+    .c-produttore-box { font-size: 0.95rem; font-weight: bold; margin-bottom: 8px; }
 
     /* Tabella HP con Bordo Nero */
     .c-hp-table-border {
@@ -208,11 +204,11 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 100%;
+      flex-grow: 1;
     }
     .hp-title {
       font-weight: bold;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-align: center;
       margin-bottom: 6px;
       text-transform: uppercase;
@@ -220,9 +216,9 @@
     }
     .hp-row {
       display: flex;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       margin-bottom: 1px;
-      opacity: 0.18;
+      opacity: 0.22;
       color: #000;
     }
     .hp-row.active {
@@ -231,12 +227,12 @@
     }
     .hp-code { width: 45px; flex-shrink: 0; }
 
-    /* Griglia 3x3 Pittogrammi CLP */
+    /* Griglia Pittogrammi 3x3 */
     .c-pittogrammi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 12px;
+      gap: 8px;
       align-items: center;
       justify-items: center;
     }
@@ -246,16 +242,17 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      opacity: 0.18;
+      opacity: 0.20;
       transition: opacity 0.2s;
       width: 100%;
     }
     .pit-item.active {
       opacity: 1;
     }
-    .pit-svg {
+    .pit-img {
       width: 85px;
       height: 85px;
+      object-fit: contain;
     }
     .pit-label {
       font-size: 0.75rem;
@@ -265,7 +262,7 @@
       color: #000;
     }
 
-    /* Regole Stampa */
+    /* Stampa */
     @media print {
       body { background: white; }
       header, .controls-panel, .print-actions { display: none !important; }
@@ -300,7 +297,7 @@
   </header>
 
   <div class="app-container">
-    <!-- Pannello Controlli -->
+    <!-- Controlli -->
     <div class="controls-panel">
       
       <div class="panel-section">
@@ -311,11 +308,11 @@
         </div>
         <div class="form-group">
           <label>WBS / Luogo di Produzione</label>
-          <input type="text" id="inputWBS" class="form-control" value="CRAVASCO" placeholder="Es. CRAVASCO">
+          <input type="text" id="inputWBS" class="form-control" value="CRAVASCO">
         </div>
         <div class="form-group">
           <label>Produttore del Rifiuto</label>
-          <input type="text" id="inputProduttore" class="form-control" value="Consorzio Tunnel Giovi" placeholder="Es. Consorzio Tunnel Giovi">
+          <input type="text" id="inputProduttore" class="form-control" value="Consorzio Tunnel Giovi">
         </div>
       </div>
 
@@ -323,32 +320,28 @@
         <h3><i class="fas fa-barcode"></i> Codice EER (Anagrafica Completa)</h3>
         <div class="form-group">
           <label>Seleziona o cerca Codice EER</label>
-          <input type="text" id="searchEER" class="form-control" placeholder="Digita codice (es. 170503, 17 09 04) o testo..." autocomplete="off">
+          <input type="text" id="searchEER" class="form-control" placeholder="Es. 17 09 04, 170503 o testo..." autocomplete="off">
           <div class="eer-suggestions" id="eerSuggestions"></div>
         </div>
         <div class="form-group">
           <label>Descrizione Associata / Personalizzata</label>
-          <textarea id="customDesc" class="form-control" rows="3" placeholder="Si compila in automatico con l'anagrafica EER..."></textarea>
+          <textarea id="customDesc" class="form-control" rows="3"></textarea>
         </div>
       </div>
 
       <div class="panel-section">
         <h3><i class="fas fa-exclamation-triangle"></i> Caratteristiche HP</h3>
-        <div class="checkbox-grid" id="hpContainer">
-          <!-- Popolato via JS -->
-        </div>
+        <div class="checkbox-grid" id="hpContainer"></div>
       </div>
 
       <div class="panel-section">
         <h3><i class="fas fa-radiation"></i> Pittogrammi CLP</h3>
-        <div class="checkbox-grid" id="pitContainer">
-          <!-- Popolato via JS -->
-        </div>
+        <div class="checkbox-grid" id="pitContainer"></div>
       </div>
 
     </div>
 
-    <!-- Area Anteprima e Stampa -->
+    <!-- Anteprima e Stampa -->
     <div class="preview-area">
       <div class="print-actions">
         <button class="btn-print" onclick="window.print()">
@@ -356,7 +349,6 @@
         </button>
       </div>
 
-      <!-- CARTELLO SHEET -->
       <div class="cartello-sheet" id="cartelloSheet">
         <!-- RIGA 1: Header Logos -->
         <div class="c-header-left">
@@ -374,18 +366,18 @@
           </div>
         </div>
 
-        <!-- RIGA 2: WBS / EER Header -->
+        <!-- RIGA 2: WBS / EER -->
         <div class="c-wbs-box">
           WBS/ LUOGO DI PRODUZIONE:<br>
           <span id="viewWBS" style="font-weight: normal;">CRAVASCO</span>
         </div>
         <div class="c-eer-box">
-          <div class="c-eer-desc" id="viewEERDesc">Selezionare un codice EER dall'anagrafica</div>
-          <div class="c-eer-code" id="viewEERCode">00 00 00</div>
+          <div class="c-eer-desc" id="viewEERDesc">Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03</div>
+          <div class="c-eer-code" id="viewEERCode">17 09 04</div>
         </div>
 
         <!-- RIGA 3: Produttore + HP e Pittogrammi -->
-        <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; flex-direction: column; height: 100%;">
           <div class="c-produttore-box">
             PRODUTTORE:<br>
             <span id="viewProduttore" style="font-weight: normal;">Consorzio Tunnel Giovi</span>
@@ -396,24 +388,22 @@
           </div>
         </div>
 
-        <!-- GRIGLIA PITTOGRAMMI (3x3) -->
-        <div class="c-pittogrammi-grid" id="viewPitGrid">
-          <!-- Popolato via JS -->
-        </div>
+        <!-- Pittogrammi 3x3 -->
+        <div class="c-pittogrammi-grid" id="viewPitGrid"></div>
 
       </div>
     </div>
   </div>
 
   <script>
-    // Database Anagrafica EER estratto direttamente dal file Excel
+    // Anagrafica EER estratta dal file Excel
     const eerDatabase = [
+      { code: "17 09 04", desc: "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03" },
       { code: "17 05 03 *", desc: "Terra e rocce, contenenti sostanze pericolose" },
       { code: "17 05 04", desc: "Terra e rocce, diverse da quelle di cui alla voce 17 05 03" },
-      { code: "17 09 04", desc: "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03" },
       { code: "17 01 01", desc: "Cemento" },
       { code: "17 01 02", desc: "Mattoni" },
-      { code: "17 01 07", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche" },
+      { code: "17 01 07", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche, diverse da quelle di cui alla voce 17 01 06" },
       { code: "17 02 01", desc: "Legno" },
       { code: "17 02 03", desc: "Plastica" },
       { code: "17 03 02", desc: "Miscele bituminose diverse da quelle di cui alla voce 17 03 01" },
@@ -430,7 +420,6 @@
       { code: "20 03 01", desc: "Rifiuti urbani non differenziati" }
     ];
 
-    // Caratteristiche HP
     const hpData = [
       { code: 'HP1', name: 'Esplosivo' },
       { code: 'HP2', name: 'Comburente' },
@@ -449,17 +438,17 @@
       { code: 'HP15', name: 'Rifiuto che non possiede direttamente una delle caratteristiche summenzionate' }
     ];
 
-    // SVG dei Pittogrammi Ufficiali CLP (incorporati per visualizzazione istantanea)
+    // SVG dei Pittogrammi Ufficiali CLP (Fedeli alle Immagini Fornite)
     const pitSvgMap = {
-      ghs01: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><circle cx="50" cy="50" r="10" fill="#000"/><path d="M50 25 L50 15 M50 75 L50 85 M25 50 L15 50 M75 50 L85 50 M32 32 L22 22 M68 68 L78 78 M32 68 L22 78 M68 32 L78 22" stroke="#000" stroke-width="4"/></svg>`,
-      ghs02: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><path d="M50,22 Q60,35 52,50 Q70,42 68,68 Q65,80 50,80 Q35,80 32,68 Q30,50 48,50 Q40,35 50,22 Z" fill="#000"/><rect x="30" y="82" width="40" height="4" fill="#000"/></svg>`,
-      ghs03: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><circle cx="50" cy="55" r="16" fill="none" stroke="#000" stroke-width="5"/><path d="M50,22 Q58,32 52,42 Q64,36 62,55 Q50,55 50,38 Q50,55 38,55 Q36,36 48,42 Q42,32 50,22 Z" fill="#000"/><rect x="32" y="75" width="36" height="4" fill="#000"/></svg>`,
-      ghs04: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><rect x="25" y="44" width="45" height="12" rx="6" fill="#000" transform="rotate(-15 50 50)"/><rect x="67" y="47" width="8" height="6" fill="#000" transform="rotate(-15 50 50)"/></svg>`,
-      ghs05: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><rect x="20" y="55" width="22" height="18" fill="#000"/><path d="M55,55 Q65,45 75,55 T85,55" fill="none" stroke="#000" stroke-width="3"/><rect x="30" y="30" width="8" height="20" fill="#000" transform="rotate(30 30 30)"/><rect x="60" y="30" width="8" height="20" fill="#000" transform="rotate(-30 60 30)"/></svg>`,
-      ghs06: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><path d="M36,32 Q50,20 64,32 Q70,45 64,55 L36,55 Q30,45 36,32 Z" fill="#000"/><circle cx="43" cy="38" r="4" fill="#fff"/><circle cx="57" cy="38" r="4" fill="#fff"/><polygon points="48,45 52,45 50,50" fill="#fff"/><path d="M28,68 L72,42 M28,42 L72,68" stroke="#000" stroke-width="5"/></svg>`,
-      ghs07: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><path d="M43,26 L57,26 L54,58 L46,58 Z" fill="#000"/><circle cx="50" cy="72" r="6" fill="#000"/></svg>`,
-      ghs08: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><path d="M50,22 A12,12 0 0,1 62,34 C62,45 58,50 68,60 L32,60 C42,50 38,45 38,34 A12,12 0 0,1 50,22 Z" fill="#000"/><polygon points="50,38 54,48 64,48 56,54 59,64 50,58 41,64 44,54 36,48 46,48" fill="#fff"/></svg>`,
-      ghs09: `<svg class="pit-svg" viewBox="0 0 100 100"><polygon points="50,3 97,50 50,97 3,50" fill="none" stroke="#e11d48" stroke-width="6"/><path d="M35,32 L35,55 M42,40 L42,55 M48,45 L48,55 M30,55 L58,55" stroke="#000" stroke-width="3"/><path d="M48,60 Q65,50 78,58 Q65,68 48,60 Z" fill="#000"/><line x1="20" y1="68" x2="80" y2="68" stroke="#000" stroke-width="4"/></svg>`
+      ghs01: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M48 25 L52 25 L52 35 L48 35 Z M25 48 L25 52 L35 52 L35 48 Z M65 48 L65 52 L75 52 L75 48 Z M48 65 L52 65 L52 75 L48 75 Z" fill="#000"/><circle cx="50" cy="50" r="9" fill="#000"/><path d="M30 30 L20 20 M70 70 L80 80 M70 30 L80 20 M30 70 L20 80" stroke="#000" stroke-width="4.5"/></svg>`,
+      ghs02: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M50,22 Q62,35 52,50 Q72,42 68,68 Q65,80 50,80 Q35,80 32,68 Q30,50 48,50 Q38,35 50,22 Z" fill="#000"/><rect x="30" y="82" width="40" height="4" fill="#000"/></svg>`,
+      ghs03: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><circle cx="50" cy="56" r="16" fill="none" stroke="#000" stroke-width="5"/><path d="M50,22 Q58,32 52,42 Q64,36 62,55 Q50,55 50,38 Q50,55 38,55 Q36,36 48,42 Q42,32 50,22 Z" fill="#000"/><rect x="32" y="75" width="36" height="4" fill="#000"/></svg>`,
+      ghs05: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><rect x="20" y="55" width="22" height="18" fill="#000"/><path d="M55,55 Q65,45 75,55 T85,55" fill="none" stroke="#000" stroke-width="3"/><rect x="30" y="30" width="8" height="20" fill="#000" transform="rotate(30 30 30)"/><rect x="60" y="30" width="8" height="20" fill="#000" transform="rotate(-30 60 30)"/></svg>`,
+      ghs04: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><rect x="25" y="44" width="45" height="12" rx="6" fill="#000" transform="rotate(-15 50 50)"/><rect x="67" y="47" width="8" height="6" fill="#000" transform="rotate(-15 50 50)"/></svg>`,
+      ghs06: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M36,32 Q50,20 64,32 Q70,45 64,55 L36,55 Q30,45 36,32 Z" fill="#000"/><circle cx="43" cy="38" r="4" fill="#fff"/><circle cx="57" cy="38" r="4" fill="#fff"/><path d="M28,68 L72,42 M28,42 L72,68" stroke="#000" stroke-width="5"/></svg>`,
+      ghs07: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M43,26 L57,26 L54,58 L46,58 Z" fill="#000"/><circle cx="50" cy="72" r="6" fill="#000"/></svg>`,
+      ghs09: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M35,32 L35,55 M42,40 L42,55 M48,45 L48,55 M30,55 L58,55" stroke="#000" stroke-width="3"/><path d="M48,60 Q65,50 78,58 Q65,68 48,60 Z" fill="#000"/><line x1="20" y1="68" x2="80" y2="68" stroke="#000" stroke-width="4.5"/></svg>`,
+      ghs08: `<svg class="pit-img" viewBox="0 0 100 100"><polygon points="50,4 96,50 50,96 4,50" fill="none" stroke="#e11d48" stroke-width="7"/><path d="M50,22 A12,12 0 0,1 62,34 C62,45 58,50 68,60 L32,60 C42,50 38,45 38,34 A12,12 0 0,1 50,22 Z" fill="#000"/><polygon points="50,38 54,48 64,48 56,54 59,64 50,58 41,64 44,54 36,48 46,48" fill="#fff"/></svg>`
     };
 
     const pitData = [
@@ -474,9 +463,7 @@
       { id: 'ghs08', label: 'GRAVI EFFETTI' }
     ];
 
-    // Inizializzazione controlli
     function initControls() {
-      // HP Checkboxes
       const hpContainer = document.getElementById('hpContainer');
       const viewHPList = document.getElementById('viewHPList');
       
@@ -493,7 +480,6 @@
         viewHPList.appendChild(row);
       });
 
-      // Pittogrammi Checkboxes e Griglia
       const pitContainer = document.getElementById('pitContainer');
       const viewPitGrid = document.getElementById('viewPitGrid');
 
@@ -512,18 +498,9 @@
         `;
         viewPitGrid.appendChild(pitBox);
       });
-
-      // Imposta selezione iniziale (es. HP11, HP12, ESPLOSIVO, INFIAMMABILE, AMBIENTE)
-      document.querySelector('input[data-hp="HP11"]').checked = true;
-      document.querySelector('input[data-hp="HP12"]').checked = true;
-      document.querySelector('input[data-pit="ghs01"]').checked = true;
-      document.querySelector('input[data-pit="ghs02"]').checked = true;
-      document.querySelector('input[data-pit="ghs09"]').checked = true;
-      updateHP();
-      updatePit();
     }
 
-    // Ricerca EER con Tendina
+    // Ricerca EER
     const searchEERInput = document.getElementById('searchEER');
     const eerSuggestions = document.getElementById('eerSuggestions');
 
@@ -564,7 +541,6 @@
       eerSuggestions.style.display = 'none';
     }
 
-    // Chiusura tendina al clic esterno
     document.addEventListener('click', function(e) {
       if (!searchEERInput.contains(e.target) && !eerSuggestions.contains(e.target)) {
         eerSuggestions.style.display = 'none';
@@ -575,7 +551,6 @@
       document.getElementById('viewEERDesc').innerText = e.target.value || "Selezionare un codice EER dall'anagrafica";
     });
 
-    // Aggiornamento HP
     function updateHP() {
       hpData.forEach(hp => {
         const cb = document.querySelector(`input[data-hp="${hp.code}"]`);
@@ -588,7 +563,6 @@
       });
     }
 
-    // Aggiornamento Pittogrammi
     function updatePit() {
       pitData.forEach(pit => {
         const cb = document.querySelector(`input[data-pit="${pit.id}"]`);
@@ -601,7 +575,7 @@
       });
     }
 
-    // Gestione Logo Upload
+    // Logo Upload
     document.getElementById('inputLogo').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
@@ -613,7 +587,6 @@
       }
     });
 
-    // Testo WBS e Produttore
     document.getElementById('inputWBS').addEventListener('input', e => {
       document.getElementById('viewWBS').innerText = e.target.value || '—';
     });
@@ -621,7 +594,6 @@
       document.getElementById('viewProduttore').innerText = e.target.value || '—';
     });
 
-    // Avvio iniziale con EER predefinito (17 05 03 *)
     window.onload = function() {
       initControls();
       selectEER(eerDatabase[0]);
