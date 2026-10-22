@@ -173,6 +173,12 @@
     }
 
     .c-header-left { display: flex; align-items: center; }
+    .c-logo-webuild {
+      max-width: 180px;
+      max-height: 55px;
+      object-fit: contain;
+    }
+
     .c-header-right {
       display: flex;
       justify-content: space-between;
@@ -378,12 +384,9 @@
       </div>
 
       <div class="cartello-sheet" id="cartelloSheet">
-        <!-- RIGA 1: Header Logos -->
+        <!-- RIGA 1: Header Logos con immagine JPEG Webuild -->
         <div class="c-header-left">
-          <svg width="170" height="38" viewBox="0 0 200 50">
-            <text x="0" y="28" font-family="Arial" font-size="26" font-weight="bold" fill="#e11d48">webuild</text>
-            <text x="0" y="44" font-family="Arial" font-size="10" fill="#64748b">Terzo Valico AV/AC</text>
-          </svg>
+          <img src="logo_webuild.jpg" class="c-logo-webuild" alt="Logo Webuild Terzo Valico" onerror="this.src='https://via.placeholder.com/170?text=Logo+Webuild+JPG'">
         </div>
         <div class="c-header-right">
           <div class="c-main-title">
