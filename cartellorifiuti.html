@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartello Deposito Temporaneo Rifiuti - Layout Orizzontale</title>
+  <title>Cartello Deposito Temporaneo Rifiuti - Terzo Valico</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -14,7 +14,7 @@
         margin: 5mm;
       }
       .no-print { display: none !important; }
-      body { background-color: #fff !important; color: #000 !important; font-family: sans-serif !important; }
+      body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
       main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
       .cartello-box { border: 4px solid #000 !important; box-shadow: none !important; width: 100% !important; }
       input, select, textarea {
@@ -24,20 +24,31 @@
         font-weight: bold !important;
       }
     }
+    
+    /* Stili per pittogrammi interattivi */
+    .ghs-card {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .ghs-card.inactive {
+      opacity: 0.15;
+      filter: grayscale(100%);
+    }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-900 font-sans min-h-screen pb-10">
 
-  <!-- BARRA DI COMANDO SUPERIORE -->
+  <!-- BARRA COMANDI TOP -->
   <header class="bg-slate-800 border-b border-slate-700 text-white sticky top-0 z-50 shadow-lg no-print">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <a href="cartellonistica-form.html" class="bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-xl border border-slate-600 transition">
           <i class="fa-solid fa-arrow-left"></i>
         </a>
         <div>
-          <h1 class="font-bold text-sm leading-tight">Generatore Cartello Rifiuti (Layout Orizzontale)</h1>
-          <p class="text-[10px] text-slate-400">Terzo Valico dei Giovi — Formato Cantiere A4 / A3</p>
+          <h1 class="font-bold text-sm leading-tight">Generatore Cartello Rifiuti (DTR)</h1>
+          <p class="text-[10px] text-slate-400">Terzo Valico dei Giovi — Formato Cantiere</p>
         </div>
       </div>
       
@@ -52,20 +63,17 @@
     </div>
   </header>
 
-  <!-- CONTENUTO STAMPABILE (LAYOUT ADERENTE AL MODELLO EXCEL) -->
   <main class="max-w-[1100px] mx-auto my-4 px-2">
     
     <div class="cartello-box bg-white p-4 rounded-xl border-4 border-black shadow-2xl space-y-3">
       
       <!-- INTESTAZIONE LOGHI E TITOLO -->
       <div class="grid grid-cols-12 items-center gap-2 border-b-2 border-black pb-2">
-        <!-- Logo Webuild / Terzo Valico -->
         <div class="col-span-3 flex flex-col justify-center items-start">
           <span class="text-red-600 font-black text-2xl tracking-tighter leading-none">webuild</span>
           <span class="text-[11px] font-bold text-slate-700 leading-tight">Terzo Valico AV/AC</span>
         </div>
         
-        <!-- Titolo Centrale -->
         <div class="col-span-6 text-center">
           <h2 class="text-xl font-black uppercase tracking-tight text-slate-900">
             Linea Ferroviaria AV/AC
@@ -75,19 +83,16 @@
           </h3>
         </div>
 
-        <!-- Logo Impresa Esecutrice -->
         <div class="col-span-3 bg-yellow-300 border-2 border-black h-14 flex items-center justify-center text-center p-1">
           <span class="font-black text-xs uppercase leading-tight text-black">LOGO IMPRESA ESECUTRICE</span>
         </div>
       </div>
 
-      <!-- CORPO PRINCIPALE IN DUE SEZIONI SUPERIORI -->
+      <!-- CORPO SUPERIORE: WBS, PRODUTTORE E SELEZIONE EER -->
       <div class="grid grid-cols-12 gap-3 items-start">
         
-        <!-- BLOCCO SINISTRO: WBS E PRODUTTORE -->
         <div class="col-span-4 space-y-2">
-          
-          <!-- WBS / LUOGO DI PRODUZIONE -->
+          <!-- WBS -->
           <div class="flex border-2 border-black rounded overflow-hidden">
             <div class="bg-white p-2 font-black text-[11px] uppercase w-1/3 border-r-2 border-black flex items-center leading-tight">
               WBS /<br>LUOGO DI<br>PRODUZIONE:
@@ -106,103 +111,151 @@
               <input type="text" id="produttore" value="XXXXXXXXXXXXXX" class="w-full bg-transparent text-center font-black text-sm uppercase text-white focus:outline-none">
             </div>
           </div>
-
         </div>
 
-        <!-- BLOCCO DESTRO: DESCRIZIONE E CODICE EER CUBITALE -->
-        <div class="col-span-8 flex flex-col justify-center items-center text-center px-2 space-y-2">
-          <textarea id="descrizione_rifiuto" rows="2" class="w-full text-center font-black text-lg text-slate-900 border-b border-dashed border-slate-300 focus:outline-none resize-none leading-tight" placeholder="Descrizione del rifiuto...">Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03</textarea>
+        <!-- DESCRIZIONE E SELETTORE EER -->
+        <div class="col-span-8 flex flex-col justify-center items-center text-center px-2 space-y-1">
+          <div class="w-full no-print mb-1">
+            <label class="text-xs font-bold text-slate-500 uppercase mr-2">Seleziona Codice EER:</label>
+            <input type="text" id="eer_input" list="eer_list" onchange="aggiornaEer()" placeholder="Cerca EER (es. 17 09 04)" class="border border-slate-400 rounded px-2 py-0.5 text-xs font-bold w-64 text-center">
+            <datalist id="eer_list">
+              <option value="17 09 04">17 09 04 - Rifiuti misti costruzione e demolizione</option>
+              <option value="17 05 04">17 05 04 - Terra e rocce non pericolose</option>
+              <option value="17 05 03*">17 05 03* - Terra e rocce pericolose</option>
+              <option value="17 01 01">17 01 01 - Cemento</option>
+              <option value="15 01 10*">15 01 10* - Imballaggi pericolosi</option>
+            </datalist>
+          </div>
+
+          <textarea id="descrizione_rifiuto" rows="2" class="w-full text-center font-black text-base md:text-lg text-slate-900 border-b border-dashed border-slate-300 focus:outline-none resize-none leading-tight">Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03</textarea>
           
-          <!-- CODICE EER/CER CUBITALE -->
-          <div class="w-full pt-1">
-            <input type="text" id="codice_eer" value="17 09 04" class="w-full text-center font-black text-5xl md:text-6xl text-slate-950 tracking-wider bg-transparent focus:outline-none">
+          <div class="w-full">
+            <input type="text" id="codice_eer_display" value="17 09 04" class="w-full text-center font-black text-5xl md:text-6xl text-slate-950 tracking-wider bg-transparent focus:outline-none">
           </div>
         </div>
 
       </div>
 
-      <!-- PARTE INFERIORE: TABELLA HP (SINISTRA) + PITTOGRAMMI GHS CON ROMBI (DESTRA) -->
+      <!-- PARTE INFERIORE: TABELLA HP (SINISTRA) + PITTOGRAMMI INTERATTIVI (DESTRA) -->
       <div class="grid grid-cols-12 gap-3 border-t-2 border-black pt-2">
         
-        <!-- COLONNA HP (HP1 - HP15) -->
-        <div class="col-span-4 border-2 border-black p-1.5 text-[9px] leading-tight">
+        <!-- SELEZIONE/TABELLA HP -->
+        <div class="col-span-4 border-2 border-black p-1.5 text-[9px] leading-tight bg-slate-50">
           <div class="font-black text-center border-b border-black pb-0.5 mb-1 text-[10px] uppercase">
             CARATTERISTICHE DI PERICOLO DEL RIFIUTO
           </div>
-          <table class="w-full font-bold">
-            <tr><td class="w-8 font-black">HP1</td><td>Esplosivo</td></tr>
-            <tr><td class="font-black">HP2</td><td>Comburente</td></tr>
-            <tr><td class="font-black">HP3</td><td>Infiammabile</td></tr>
-            <tr><td class="font-black">HP4</td><td>Irritante</td></tr>
-            <tr><td class="font-black">HP5</td><td>Nocivo</td></tr>
-            <tr><td class="font-black">HP6</td><td>Tossicità acuta</td></tr>
-            <tr><td class="font-black">HP7</td><td>Cancerogeno</td></tr>
-            <tr><td class="font-black">HP8</td><td>Corrosivo</td></tr>
-            <tr><td class="font-black">HP9</td><td>Infettivo</td></tr>
-            <tr><td class="font-black">HP10</td><td>Tossico per la riproduzione</td></tr>
-            <tr><td class="font-black">HP11</td><td>Mutageno</td></tr>
-            <tr><td class="font-black">HP12</td><td>Liberazione di gas a tossicità acuta</td></tr>
-            <tr><td class="font-black">HP13</td><td>Sensibilizzante</td></tr>
-            <tr><td class="font-black">HP14</td><td>Ecotossico</td></tr>
-            <tr><td class="font-black">HP15</td><td class="text-[8px] leading-none">Rifiuto che non possiede direttamente una delle caratteristiche summenzionate</td></tr>
-          </table>
+          <div class="space-y-0.5 font-bold">
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP1</b> Esplosivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP2</b> Comburente</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP3</b> Infiammabile</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP4</b> Irritante</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP5</b> Nocivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP6</b> Tossicità acuta</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP7</b> Cancerogeno</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP8</b> Corrosivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP9</b> Infettivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP10</b> Tossico per la riproduzione</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP11</b> Mutageno</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP12</b> Liberazione gas tossici</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP13</b> Sensibilizzante</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP14</b> Ecotossico</label>
+            <label class="flex items-center gap-1"><input type="checkbox" class="hp-cb"> <b>HP15</b> Altre caratteristiche</label>
+          </div>
         </div>
 
-        <!-- COLONNA PITTOGRAMMI GHS CON IMMAGINI ROMBO CLP -->
-        <div class="col-span-8 grid grid-cols-3 gap-2 items-center text-center p-1">
+        <!-- PITTOGRAMMI GHS VETTORIALI SVG NATIVI (INTERATTIVI) -->
+        <div class="col-span-8 grid grid-cols-3 gap-3 items-center text-center p-1">
           
-          <!-- GHS01 ESPLOSIVO -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/GHS-pictogram-explos.svg" class="w-14 h-14" alt="Esplosivo">
-            <span class="font-black text-[10px] uppercase mt-0.5">ESPLOSIVO</span>
+          <!-- GHS01 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <circle cx="50" cy="50" r="12" fill="black"/>
+              <path d="M50 25 L50 15 M25 50 L15 50 M75 50 L85 50 M50 75 L50 85 M32 32 L22 22 M68 32 L78 22 M32 68 L22 78 M68 68 L78 78" stroke="black" stroke-width="4"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">ESPLOSIVO</span>
           </div>
 
-          <!-- GHS02 INFIAMMABILE -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/GHS-pictogram-flam.svg" class="w-14 h-14" alt="Infiammabile">
-            <span class="font-black text-[10px] uppercase mt-0.5">INFIAMMABILE</span>
+          <!-- GHS02 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <path d="M50 20 C40 35 30 45 30 60 C30 72 40 80 50 80 C60 80 70 72 70 60 C70 45 60 35 50 20 Z M50 45 C45 52 40 57 40 65 C40 70 45 74 50 74 C55 74 60 70 60 65 C60 57 55 52 50 45 Z" fill="black"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">INFIAMMABILE</span>
           </div>
 
-          <!-- GHS03 OSSIDANTE -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/GHS-pictogram-rondflam.svg" class="w-14 h-14" alt="Ossidante">
-            <span class="font-black text-[10px] uppercase mt-0.5">OSSIDANTE</span>
+          <!-- GHS03 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <circle cx="50" cy="55" r="14" fill="none" stroke="black" stroke-width="6"/>
+              <path d="M50 22 C45 30 42 35 50 42 C58 35 55 30 50 22 Z" fill="black"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">OSSIDANTE</span>
           </div>
 
-          <!-- GHS05 CORROSIVO -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/GHS-pictogram-acid.svg" class="w-14 h-14" alt="Corrosivo">
-            <span class="font-black text-[10px] uppercase mt-0.5">CORROSIVO</span>
+          <!-- GHS05 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <rect x="25" y="65" width="50" height="8" fill="black"/>
+              <path d="M30 30 L40 45 M70 30 L60 45" stroke="black" stroke-width="5"/>
+              <circle cx="35" cy="60" r="3" fill="black"/>
+              <circle cx="65" cy="60" r="3" fill="black"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">CORROSIVO</span>
           </div>
 
-          <!-- GHS04 GAS PRESSIONE -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/GHS-pictogram-bottle.svg" class="w-14 h-14" alt="Gas Pressione">
-            <span class="font-black text-[10px] uppercase mt-0.5">GAS SOTTO PRESSIONE</span>
+          <!-- GHS04 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <rect x="25" y="44" width="50" height="12" rx="6" fill="black"/>
+              <rect x="70" y="47" width="8" height="6" fill="black"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">GAS SOTTO PRESSIONE</span>
           </div>
 
-          <!-- GHS06 TOSSICO ACUTO -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/GHS-pictogram-skull.svg" class="w-14 h-14" alt="Tossico Acuto">
-            <span class="font-black text-[10px] uppercase mt-0.5">TOSSICO ACUTO</span>
+          <!-- GHS06 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <circle cx="50" cy="42" r="14" fill="black"/>
+              <path d="M30 68 L70 68 M35 60 L65 76 M35 76 L65 60" stroke="black" stroke-width="5"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">TOSSICO ACUTO</span>
           </div>
 
-          <!-- GHS07 NOCIVO / IRRITANTE -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/GHS-pictogram-exclam.svg" class="w-14 h-14" alt="Nocivo">
-            <span class="font-black text-[10px] uppercase mt-0.5">NOCIVO</span>
+          <!-- GHS07 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <path d="M50 25 L50 55 M50 68 L50 76" stroke="black" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">NOCIVO</span>
           </div>
 
-          <!-- GHS09 ECOTOSSICO -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/GHS-pictogram-pollu.svg" class="w-14 h-14" alt="Pericoloso Ambiente">
-            <span class="font-black text-[10px] uppercase mt-0.5">PERICOLOSO PER L'AMBIENTE</span>
+          <!-- GHS09 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <path d="M25 65 Q40 55 50 65 T75 65" stroke="black" stroke-width="4" fill="none"/>
+              <circle cx="60" cy="40" r="6" fill="black"/>
+              <path d="M30 50 L45 35 L40 50 Z" fill="black"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">PERICOLOSO AMBIENTE</span>
           </div>
 
-          <!-- GHS08 GRAVI EFFETTI SALUTE -->
-          <div class="flex flex-col items-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/GHS-pictogram-silhou.svg" class="w-14 h-14" alt="Corrosivo / Salute">
-            <span class="font-black text-[10px] uppercase mt-0.5">CORROSIVO / SALUTE</span>
+          <!-- GHS08 -->
+          <div class="ghs-card inactive flex flex-col items-center" onclick="toggleGhs(this)">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+              <polygon points="50,3 97,50 50,97 3,50" fill="white" stroke="#d32f2f" stroke-width="6"/>
+              <circle cx="50" cy="32" r="8" fill="black"/>
+              <path d="M40 45 L60 45 L65 75 L35 75 Z" fill="black"/>
+              <polygon points="50,50 55,60 45,60" fill="white"/>
+            </svg>
+            <span class="font-black text-[10px] uppercase mt-1">CORROSIVO / SALUTE</span>
           </div>
 
         </div>
@@ -214,6 +267,27 @@
   </main>
 
   <script>
+    function toggleGhs(element) {
+      element.classList.toggle('inactive');
+    }
+
+    function aggiornaEer() {
+      const input = document.getElementById('eer_input').value;
+      const display = document.getElementById('codice_eer_display');
+      const descr = document.getElementById('descrizione_rifiuto');
+      
+      if(input) {
+        display.value = input;
+        if(input.includes("17 05 04")) {
+          descr.value = "Terra e rocce, diverse da quelle di cui alla voce 17 05 03";
+        } else if(input.includes("17 05 03")) {
+          descr.value = "Terra e rocce, contenenti sostanze pericolose";
+        } else if(input.includes("17 09 04")) {
+          descr.value = "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03";
+        }
+      }
+    }
+
     function stampaCartello(formato) {
       const styleTag = document.getElementById('print-style');
       if (formato === 'A3') {
@@ -224,10 +298,11 @@
               margin: 8mm;
             }
             .no-print { display: none !important; }
-            body { background-color: #fff !important; color: #000 !important; font-family: sans-serif !important; }
+            .ghs-card.inactive { display: none !important; }
+            body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
             main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
             .cartello-box { border: 6px solid #000 !important; box-shadow: none !important; width: 100% !important; font-size: 1.3rem !important; }
-            img { width: 80px !important; h-80px !important; }
+            svg { width: 80px !important; height: 80px !important; }
             input, select, textarea {
               border: none !important;
               background: transparent !important;
@@ -244,7 +319,8 @@
               margin: 5mm;
             }
             .no-print { display: none !important; }
-            body { background-color: #fff !important; color: #000 !important; font-family: sans-serif !important; }
+            .ghs-card.inactive { display: none !important; }
+            body { background-color: #fff !important; color: #000 !important; font-family: Arial, sans-serif !important; }
             main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
             .cartello-box { border: 4px solid #000 !important; box-shadow: none !important; width: 100% !important; }
             input, select, textarea {
