@@ -15,7 +15,7 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 8mm;
+        margin: 6mm;
       }
       .no-print { display: none !important; }
       body { background-color: #fff !important; color: #000 !important; }
@@ -59,114 +59,136 @@
   </header>
 
   <!-- CONTENUTO CARTELLO STAMPABILE -->
-  <main class="max-w-4xl mx-auto my-6 px-3">
+  <main class="max-w-4xl mx-auto my-4 px-3">
     
-    <div class="cartello-box bg-white text-slate-900 rounded-2xl border-8 border-amber-400 p-6 shadow-2xl space-y-4">
+    <div class="cartello-box bg-white text-slate-900 rounded-2xl border-8 border-amber-400 p-5 shadow-2xl space-y-3">
       
       <!-- INTESTAZIONE CARTELLO -->
-      <div class="bg-amber-400 p-4 rounded-xl text-center border-2 border-slate-900 space-y-1">
-        <div class="flex justify-between items-center border-b border-slate-900/30 pb-2 mb-1">
+      <div class="bg-amber-400 p-3 rounded-xl text-center border-2 border-slate-900 space-y-1">
+        <div class="flex justify-between items-center border-b border-slate-900/30 pb-1 mb-1">
           <span class="font-black text-xs tracking-widest text-slate-900">CONSORZIO COCIV</span>
           <span class="font-black text-xs tracking-widest text-slate-900">TERZO VALICO DEI GIOVI</span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-950 flex items-center justify-center gap-2">
+        <h2 class="text-2xl font-black uppercase tracking-tight text-slate-950 flex items-center justify-center gap-2">
           <i class="fa-solid fa-triangle-exclamation text-slate-950"></i> DEPOSITO TEMPORANEO RIFIUTI
         </h2>
-        <p class="text-xs font-bold text-slate-900 uppercase">
+        <p class="text-[11px] font-bold text-slate-900 uppercase">
           Ai sensi del D.Lgs. 152/2006 e s.m.i. — Articolo 185-bis
         </p>
       </div>
 
       <!-- SEZIONE 1: DATI CANTIERE & UBICAZIONE -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-300">
-        <div class="space-y-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-300">
+        <div class="space-y-0.5">
           <label class="font-black text-slate-700 uppercase block">Cantiere / Ubicazione:</label>
-          <input type="text" id="cantiere" placeholder="Es. CSL2 - Cravasco / Galleria Castagnola" class="w-full border border-slate-400 rounded p-1.5 font-bold bg-white">
+          <input type="text" id="cantiere" placeholder="Es. CSL2 - Cravasco" class="w-full border border-slate-400 rounded p-1 font-bold bg-white">
         </div>
-        <div class="space-y-1">
+        <div class="space-y-0.5">
           <label class="font-black text-slate-700 uppercase block">Identificativo Area / Area DTR N°:</label>
-          <input type="text" id="area_dtr" placeholder="Es. DTR-01 / Area Stoccaggio Nord" class="w-full border border-slate-400 rounded p-1.5 font-bold bg-white">
+          <input type="text" id="area_dtr" placeholder="Es. DTR-01 / Area Stoccaggio Nord" class="w-full border border-slate-400 rounded p-1 font-bold bg-white">
         </div>
-        <div class="space-y-1">
+        <div class="space-y-0.5">
           <label class="font-black text-slate-700 uppercase block">Responsabile di Cantiere / Referente:</label>
-          <input type="text" id="responsabile" placeholder="Nome Cognome / Tel. Emergenza" class="w-full border border-slate-400 rounded p-1.5 font-bold bg-white">
+          <input type="text" id="responsabile" placeholder="Nome Cognome / Tel. Emergenza" class="w-full border border-slate-400 rounded p-1 font-bold bg-white">
         </div>
-        <div class="space-y-1">
+        <div class="space-y-0.5">
           <label class="font-black text-slate-700 uppercase block">Data Attivazione Deposito:</label>
-          <input type="date" id="data_attivazione" class="w-full border border-slate-400 rounded p-1.5 font-bold bg-white">
+          <input type="date" id="data_attivazione" class="w-full border border-slate-400 rounded p-1 font-bold bg-white">
         </div>
       </div>
 
       <!-- SEZIONE 2: CODICE EER / CER E DESCRIZIONE ESTESA -->
-      <div class="border-4 border-slate-900 p-4 rounded-xl bg-amber-50/50 space-y-3">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b-2 border-slate-900 pb-2">
-          <label class="font-black text-base text-slate-900 uppercase tracking-wide">
+      <div class="border-4 border-slate-900 p-3 rounded-xl bg-amber-50/50 space-y-2">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b-2 border-slate-900 pb-1.5">
+          <label class="font-black text-sm text-slate-900 uppercase tracking-wide">
             CODICE EER / CER:
           </label>
-          <input type="text" id="codice_eer" list="eer_list" oninput="onEerSelect()" placeholder="Digita o seleziona codice (es. 17 05 04)" class="w-full md:w-80 border-2 border-slate-900 rounded-lg p-2 font-black text-lg text-amber-950 bg-white text-center">
+          <input type="text" id="codice_eer" list="eer_list" oninput="onEerSelect()" placeholder="Digita o seleziona codice (es. 17 05 04)" class="w-full md:w-72 border-2 border-slate-900 rounded-lg p-1.5 font-black text-base text-amber-950 bg-white text-center">
         </div>
 
-        <div class="space-y-1">
-          <label class="font-black text-xs text-slate-700 uppercase block">Descrizione Ufficiale Rifiuto:</label>
-          <textarea id="descrizione_eer" rows="2" placeholder="La descrizione estesa apparirà automaticamente selezionando il codice..." class="w-full border-2 border-slate-400 rounded-lg p-2 font-bold text-sm bg-white"></textarea>
+        <div class="space-y-0.5">
+          <label class="font-black text-[11px] text-slate-700 uppercase block">Descrizione Ufficiale Rifiuto:</label>
+          <textarea id="descrizione_eer" rows="2" placeholder="La descrizione estesa apparirà automaticamente..." class="w-full border-2 border-slate-400 rounded-lg p-1.5 font-bold text-xs bg-white"></textarea>
         </div>
       </div>
 
-      <!-- SEZIONE 3: STATO FISICO & CARATTERISTICHE DI PERICOLO (HP) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+      <!-- SEZIONE 3: STATO FISICO & CARATTERISTICHE DI PERICOLO (HP1 - HP15) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
         
         <!-- STATO FISICO -->
-        <div class="border-2 border-slate-800 p-3 rounded-xl bg-slate-50 space-y-2">
-          <h4 class="font-black text-slate-900 uppercase border-b pb-1 text-center">Stato Fisico</h4>
-          <div class="space-y-1.5 font-bold text-slate-800">
+        <div class="border-2 border-slate-800 p-2.5 rounded-xl bg-slate-50 space-y-1.5">
+          <h4 class="font-black text-slate-900 uppercase border-b pb-1 text-center text-[11px]">Stato Fisico</h4>
+          <div class="space-y-1 font-bold text-[11px] text-slate-800">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="stato_fisico" value="Solido non polverulento" checked class="w-4 h-4"> Solido non polverulento
+              <input type="radio" name="stato_fisico" value="Solido non polverulento" checked class="w-3.5 h-3.5"> Solido non polverulento
             </label>
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="stato_fisico" value="Solido polverulento" class="w-4 h-4"> Solido polverulento
+              <input type="radio" name="stato_fisico" value="Solido polverulento" class="w-3.5 h-3.5"> Solido polverulento
             </label>
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="stato_fisico" value="Fangoso palabile" class="w-4 h-4"> Fangoso palabile
+              <input type="radio" name="stato_fisico" value="Fangoso palabile" class="w-3.5 h-3.5"> Fangoso palabile
             </label>
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name="stato_fisico" value="Liquido" class="w-4 h-4"> Liquido
+              <input type="radio" name="stato_fisico" value="Liquido" class="w-3.5 h-3.5"> Liquido
             </label>
           </div>
         </div>
 
-        <!-- PERICOLOSITÀ & HP -->
-        <div class="md:col-span-2 border-2 border-slate-800 p-3 rounded-xl bg-slate-50 space-y-2">
+        <!-- CARATTERISTICHE HP (HP1 - HP15 COMPLETO) -->
+        <div class="md:col-span-2 border-2 border-slate-800 p-2.5 rounded-xl bg-slate-50 space-y-1.5">
           <div class="flex justify-between items-center border-b pb-1">
-            <h4 class="font-black text-slate-900 uppercase">Caratteristiche di Pericolo (HP)</h4>
-            <div class="flex gap-3 font-bold">
+            <h4 class="font-black text-slate-900 uppercase text-[11px]">Caratteristiche di Pericolo (HP1 - HP15)</h4>
+            <div class="flex gap-3 font-bold text-[11px]">
               <label class="flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="pericoloso" value="NO" checked onchange="toggleHpSection(false)" class="w-4 h-4"> Non Pericoloso
+                <input type="radio" name="pericoloso" value="NO" checked onchange="toggleHpSection(false)" class="w-3.5 h-3.5"> Non Pericoloso
               </label>
               <label class="flex items-center gap-1 cursor-pointer text-red-700">
-                <input type="radio" name="pericoloso" value="SI" onchange="toggleHpSection(true)" class="w-4 h-4"> Pericoloso (*)
+                <input type="radio" name="pericoloso" value="SI" onchange="toggleHpSection(true)" class="w-3.5 h-3.5"> Pericoloso (*)
               </label>
             </div>
           </div>
 
-          <div id="hp_grid" class="grid grid-cols-3 gap-1.5 font-bold text-[10px] text-slate-800 opacity-40 pointer-events-none transition">
+          <div id="hp_grid" class="grid grid-cols-3 gap-1 font-bold text-[9.5px] text-slate-800 opacity-40 pointer-events-none transition">
             <label class="flex items-center gap-1"><input type="checkbox" value="HP1 Esplosivo" class="hp-cb"> HP1 Esplosivo</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP2 Comburente" class="hp-cb"> HP2 Comburente</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP3 Infiammabile" class="hp-cb"> HP3 Infiammabile</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP4 Irritante" class="hp-cb"> HP4 Irritante</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP5 Nocivo" class="hp-cb"> HP5 Nocivo</label>
-            <label class="flex items-center gap-1"><input type="checkbox" value="HP6 Tossico" class="hp-cb"> HP6 Tossico</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP6 Tossicità acuta" class="hp-cb"> HP6 Tossicità acuta</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP7 Cancerogeno" class="hp-cb"> HP7 Cancerogeno</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP8 Corrosivo" class="hp-cb"> HP8 Corrosivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP9 Infettivo" class="hp-cb"> HP9 Infettivo</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP10 Tossico riproduzione" class="hp-cb"> HP10 Tossico riprod.</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP11 Mutageno" class="hp-cb"> HP11 Mutageno</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP12 Gas tossici" class="hp-cb"> HP12 Gas tossici</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP13 Sensibilizzante" class="hp-cb"> HP13 Sensibilizzante</label>
             <label class="flex items-center gap-1"><input type="checkbox" value="HP14 Ecotossico" class="hp-cb"> HP14 Ecotossico</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="HP15 Altre caratteristiche" class="hp-cb"> HP15 Altre caratt.</label>
           </div>
         </div>
 
       </div>
 
-      <!-- SEZIONE 4: AVVERTENZE DI SICUREZZA E NORME COMPORTAMENTALI -->
-      <div class="border-2 border-slate-900 p-3 rounded-xl bg-amber-100 text-[10px] font-bold leading-tight space-y-1 text-slate-900">
-        <p class="font-black uppercase text-xs text-slate-950 flex items-center gap-1">
-          <i class="fa-solid fa-triangle-exclamation text-amber-700"></i> PRESCRIPTIONI DI SICUREZZA E NORME COMPORTAMENTALI:
+      <!-- SEZIONE 4: PITTOGRAMMI GHS (DA GHS01 A GHS09) -->
+      <div class="border-2 border-slate-800 p-2.5 rounded-xl bg-slate-50 space-y-1.5">
+        <h4 class="font-black text-slate-900 uppercase text-[11px] border-b pb-1">Pittogrammi di Pericolo (GHS / CLP)</h4>
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-1.5 font-bold text-[9.5px] text-slate-800">
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS01 Esplosivo" class="ghs-cb"> GHS01 Esplosivo</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS02 Infiammabile" class="ghs-cb"> GHS02 Infiammabile</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS03 Ossidante" class="ghs-cb"> GHS03 Ossidante</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS04 Gas pressione" class="ghs-cb"> GHS04 Gas press.</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS05 Corrosivo" class="ghs-cb"> GHS05 Corrosivo</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS06 Tossico" class="ghs-cb"> GHS06 Tossico acuto</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS07 Nocivo" class="ghs-cb"> GHS07 Nocivo / Irrit.</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS08 Pericolo salute" class="ghs-cb"> GHS08 Pericolo salute</label>
+          <label class="flex items-center gap-1 bg-white p-1 rounded border border-slate-300"><input type="checkbox" value="GHS09 Pericolo ambiente" class="ghs-cb"> GHS09 Ecotossico</label>
+        </div>
+      </div>
+
+      <!-- SEZIONE 5: AVVERTENZE DI SICUREZZA -->
+      <div class="border-2 border-slate-900 p-2.5 rounded-xl bg-amber-100 text-[10px] font-bold leading-tight space-y-0.5 text-slate-900">
+        <p class="font-black uppercase text-[11px] text-slate-950 flex items-center gap-1">
+          <i class="fa-solid fa-triangle-exclamation text-amber-700"></i> PRESCRIZIONI DI SICUREZZA E NORME COMPORTAMENTALI:
         </p>
         <ul class="list-disc list-inside space-y-0.5">
           <li>È severamente vietato miscelare rifiuti pericolosi tra loro o con rifiuti non pericolosi.</li>
@@ -176,12 +198,12 @@
       </div>
 
       <!-- FOOTER FIRME CARTELLO -->
-      <div class="flex justify-between items-end pt-2 text-[10px] border-t-2 border-slate-300">
+      <div class="flex justify-between items-end pt-1 text-[10px] border-t-2 border-slate-300">
         <div>
           <p class="font-bold text-slate-500">Documento prodotto dal Portale Gestione Ambientale COCIV</p>
           <p class="font-bold text-slate-400">Terzo Valico dei Giovi — Cantiere Sicuro</p>
         </div>
-        <div class="text-right border-t border-slate-900 pt-1 w-48">
+        <div class="text-right border-t border-slate-900 pt-1 w-44">
           <p class="font-black text-slate-900 uppercase text-center">Firma Responsabile Cantiere</p>
         </div>
       </div>
@@ -190,21 +212,18 @@
 
   </main>
 
-  <!-- DATALIST CODICI EER INTEGRATO DAL FILE EXCEL -->
+  <!-- DATALIST CODICI EER INTEGRATO -->
   <datalist id="eer_list"></datalist>
 
   <script>
-    // Inizializzazione Firebase
     const firebaseConfig = {
       databaseURL: "https://vstvg-1f2f6-default-rtdb.europe-west1.firebasedatabase.app"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Database Codici EER caricato dal tuo Excel
     let eerDatabase = {};
 
-    // Caricamento Datalist
     function loadEerDatalist() {
       const datalist = document.getElementById('eer_list');
       fetchEerCodes().then(data => {
@@ -218,7 +237,6 @@
       });
     }
 
-    // Simulazione/Iniezione codici EER (con i principali del tuo Excel e funzione autocompletamento)
     async function fetchEerCodes() {
       return {
         "17 05 04": "Terra e rocce, diverse da quelle di cui alla voce 17 05 03",
@@ -260,6 +278,7 @@
       } else {
         grid.classList.add('opacity-40', 'pointer-events-none');
         document.querySelectorAll('.hp-cb').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.ghs-cb').forEach(cb => cb.checked = false);
       }
     }
 
@@ -267,6 +286,9 @@
       const eer = document.getElementById('codice_eer').value.trim();
       const cantiere = document.getElementById('cantiere').value.trim();
       if (!eer) { alert("Inserisci un codice EER/CER prima di salvare!"); return; }
+
+      const selectedHp = Array.from(document.querySelectorAll('.hp-cb:checked')).map(cb => cb.value);
+      const selectedGhs = Array.from(document.querySelectorAll('.ghs-cb:checked')).map(cb => cb.value);
 
       const record = {
         cantiere: cantiere,
@@ -277,6 +299,8 @@
         descrizione_eer: document.getElementById('descrizione_eer').value,
         stato_fisico: document.querySelector('input[name="stato_fisico"]:checked').value,
         pericoloso: document.querySelector('input[name="pericoloso"]:checked').value,
+        caratteristiche_hp: selectedHp,
+        pittogrammi_ghs: selectedGhs,
         timestamp: Date.now()
       };
 
