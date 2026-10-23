@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portale Operativo QHSE Cantiere</title>
+    <!-- Font Awesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --quality-color: #10b981;
+            --hs-color: #f59e0b;
+            --env-color: #22c55e;
+            --border-glow: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
+        }
+
+        /* Header e Navigation */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-glow);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .logo i {
+            color: var(--quality-color);
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--quality-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--quality-color);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--quality-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* QHSE Wheel Container */
+        .qhse-container {
+            position: relative;
+            width: 380px;
+            height: 380px;
+            margin: 2rem auto;
+            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.5));
+        }
+
+        .qhse-wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            background: #1e293b;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s ease;
+        }
+
+        /* Dividere la circonferenza in 3 spicchi uguali (120° ciascuno) */
+        .slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Utilizzo di clip-path per tagliare lo spicchio a 120 gradi esatti */
+        .slice-inner {
+            width: 200%;
+            height: 200%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip-path: polygon(0 0, 100% 0, 50% 86.6%);
+            transform-origin: 50% 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 35px;
+            text-decoration: none;
+            color: white;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Posizionamento dei tre spicchi */
+        /* Spicchio 1: Quality (0° - 120°) */
+        .slice-q {
+            top: 0;
+            left: 0;
+            transform: rotate(30deg) skewY(30deg);
+        }
+        .slice-q .slice-content {
+            transform: skewY(-30deg) rotate(-30deg) translate(30px, 40px);
+        }
+        .slice-q-bg {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-top: 3px solid var(--quality-color);
+        }
+
+        /* Spicchio 2: Health & Safety (120° - 240°) */
+        .slice-hs {
+            top: 0;
+            left: 0;
+            transform: rotate(150deg) skewY(30deg);
+        }
+        .slice-hs .slice-content {
+            transform: skewY(-30deg) rotate(-150deg) translate(-20px, 45px);
+        }
+        .slice-hs-bg {
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-top: 3px solid var(--hs-color);
+        }
+
+        /* Spicchio 3: Environment (240° - 360°) */
+        .slice-e {
+            top: 0;
+            left: 0;
+            transform: rotate(270deg) skewY(30deg);
+        }
+        .slice-e .slice-content {
+            transform: skewY(-30deg) rotate(-270deg) translate(-40px, -15px);
+        }
+        .slice-e-bg {
+            background: linear-gradient(180deg, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border-top: 3px solid var(--env-color);
+        }
+
+        /* Hover Effects */
+        .slice:hover .slice-inner {
+            filter: brightness(1.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Contenuto all'interno degli spicchi */
+        .slice-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+        }
+
+        .sector-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .sector-icons {
+            display: flex;
+            gap: 6px;
+            font-size: 1.1rem;
+        }
+
+        /* Colori e icone specifiche */
+        .q-color { color: var(--quality-color); }
+        .hs-color { color: var(--hs-color); }
+        .e-color { color: var(--env-color); }
+
+        /* Mozzo centrale (Center Hub) */
+        .center-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px;
+            height: 110px;
+            background: #0f172a;
+            border-radius: 50%;
+            border: 3px solid var(--border-glow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .center-hub span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        .center-hub h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Quick Access Cards (Sotto il cerchio) */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            padding: 1.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-card:hover {
+            transform: translateY(-50px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-glow);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Media Queries per Mobile (Cantiere) */
+        @media (max-width: 480px) {
+            .qhse-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .center-hub {
+                width: 85px;
+                height: 85px;
+            }
+
+            .center-hub h2 {
+                font-size: 1rem;
+            }
+
+            .sector-title {
+                font-size: 1.1rem;
+            }
+
+            .sector-icons {
+                font-size: 0.9rem;
+            }
+
+            .hero-title h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>PORTALE QHSE</span>
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>Cantiere Attivo</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero-title">
+            <h1>Gestione Operativa di Cantiere</h1>
+            <p>Seleziona un settore per accedere ai moduli di controllo, verbali di ispezione e documentazione aggiornata.</p>
+        </div>
+
+        <!-- Ruota QHSE a 3 Spicchi -->
+        <div class="qhse-container">
+            <div class="qhse-wheel">
+                
+                <!-- Spicchio Q (Quality) -->
+                <div class="slice slice-q">
+                    <a href="#quality" class="slice-inner slice-q-bg">
+                        <div class="slice-content">
+                            <span class="sector-title q-color">Q</span>
+                            <div class="sector-icons q-color">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Spicchio HS (Health & Safety) -->
+                <div class="slice slice-hs">
+                    <a href="#hs" class="slice-inner slice-hs-bg">
+                        <div class="slice-content">
+                            <span class="sector-title hs-color">HS</span>
+                            <div class="sector-icons hs-color">
+                                <i class="fa-solid fa-hard-hat"></i>
+                                <i class="fa-solid fa-kit-medical"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Spicchio E (Environment) -->
+                <div class="slice slice-e">
+                    <a href="#environment" class="slice-inner slice-e-bg">
+                        <div class="slice-content">
+                            <span class="sector-title e-color">E</span>
+                            <div class="sector-icons e-color">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Mozzo Centrale -->
+            <div class="center-hub">
+                <span>SISTEMA</span>
+                <h2>QHSE</h2>
+            </div>
+        </div>
+
+        <!-- Scorciatoie Operative -->
+        <div class="quick-actions">
+            <a href="#quality" class="action-card">
+                <div class="card-header">
+                    <span class="card-title">Qualità (Q)</span>
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--quality-color);">
+                        <i class="fa-solid fa-check-double"></i>
+                    </div>
+                </div>
+                <p class="card-desc">Controlli di accettazione materiali, verbali di non conformità, Piani di Controllo Qualità (PCQ) e prove di laboratorio.</p>
+            </a>
+
+            <a href="#hs" class="action-card">
+                <div class="card-header">
+                    <span class="card-title">Salute e Sicurezza (HS)</span>
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--hs-color);">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                </div>
+                <p class="card-desc">POS, tesserini e accessi, verbali di sopralluogo CSE/RSPP, registro DPI, addestramento e procedure di emergenza.</p>
+            </a>
+
+            <a href="#environment" class="action-card">
+                <div class="card-header">
+                    <span class="card-title">Ambiente (E)</span>
+                    <div class="card-icon" style="background: rgba(34, 197, 94, 0.1); color: var(--env-color);">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                </div>
+                <p class="card-desc">Gestione Terre e Rocce da Scavo (MdS), tracciabilità rifiuti (EER), monitoraggi ambientali, emissioni e rumore.</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Portale QHSE Cantiere | Sistema Integrato di Controllo Operativo</p>
+    </footer>
+
+</body>
+</html>
