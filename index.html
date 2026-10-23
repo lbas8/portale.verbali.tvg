@@ -70,7 +70,7 @@
         SISTEMA DI GESTIONE INTEGRATO <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-amber-400 to-sky-400">QHSE</span>
       </h2>
       <p class="text-sm sm:text-base text-slate-400">
-        Seleziona il settore operativo per accedere ai moduli di controllo, verbali di cantiere e cartellonistica ufficiale di sicurezza e ambiente.
+        Seleziona il settore operativo per accedere ai verbali di sopralluogo, catene di custodia, campionamenti e cartellonistica ambientale di cantiere.
       </p>
     </div>
 
@@ -85,8 +85,8 @@
             <!-- Center Hub Circle -->
             <circle cx="200" cy="200" r="190" fill="#0f172a" stroke="#1e293b" stroke-width="4"/>
 
-            <!-- SPICCHIO E (Environment - Top/Right: 270deg to 30deg) -> COLLEGATO A CARTELLONISTICA -->
-            <g class="slice-group cursor-pointer" onclick="location.href='cartellonisticaform.html'">
+            <!-- SPICCHIO E (Environment) -> RICONNESSO AL PORTALE AMBIENTALE COMPLETO -->
+            <g class="slice-group cursor-pointer" onclick="location.href='verbale10.html'">
               <path d="M 200 200 L 200 20 A 180 180 0 0 1 355.88 290 Z" 
                     fill="#0284c7" class="slice-path opacity-85 hover:opacity-100 transition" />
               <!-- Icona & Testo E -->
@@ -97,7 +97,7 @@
               </g>
             </g>
 
-            <!-- SPICCHIO HS (Health & Safety - Bottom: 30deg to 150deg) -->
+            <!-- SPICCHIO HS (Health & Safety) -->
             <g class="slice-group cursor-pointer" onclick="alert('Modulo Health & Safety in attivazione')">
               <path d="M 200 200 L 355.88 290 A 180 180 0 0 1 44.12 290 Z" 
                     fill="#d97706" class="slice-path opacity-85 hover:opacity-100 transition" />
@@ -109,7 +109,7 @@
               </g>
             </g>
 
-            <!-- SPICCHIO Q (Quality - Top/Left: 150deg to 270deg) -->
+            <!-- SPICCHIO Q (Quality) -->
             <g class="slice-group cursor-pointer" onclick="alert('Modulo Qualità in attivazione')">
               <path d="M 200 200 L 44.12 290 A 180 180 0 0 1 200 20 Z" 
                     fill="#059669" class="slice-path opacity-85 hover:opacity-100 transition" />
@@ -165,7 +165,7 @@
           <div class="flex-grow">
             <div class="flex items-center justify-between mb-1">
               <h3 class="text-lg font-black text-white group-hover:text-amber-400 transition">HS — HEALTH & SAFETY (Sicurezza & Salute)</h3>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 uppercase">ISO 4501</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 uppercase">ISO 45001</span>
             </div>
             <p class="text-xs text-slate-400 mb-2">
               Gestione DPI, idoneità tessere cantiere, verifiche attrezzature, gestione emergenze e cassette primo soccorso.
@@ -176,22 +176,22 @@
           </div>
         </div>
 
-        <!-- CARD E - ENVIRONMENT (ATTIVA - COLLEGA ALLA CARTELLONISTICA E MATRICI AMBIENTALI) -->
+        <!-- CARD E - ENVIRONMENT (COLLEGAMENTO AL PORTALE COMPLETO CON VERBALI E CATENA DI CUSTODIA) -->
         <div class="glass-card rounded-2xl p-5 flex items-start gap-4 border-l-4 border-l-sky-500 cursor-pointer group bg-sky-950/20 shadow-lg shadow-sky-950/20"
-             onclick="location.href='cartellonisticaform.html'">
+             onclick="location.href='verbale10.html'">
           <div class="w-14 h-14 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-2xl group-hover:scale-110 transition flex-shrink-0">
             <i class="fa-solid fa-leaf"></i>
           </div>
           <div class="flex-grow">
             <div class="flex items-center justify-between mb-1">
-              <h3 class="text-lg font-black text-white group-hover:text-sky-400 transition">E — ENVIRONMENT (Ambiente & Terre)</h3>
+              <h3 class="text-lg font-black text-white group-hover:text-sky-400 transition">E — ENVIRONMENT (Ambiente & Cantiere)</h3>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800 uppercase">D.Lgs. 152/06</span>
             </div>
             <p class="text-xs text-slate-400 mb-2">
-              Gestione Depositi Temporanei Rifiuti (pericolosi e non), cartellonistica di cantiere, terre e rocce da scavo e verbali ambientali.
+              Verbali di Sopralluogo sul campo, Catena di Custodia campionamenti, Cartellonistica DTR e gestione Terre e Rocce da Scavo.
             </p>
             <div class="flex items-center gap-2 text-xs text-sky-400 font-bold">
-              <span>Apri Moduli Ambientali & Cartellonistica</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              <span>Apri Portale Ambientale Completo</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </div>
           </div>
         </div>
