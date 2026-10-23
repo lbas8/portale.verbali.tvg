@@ -156,7 +156,7 @@
     .btn-print.btn-a3 { background-color: #0284c7; }
     .btn-print.btn-a3:hover { background-color: #0369a1; }
 
-    /* CARTELLO SHEET (Ottimizzato e Rimodulato) */
+    /* CARTELLO SHEET (Layout Pieno e Senza Spazi Vuoti) */
     .cartello-sheet {
       background: white;
       width: 1050px;
@@ -166,7 +166,7 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       display: grid;
       grid-template-columns: 360px 1fr;
-      grid-template-rows: 65px auto;
+      grid-template-rows: 65px 1fr;
       gap: 12px;
       box-sizing: border-box;
       position: relative;
@@ -195,11 +195,12 @@
     }
     .c-logo-esecutrice img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    /* Colonna Sinistra Rimodulata */
+    /* Colonna Sinistra Completa */
     .col-sinistra {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      height: 100%;
     }
 
     .c-box-evidenza {
@@ -208,6 +209,7 @@
       padding: 6px 8px;
       text-align: center;
       background-color: #ffffff;
+      flex-shrink: 0;
     }
     .c-box-label {
       font-size: 0.68rem;
@@ -226,66 +228,76 @@
       text-transform: uppercase;
     }
 
-    /* Tabella HP Ingrandita e Più Visibile */
+    /* Tabella HP Ingrandita che riempie tutto lo spazio verticale */
     .c-hp-table-border {
       border: 2px solid #000;
-      padding: 6px 8px;
+      padding: 8px 10px;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       flex-grow: 1;
       background: #fff;
     }
     .hp-title {
       font-weight: bold;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       text-transform: uppercase;
       color: #000;
-      border-bottom: 1px solid #000;
-      padding-bottom: 2px;
+      border-bottom: 1.5px solid #000;
+      padding-bottom: 3px;
+    }
+    .hp-list-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
     }
     .hp-row {
       display: flex;
-      font-size: 0.8rem; /* Caratteri più grandi e leggibili */
-      margin-bottom: 2px;
-      opacity: 0.2;
+      align-items: center;
+      font-size: 0.82rem; /* Testo grande e ben visibile */
+      opacity: 0.22;
       color: #000;
+      padding: 1px 0;
     }
     .hp-row.active {
       opacity: 1;
       font-weight: bold;
     }
-    .hp-code { width: 50px; flex-shrink: 0; }
+    .hp-code { width: 55px; flex-shrink: 0; font-weight: 900; }
 
-    /* Colonna Destra: Box EER, Descrizione Operativa e Pittogrammi Compatti */
+    /* Colonna Destra: Box EER, Descrizione Operativa e Griglia Pittogrammi Piena */
     .col-destra {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding-left: 5px;
+      gap: 12px;
+      height: 100%;
     }
 
     /* Box Dedicato per Codice EER e Descrizione Ufficiale */
     .c-eer-box-container {
       border: 3px solid #000;
       border-radius: 6px;
-      padding: 8px 12px;
+      padding: 10px 14px;
       text-align: center;
-      background: #fafafa;
+      background: #ffffff;
+      flex-shrink: 0;
     }
-    .c-eer-desc { font-size: 1.05rem; font-weight: bold; margin-bottom: 4px; line-height: 1.2; color: #000; }
-    .c-eer-code { font-size: 3rem; font-weight: 900; letter-spacing: 2px; color: #000; line-height: 1; }
+    .c-eer-desc { font-size: 1.15rem; font-weight: bold; margin-bottom: 4px; line-height: 1.2; color: #000; }
+    .c-eer-code { font-size: 3.2rem; font-weight: 900; letter-spacing: 2px; color: #000; line-height: 1; }
 
-    /* Nuovo Box per Descrizione Operativa (Cantiere) */
+    /* Box per Descrizione Operativa */
     .c-operativa-box {
       border: 2px dashed #0284c7;
       border-radius: 6px;
-      padding: 6px 10px;
+      padding: 8px 12px;
       background: #f0f9ff;
+      flex-shrink: 0;
     }
     .c-operativa-label {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 800;
       color: #0369a1;
       text-transform: uppercase;
@@ -295,21 +307,22 @@
       gap: 5px;
     }
     .c-operativa-text {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: bold;
       color: #0f172a;
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
-    /* Griglia Pittogrammi più Compatta */
+    /* Griglia Pittogrammi Ingrandita che riempie lo spazio vuoto sottostante */
     .c-pittogrammi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 6px;
+      gap: 10px;
       align-items: center;
       justify-items: center;
-      margin-top: auto;
+      flex-grow: 1;
+      width: 100%;
     }
     .pit-item {
       display: flex;
@@ -317,21 +330,23 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      opacity: 0.15;
+      opacity: 0.18;
       transition: opacity 0.2s;
+      width: 100%;
+      height: 100%;
     }
     .pit-item.active {
       opacity: 1;
     }
     .pit-img {
-      width: 65px; /* Dimensioni compatte per fare spazio */
-      height: 65px;
+      width: 90px;
+      height: 90px;
       object-fit: contain;
     }
     .pit-label {
-      font-size: 0.65rem;
-      font-weight: bold;
-      margin-top: 2px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-top: 3px;
       text-transform: uppercase;
       color: #000;
     }
@@ -457,7 +472,7 @@
 
           <div class="c-hp-table-border">
             <div class="hp-title">Caratteristiche di Pericolo (HP)</div>
-            <div id="viewHPList"></div>
+            <div class="hp-list-container" id="viewHPList"></div>
           </div>
         </div>
 
@@ -470,13 +485,13 @@
             <div class="c-eer-code" id="viewEERCode">17 05 03 *</div>
           </div>
 
-          <!-- Nuovo Box Descrizione Operativa -->
+          <!-- Box Descrizione Operativa -->
           <div class="c-operativa-box">
             <div class="c-operativa-label"><i class="fas fa-hard-hat"></i> Indicazioni Operative per il Cantiere</div>
             <div class="c-operativa-text" id="viewOperativa">Depositare esclusivamente nei cassoni dedicati coperti da telo impermeabile.</div>
           </div>
 
-          <!-- Griglia Pittogrammi Compatti -->
+          <!-- Griglia Pittogrammi Piena -->
           <div class="c-pittogrammi-grid" id="viewPitGrid"></div>
 
         </div>
@@ -526,6 +541,7 @@
       { code: 'HP15', name: 'Altre caratteristiche' }
     ];
 
+    /* Nomi dei file delle immagini esatti come salvati su GitHub */
     const pitImageMap = {
       ghs01: "ghs01.jpg",
       ghs02: "ghs02.jpg",
@@ -580,7 +596,7 @@
         pitBox.className = 'pit-item';
         pitBox.id = `view_pit_${pit.id}`;
         pitBox.innerHTML = `
-          <img src="${pitImageMap[pit.id]}" class="pit-img" alt="${pit.label}" onerror="this.src='https://via.placeholder.com/65?text=IMG'">
+          <img src="${pitImageMap[pit.id]}" class="pit-img" alt="${pit.label}" onerror="this.src='https://via.placeholder.com/90?text=${pit.id.toUpperCase()}'">
           <div class="pit-label">${pit.label}</div>
         `;
         viewPitGrid.appendChild(pitBox);
