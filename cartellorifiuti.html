@@ -57,7 +57,7 @@
     /* App Layout */
     .app-container {
       display: grid;
-      grid-template-columns: 400px 1fr;
+      grid-template-columns: 420px 1fr;
       gap: 2rem;
       max-width: 1600px;
       margin: 1.5rem auto;
@@ -135,7 +135,7 @@
       gap: 1rem;
       margin-bottom: 1rem;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1050px;
       justify-content: flex-end;
     }
     .btn-print {
@@ -156,114 +156,160 @@
     .btn-print.btn-a3 { background-color: #0284c7; }
     .btn-print.btn-a3:hover { background-color: #0369a1; }
 
-    /* CARTELLO SHEET */
+    /* CARTELLO SHEET (Ottimizzato e Rimodulato) */
     .cartello-sheet {
       background: white;
-      width: 1000px;
-      height: 650px;
-      padding: 24px;
-      border: 2px solid #000;
+      width: 1050px;
+      height: 700px;
+      padding: 20px;
+      border: 3px solid #000;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       display: grid;
-      grid-template-columns: 320px 1fr;
-      grid-template-rows: 75px 110px 1fr;
+      grid-template-columns: 360px 1fr;
+      grid-template-rows: 65px auto;
       gap: 12px;
       box-sizing: border-box;
       position: relative;
     }
 
     .c-header-left { display: flex; align-items: center; }
-    .c-logo-webuild {
-      max-width: 180px;
-      max-height: 55px;
-      object-fit: contain;
-    }
+    .c-logo-webuild { max-width: 160px; max-height: 50px; object-fit: contain; }
 
     .c-header-right {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-left: 20px;
+      padding-left: 15px;
     }
-    .c-main-title { text-align: center; font-size: 1.25rem; font-weight: bold; line-height: 1.2; }
+    .c-main-title { text-align: center; font-size: 1.15rem; font-weight: bold; line-height: 1.2; }
     .c-logo-esecutrice {
-      width: 180px;
-      height: 60px;
+      width: 160px;
+      height: 55px;
       border: 1px dashed #cbd5e1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #94a3b8;
       text-align: center;
     }
     .c-logo-esecutrice img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    .c-eer-box { text-align: center; display: flex; flex-direction: column; justify-content: center; padding: 0 10px; }
-    .c-eer-desc { font-size: 1.15rem; font-weight: bold; margin-bottom: 6px; line-height: 1.2; color: #000; }
-    .c-eer-code { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; color: #000; line-height: 1; }
+    /* Colonna Sinistra Rimodulata */
+    .col-sinistra {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-    /* Riquadri WBS e Produttore appetibili, centrati e in grassetto */
     .c-box-evidenza {
-      border: 2px solid #000;
+      border: 2px solid #0f172a;
       border-radius: 6px;
-      padding: 8px;
+      padding: 6px 8px;
       text-align: center;
-      background-color: #f8fafc;
-      margin-bottom: 10px;
+      background-color: #ffffff;
     }
     .c-box-label {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       font-weight: 800;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: #334155;
+      color: #475569;
       margin-bottom: 2px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 1px;
     }
     .c-box-value {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 900;
       color: #0f172a;
       text-transform: uppercase;
     }
 
-    /* Tabella HP con Bordo Nero */
+    /* Tabella HP Ingrandita e Più Visibile */
     .c-hp-table-border {
       border: 2px solid #000;
-      padding: 8px 10px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       flex-grow: 1;
+      background: #fff;
     }
     .hp-title {
       font-weight: bold;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       text-align: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-transform: uppercase;
       color: #000;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2px;
     }
     .hp-row {
       display: flex;
-      font-size: 0.72rem;
-      margin-bottom: 1px;
-      opacity: 0.22;
+      font-size: 0.8rem; /* Caratteri più grandi e leggibili */
+      margin-bottom: 2px;
+      opacity: 0.2;
       color: #000;
     }
     .hp-row.active {
       opacity: 1;
       font-weight: bold;
     }
-    .hp-code { width: 45px; flex-shrink: 0; }
+    .hp-code { width: 50px; flex-shrink: 0; }
 
-    /* Griglia Pittogrammi 3x3 */
+    /* Colonna Destra: Box EER, Descrizione Operativa e Pittogrammi Compatti */
+    .col-destra {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-left: 5px;
+    }
+
+    /* Box Dedicato per Codice EER e Descrizione Ufficiale */
+    .c-eer-box-container {
+      border: 3px solid #000;
+      border-radius: 6px;
+      padding: 8px 12px;
+      text-align: center;
+      background: #fafafa;
+    }
+    .c-eer-desc { font-size: 1.05rem; font-weight: bold; margin-bottom: 4px; line-height: 1.2; color: #000; }
+    .c-eer-code { font-size: 3rem; font-weight: 900; letter-spacing: 2px; color: #000; line-height: 1; }
+
+    /* Nuovo Box per Descrizione Operativa (Cantiere) */
+    .c-operativa-box {
+      border: 2px dashed #0284c7;
+      border-radius: 6px;
+      padding: 6px 10px;
+      background: #f0f9ff;
+    }
+    .c-operativa-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #0369a1;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .c-operativa-text {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    /* Griglia Pittogrammi più Compatta */
     .c-pittogrammi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       justify-items: center;
+      margin-top: auto;
     }
     .pit-item {
       display: flex;
@@ -273,20 +319,19 @@
       text-align: center;
       opacity: 0.15;
       transition: opacity 0.2s;
-      width: 100%;
     }
     .pit-item.active {
       opacity: 1;
     }
     .pit-img {
-      width: 80px;
-      height: 80px;
+      width: 65px; /* Dimensioni compatte per fare spazio */
+      height: 65px;
       object-fit: contain;
     }
     .pit-label {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       font-weight: bold;
-      margin-top: 4px;
+      margin-top: 2px;
       text-transform: uppercase;
       color: #000;
     }
@@ -304,12 +349,8 @@
         height: 100vh;
         page-break-after: always;
       }
-      .pit-item:not(.active) {
-        visibility: hidden !important;
-      }
-      .hp-row:not(.active) {
-        opacity: 0.15 !important;
-      }
+      .pit-item:not(.active) { visibility: hidden !important; }
+      .hp-row:not(.active) { opacity: 0.15 !important; }
     }
   </style>
 </head>
@@ -328,7 +369,7 @@
   </header>
 
   <div class="app-container">
-    <!-- Controlli -->
+    <!-- Pannello di Controllo -->
     <div class="controls-panel">
       
       <div class="panel-section">
@@ -348,15 +389,19 @@
       </div>
 
       <div class="panel-section">
-        <h3><i class="fas fa-barcode"></i> Codice EER (Anagrafica Completa)</h3>
+        <h3><i class="fas fa-barcode"></i> Codice EER & Descrizione</h3>
         <div class="form-group">
-          <label>Seleziona o cerca Codice EER</label>
-          <input type="text" id="searchEER" class="form-control" placeholder="Es. 17 09 04, 170503 o testo..." autocomplete="off">
+          <label>Cerca Codice EER</label>
+          <input type="text" id="searchEER" class="form-control" placeholder="Es. 17 05 03*, 17 09 04..." autocomplete="off">
           <div class="eer-suggestions" id="eerSuggestions"></div>
         </div>
         <div class="form-group">
-          <label>Descrizione Associata / Personalizzata</label>
-          <textarea id="customDesc" class="form-control" rows="3"></textarea>
+          <label>Descrizione Ufficiale EER</label>
+          <textarea id="customDesc" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-info-circle text-sky-600"></i> Descrizione Operativa (Cantiere)</label>
+          <input type="text" id="inputOperativa" class="form-control" value="Depositare esclusivamente nei cassoni dedicati coperti da telo impermeabile." placeholder="Istruzioni sbrigative per operai...">
         </div>
       </div>
 
@@ -366,7 +411,7 @@
       </div>
 
       <div class="panel-section">
-        <h3><i class="fas fa-radiation"></i> Pittogrammi CLP (Immagini ufficiali)</h3>
+        <h3><i class="fas fa-radiation"></i> Pittogrammi CLP (ADR)</h3>
         <div class="checkbox-grid" id="pitContainer"></div>
       </div>
 
@@ -384,9 +429,10 @@
       </div>
 
       <div class="cartello-sheet" id="cartelloSheet">
-        <!-- RIGA 1: Header Logos con immagine JPEG Webuild -->
+        
+        <!-- RIGA 1: Header Logos -->
         <div class="c-header-left">
-          <img src="logowb.jpg" class="c-logo-webuild" alt="Logo Webuild Terzo Valico" onerror="this.src='https://via.placeholder.com/170?text=Logo+Webuild+JPG'">
+          <img src="logo_webuild.jpg" class="c-logo-webuild" alt="Logo Webuild" onerror="this.src='https://via.placeholder.com/160?text=Logo+Webuild'">
         </div>
         <div class="c-header-right">
           <div class="c-main-title">
@@ -397,36 +443,43 @@
           </div>
         </div>
 
-        <!-- RIGA 2: WBS / EER -->
-        <div>
-          <!-- WBS / Luogo di Produzione (Grafica appetibile, centrata e in grassetto) -->
+        <!-- COLONNA SINISTRA -->
+        <div class="col-sinistra">
           <div class="c-box-evidenza">
             <div class="c-box-label">WBS / Luogo di Produzione</div>
             <div class="c-box-value" id="viewWBS">CRAVASCO</div>
           </div>
-        </div>
 
-        <div class="c-eer-box">
-          <div class="c-eer-desc" id="viewEERDesc">Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03</div>
-          <div class="c-eer-code" id="viewEERCode">17 09 04</div>
-        </div>
-
-        <!-- RIGA 3: Produttore + HP e Pittogrammi -->
-        <div style="display: flex; flex-direction: column; height: 100%;">
-          <!-- Produttore (Grafica appetibile, centrata e in grassetto) -->
           <div class="c-box-evidenza">
             <div class="c-box-label">Produttore</div>
             <div class="c-box-value" id="viewProduttore">Consorzio Tunnel Giovi</div>
           </div>
 
           <div class="c-hp-table-border">
-            <div class="hp-title">Caratteristiche di Pericolo del Rifiuto</div>
+            <div class="hp-title">Caratteristiche di Pericolo (HP)</div>
             <div id="viewHPList"></div>
           </div>
         </div>
 
-        <!-- Pittogrammi 3x3 basati sui file JPG ufficiali caricati su GitHub -->
-        <div class="c-pittogrammi-grid" id="viewPitGrid"></div>
+        <!-- COLONNA DESTRA -->
+        <div class="col-destra">
+          
+          <!-- Box EER e Descrizione Ufficiale -->
+          <div class="c-eer-box-container">
+            <div class="c-eer-desc" id="viewEERDesc">Terra e rocce, contenenti sostanze pericolose</div>
+            <div class="c-eer-code" id="viewEERCode">17 05 03 *</div>
+          </div>
+
+          <!-- Nuovo Box Descrizione Operativa -->
+          <div class="c-operativa-box">
+            <div class="c-operativa-label"><i class="fas fa-hard-hat"></i> Indicazioni Operative per il Cantiere</div>
+            <div class="c-operativa-text" id="viewOperativa">Depositare esclusivamente nei cassoni dedicati coperti da telo impermeabile.</div>
+          </div>
+
+          <!-- Griglia Pittogrammi Compatti -->
+          <div class="c-pittogrammi-grid" id="viewPitGrid"></div>
+
+        </div>
 
       </div>
     </div>
@@ -434,411 +487,25 @@
 
   <script>
     const eerDatabase = [
-       { code: "01 03 04 *", desc: "Sterili che possono generare acido prodotti dalla lavorazione di minerale solforoso" },
-       { code: "01 03 05 *", desc: "Altri sterili contenenti sostanze pericolose" },
-       { code: "01 03 07 *", desc: "Altri rifiuti contenenti sostanze pericolose prodotti da trattamenti chimici e fisici di minerali metalliferi" },
-       { code: "01 04 07 *", desc: "Rifiuti contenenti sostanze pericolose, prodotti da trattamenti chimici e fisici di minerali non metalliferi" },
-       { code: "01 05 05 *", desc: "Fanghi e rifiuti di perforazione contenenti oli" },
-       { code: "01 05 06 *", desc: "Fanghi di perforazione ed altri rifiuti di perforazione contenenti sostanze pericolose" },
-       { code: "02 01 08 *", desc: "Rifiuti agrochimici contenenti sostanze pericolose" },
-       { code: "03 01 04 *", desc: "Segatura, trucioli, residui di taglio, legno, pannelli di truciolare e piallacci contenenti sostanze pericolose" },
-       { code: "03 02 01 *", desc: "Prodotti per i trattamenti conservativi del legno contenenti composti organici non alogenati" },
-       { code: "03 02 02 *", desc: "Prodotti per i trattamenti conservativi del legno contenenti composti organici clorurati" },
-       { code: "03 02 03 *", desc: "Prodotti per i trattamenti conservativi del legno contenenti composti organometallici" },
-       { code: "03 02 04 *", desc: "Prodotti per i trattamenti conservativi del legno contenenti composti inorganici" },
-       { code: "03 02 05 *", desc: "Altri prodotti per i trattamenti conservativi del legno contenenti sostanze pericolose" },
-       { code: "04 01 03 *", desc: "Bagni di sgrassatura esauriti contenenti solventi senza fase liquida" },
-       { code: "04 02 14 *", desc: "Rifiuti provenienti da operazioni di finitura, contenenti solventi organici" },
-       { code: "04 02 16 *", desc: "Tinture e pigmenti, contenenti sostanze pericolose" },
-       { code: "04 02 19 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "05 01 02 *", desc: "Fanghi da processi di dissalazione" },
-       { code: "05 01 03 *", desc: "Morchie depositate sul fondo dei serbatoi" },
-       { code: "05 01 04 *", desc: "Fanghi acidi prodotti da processi di alchilazione" },
-       { code: "05 01 05 *", desc: "Perdite di olio" },
-       { code: "05 01 06 *", desc: "Fanghi oleosi prodotti dalla manutenzione di impianti e apparecchiature" },
-       { code: "05 01 07 *", desc: "Catrami acidi" },
-       { code: "05 01 08 *", desc: "Altri catrami" },
-       { code: "05 01 09 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "05 01 11 *", desc: "Rifiuti prodotti dalla purificazione di carburanti tramite basi" },
-       { code: "05 01 12 *", desc: "Acidi contenenti oli" },
-       { code: "05 01 15 *", desc: "Filtri di argilla esauriti" },
-       { code: "05 06 01 *", desc: "Catrami acidi" },
-       { code: "05 06 03 *", desc: "Altri catrami" },
-       { code: "05 07 01 *", desc: "Rifiuti contenenti mercurio" },
-       { code: "06 01 01 *", desc: "Acido solforico ed acido solforoso" },
-       { code: "06 01 02 *", desc: "Acido cloridrico" },
-       { code: "06 01 03 *", desc: "Acido fluoridrico" },
-       { code: "06 01 04 *", desc: "Acido fosforico e fosforoso" },
-       { code: "06 01 05 *", desc: "Acido nitrico e acido nitroso" },
-       { code: "06 01 06 *", desc: "Altri acidi" },
-       { code: "06 02 01 *", desc: "Idrossido di calcio" },
-       { code: "06 02 03 *", desc: "Idrossido di ammonio" },
-       { code: "06 02 04 *", desc: "Idrossido di sodio e di potassio" },
-       { code: "06 02 05 *", desc: "Altre basi" },
-       { code: "06 03 11 *", desc: "Sali e loro soluzioni, contenenti cianuri" },
-       { code: "06 03 13 *", desc: "Sali e loro soluzioni, contenenti metalli pesanti" },
-       { code: "06 03 15 *", desc: "Ossidi metallici contenenti metalli pesanti" },
-       { code: "06 04 03 *", desc: "Rifiuti contenenti arsenico" },
-       { code: "06 04 04 *", desc: "Rifiuti contenenti mercurio" },
-       { code: "06 04 05 *", desc: "Rifiuti contenenti altri metalli pesanti" },
-       { code: "06 05 02 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "06 06 02 *", desc: "Rifiuti contenenti solfuri pericolosi" },
-       { code: "06 07 01 *", desc: "Rifiuti dei processi elettrolitici, contenenti amianto" },
-       { code: "06 07 02 *", desc: "Carbone attivato dalla produzione di cloro" },
-       { code: "06 07 03 *", desc: "Fanghi di solfati di bario, contenenti mercurio" },
-       { code: "06 07 04 *", desc: "Soluzioni ed acidi, ad es. Acido di contatto" },
-       { code: "06 08 02 *", desc: "Rifiuti contenenti clorosilano pericoloso" },
-       { code: "06 09 03 *", desc: "Rifiuti prodotti da reazioni a base di calcio contenenti o contaminati da sostanze pericolose" },
-       { code: "06 10 02 *", desc: "Rifiuti contenenti sostanze pericolose" },
-       { code: "06 13 01 *", desc: "Prodotti fitosanitari, agenti conservativi del legno ed altri biocidi inorganici" },
-       { code: "06 13 02 *", desc: "Carbone attivato esaurito (tranne 06 07 02)" },
-       { code: "06 13 04 *", desc: "Rifiuti della lavorazione dell'amianto" },
-       { code: "06 13 05 *", desc: "Fuliggine" },
-       { code: "07 01 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 01 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 01 04 *", desc: "Altri solventi organici, soluzioni di lavaggio ed acque madri" },
-       { code: "07 01 07 *", desc: "Fondi e residui di reazione, alogenati" },
-       { code: "07 01 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 01 09 *", desc: "Residui di filtrazione e assorbenti esauriti, alogenati" },
-       { code: "07 01 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 01 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 02 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 02 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 02 04 *", desc: "Altri solventi organici, soluzioni di lavaggio ed acque madri" },
-       { code: "07 02 07 *", desc: "Fondi e residui di reazione, alogenati" },
-       { code: "07 02 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 02 09 *", desc: "Residui di filtrazione e assorbenti esauriti, alogenati" },
-       { code: "07 02 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 02 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 02 14 *", desc: "Rifiuti prodotti da additivi, contenenti sostanze pericolose" },
-       { code: "07 02 16 *", desc: "Rifiuti contenenti silicone pericoloso" },
-       { code: "07 03 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 03 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 03 04 *", desc: "Altri solventi organici, soluzioni di lavaggio ed acque madri" },
-       { code: "07 03 07 *", desc: "Fondi e residui di reazione alogenati" },
-       { code: "07 03 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 03 09 *", desc: "Residui di filtrazione e assorbenti esauriti alogenati" },
-       { code: "07 03 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 03 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 04 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 04 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 04 04 *", desc: "Altri solventi organici, soluzioni di lavaggio ed acque madri" },
-       { code: "07 04 07 *", desc: "Fondi e residui di reazione alogenati" },
-       { code: "07 04 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 04 09 *", desc: "Residui di filtrazione e assorbenti esauriti alogenati" },
-       { code: "07 04 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 04 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 04 13 *", desc: "Rifiuti solidi contenenti sostanze pericolose" },
-       { code: "07 05 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 05 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 05 04 *", desc: "Altri solventi organici, soluzioni di lavaggio ed acque madri" },
-       { code: "07 05 07 *", desc: "Fondi e residui di reazione, alogenati" },
-       { code: "07 05 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 05 09 *", desc: "Residui di filtrazione e assorbenti esauriti, alogenati" },
-       { code: "07 05 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 05 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 05 13 *", desc: "Rifiuti solidi contenenti sostanze pericolose" },
-       { code: "07 06 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 06 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 06 04 *", desc: "Altri solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 06 07 *", desc: "Fondi e residui di reazione, alogenati" },
-       { code: "07 06 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 06 09 *", desc: "Residui di filtrazione e assorbenti esauriti, alogenati" },
-       { code: "07 06 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 06 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "07 07 01 *", desc: "Soluzioni acquose di lavaggio ed acque madri" },
-       { code: "07 07 03 *", desc: "Solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 07 04 *", desc: "Altri solventi organici alogenati, soluzioni di lavaggio ed acque madri" },
-       { code: "07 07 07 *", desc: "Fondi e residui di reazione, alogenati" },
-       { code: "07 07 08 *", desc: "Altri fondi e residui di reazione" },
-       { code: "07 07 09 *", desc: "Residui di filtrazione e assorbenti esauriti, alogenati" },
-       { code: "07 07 10 *", desc: "Altri residui di filtrazione e assorbenti esauriti" },
-       { code: "07 07 11 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "08 01 11 *", desc: "Pitture e vernici di scarto, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 01 13 *", desc: "Fanghi prodotti da pitture e vernici, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 01 15 *", desc: "Fanghi acquosi contenenti pitture e vernici, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 01 17 *", desc: "Fanghi prodotti dalla rimozione di pitture e vernici, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 01 19 *", desc: "Sospensioni acquose contenenti pitture e vernici, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 01 21 *", desc: "Residui di vernici o di sverniciatori" },
-       { code: "08 03 12 *", desc: "Scarti di inchiostro, contenenti sostanze pericolose" },
-       { code: "08 03 14 *", desc: "Fanghi di inchiostro, contenenti sostanze pericolose" },
-       { code: "08 03 16 *", desc: "Residui di soluzioni chimiche per incisione" },
-       { code: "08 03 17 *", desc: "Toner per stampa esauriti, contenenti sostanze pericolose" },
-       { code: "08 03 19 *", desc: "Oli dispersi" },
-       { code: "08 04 09 *", desc: "Adesivi e sigillanti di scarto, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 04 11 *", desc: "Fanghi di adesivi e sigillanti, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 04 13 *", desc: "Fanghi acquosi contenenti adesivi e sigillanti, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 04 15 *", desc: "Rifiuti liquidi acquosi contenenti adesivi e sigillanti, contenenti solventi organici o altre sostanze pericolose" },
-       { code: "08 04 17 *", desc: "Olio di resina" },
-       { code: "08 05 01 *", desc: "Isocianati di scarto" },
-       { code: "09 01 01 *", desc: "Soluzioni di sviluppo e attivanti a base acquosa" },
-       { code: "09 01 02 *", desc: "Soluzioni di sviluppo per lastre offset a base acquosa" },
-       { code: "09 01 03 *", desc: "Soluzioni di sviluppo a base di solventi" },
-       { code: "09 01 04 *", desc: "Soluzioni fissative" },
-       { code: "09 01 05 *", desc: "Soluzioni di sbianca e soluzioni di sbianca-fissaggio" },
-       { code: "09 01 06 *", desc: "Rifiuti contenenti argento prodotti dal trattamento in loco di rifiuti fotografici" },
-       { code: "09 01 11 *", desc: "Macchine fotografiche monouso contenenti batterie incluse nelle voci 16 06 01, 16 06 02 o 16 06 03" },
-       { code: "09 01 13 *", desc: "Rifiuti liquidi acquosi prodotti dal recupero in loco dell'argento, diversi da quelli di cui alla voce 09 01 06" },
-       { code: "10 01 04 *", desc: "Ceneri leggere di olio combustibile e polveri di caldaia" },
-       { code: "10 01 09 *", desc: "Acido solforico" },
-       { code: "10 01 13 *", desc: "Ceneri leggere prodotte da idrocarburi emulsionati usati come carburante" },
-       { code: "10 01 14 *", desc: "Ceneri pesanti, scorie e polveri di caldaia prodotte dal coincenerimento, contenenti sostanze pericolose" },
-       { code: "10 01 16 *", desc: "Ceneri leggere prodotte dal coincenerimento, contenenti sostanze pericolose" },
-       { code: "10 01 18 *", desc: "Rifiuti prodotti dalla depurazione dei fumi, contenenti sostanze pericolose" },
-       { code: "10 01 20 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "10 01 22 *", desc: "Fanghi acquosi da operazioni di pulizia caldaie, contenenti sostanze pericolose" },
-       { code: "10 02 07 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 02 11 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenti oli" },
-       { code: "10 02 13 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 03 04 *", desc: "Scorie della produzione primaria" },
-       { code: "10 03 08 *", desc: "Scorie saline della produzione secondaria" },
-       { code: "10 03 09 *", desc: "Scorie nere della produzione secondaria" },
-       { code: "10 03 15 *", desc: "Schiumature infiammabili o che rilasciano, al contatto con l'acqua, gas infiammabili in quantità pericolose" },
-       { code: "10 03 17 *", desc: "Rifiuti contenenti catrame della produzione degli anodi" },
-       { code: "10 03 19 *", desc: "Polveri dei gas di combustione, contenenti sostanze pericolose" },
-       { code: "10 03 21 *", desc: "Altre polveri e particolati (comprese quelle prodotte da mulini a palle), contenenti sostanze pericolose" },
-       { code: "10 03 23 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 03 25 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 03 27 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 03 29 *", desc: "Rifiuti prodotti dal trattamento di scorie saline e scorie nere, contenenti sostanze pericolose" },
-       { code: "10 04 01 *", desc: "Scorie della produzione primaria e secondaria" },
-       { code: "10 04 02 *", desc: "Impurità e schiumature della produzione primaria e secondaria" },
-       { code: "10 04 03 *", desc: "Arsenato di calcio" },
-       { code: "10 04 04 *", desc: "Polveri dei gas di combustione" },
-       { code: "10 04 05 *", desc: "Altre polveri e particolato" },
-       { code: "10 04 06 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi" },
-       { code: "10 04 07 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi" },
-       { code: "10 04 09 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 05 03 *", desc: "Polveri dei gas di combustione" },
-       { code: "10 05 05 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi" },
-       { code: "10 05 06 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi" },
-       { code: "10 05 08 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 05 10 *", desc: "Scorie e schiumature infiammabili o che rilasciano, al contatto con l'acqua, gas infiammabili in quantità pericolose" },
-       { code: "10 06 03 *", desc: "Polveri dei gas di combustione" },
-       { code: "10 06 06 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi" },
-       { code: "10 06 07 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi" },
-       { code: "10 06 09 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 07 07 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 08 08 *", desc: "Scorie salate della produzione primaria e secondaria" },
-       { code: "10 08 10 *", desc: "Impurità e schiumature infiammabili o che rilasciano, al contatto con l'acqua, gas infiammabili in quantità pericolose" },
-       { code: "10 08 12 *", desc: "Rifiuti contenenti catrame derivante dalla produzione degli anodi" },
-       { code: "10 08 15 *", desc: "Polveri dei gas di combustione, contenenti sostanze pericolose" },
-       { code: "10 08 17 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 08 19 *", desc: "Rifiuti prodotti dal trattamento delle acque di raffreddamento, contenenti oli" },
-       { code: "10 09 05 *", desc: "Forme e anime da fonderia non utilizzate, contenenti sostanze pericolose" },
-       { code: "10 09 07 *", desc: "Forme e anime da fonderia utilizzate, contenenti sostanze pericolose" },
-       { code: "10 09 09 *", desc: "Polveri dei gas di combustione contenenti sostanze pericolose" },
-       { code: "10 09 11 *", desc: "Altri particolati contenenti sostanze pericolose" },
-       { code: "10 09 13 *", desc: "Leganti per rifiuti contenenti sostanze pericolose" },
-       { code: "10 09 15 *", desc: "Scarti di prodotti rilevatori di crepe, contenenti sostanze pericolose" },
-       { code: "10 10 05 *", desc: "Forme e anime da fonderia non utilizzate, contenenti sostanze pericolose" },
-       { code: "10 10 07 *", desc: "Forme e anime da fonderia utilizzate, contenenti sostanze pericolose" },
-       { code: "10 10 09 *", desc: "Polveri dei gas di combustione, contenenti sostanze pericolose" },
-       { code: "10 10 11 *", desc: "Altri particolati contenenti sostanze pericolose" },
-       { code: "10 10 13 *", desc: "Leganti per rifiuti contenenti sostanze pericolose" },
-       { code: "10 10 15 *", desc: "Scarti di prodotti rilevatori di crepe, contenenti sostanze pericolose" },
-       { code: "10 11 09 *", desc: "Scarti di mescole non sottoposte a trattamento termico, contenenti sostanze pericolose" },
-       { code: "10 11 11 *", desc: "Rifiuti di vetro in forma di particolato e polveri di vetro contenenti metalli pesanti (provenienti ad es. Da tubi a raggi catodici)" },
-       { code: "10 11 13 *", desc: "Lucidature di vetro e fanghi di macinazione, contenenti sostanze pericolose" },
-       { code: "10 11 15 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 11 17 *", desc: "Fanghi e residui di filtrazione prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 11 19 *", desc: "Rifiuti solidi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "10 12 09 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 12 11 *", desc: "Rifiuti delle operazioni di smaltatura, contenenti metalli pesanti" },
-       { code: "10 13 09 *", desc: "Rifiuti della fabbricazione di amianto cemento, contenenti amianto" },
-       { code: "10 13 12 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi, contenenti sostanze pericolose" },
-       { code: "10 14 01 *", desc: "Rifiuti prodotti dalla depurazione dei fumi, contenenti mercurio" },
-       { code: "11 01 05 *", desc: "Acidi di decappaggio" },
-       { code: "11 01 06 *", desc: "Acidi non specificati altrimenti" },
-       { code: "11 01 07 *", desc: "Basi di decappaggio" },
-       { code: "11 01 08 *", desc: "Fanghi di fosfatazione" },
-       { code: "11 01 09 *", desc: "Fanghi e residui di filtrazione, contenenti sostanze pericolose" },
-       { code: "11 01 11 *", desc: "Soluzioni acquose di lavaggio, contenenti sostanze pericolose" },
-       { code: "11 01 13 *", desc: "Rifiuti di sgrassaggio contenenti sostanze pericolose" },
-       { code: "11 01 15 *", desc: "Eluati e fanghi di sistemi a membrana e sistemi a scambio ionico, contenenti sostanze pericolose" },
-       { code: "11 01 16 *", desc: "Resine a scambio ionico saturate o esaurite" },
-       { code: "11 01 98 *", desc: "Altri rifiuti contenenti sostanze pericolose" },
-       { code: "11 02 02 *", desc: "Rifiuti della lavorazione idrometallurgica dello zinco (compresi jarosite, goethite)" },
-       { code: "11 02 05 *", desc: "Rifiuti della lavorazione idrometallurgica del rame, contenenti sostanze pericolose" },
-       { code: "11 02 07 *", desc: "Altri rifiuti contenenti sostanze pericolose" },
-       { code: "11 03 01 *", desc: "Rifiuti contenenti cianuro" },
-       { code: "11 03 02 *", desc: "Altri rifiuti" },
-       { code: "11 05 03 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi" },
-       { code: "11 05 04 *", desc: "Fondente esaurito" },
-       { code: "12 01 06 *", desc: "Oli minerali per macchinari, contenenti alogeni (eccetto emulsioni e soluzioni)" },
-       { code: "12 01 07 *", desc: "Oli minerali per macchinari, non contenenti alogeni (eccetto emulsioni e soluzioni)" },
-       { code: "12 01 08 *", desc: "Emulsioni e soluzioni per macchinari, contenenti alogeni" },
-       { code: "12 01 09 *", desc: "Emulsioni e soluzioni per macchinari, non contenenti alogeni" },
-       { code: "12 01 10 *", desc: "Oli sintetici per macchinari" },
-       { code: "12 01 12 *", desc: "Cere e grassi esauriti" },
-       { code: "12 01 14 *", desc: "Fanghi di lavorazione, contenenti sostanze pericolose" },
-       { code: "12 01 16 *", desc: "Materiale abrasivo di scarto, contenente sostanze pericolose" },
-       { code: "12 01 18 *", desc: "Fanghi metallici (fanghi di rettifica, affilatura e lappatura) contenenti olio" },
-       { code: "12 01 19 *", desc: "Oli per macchinari, facilmente biodegradabili" },
-       { code: "12 01 20 *", desc: "Corpi d'utensile e materiali di rettifica esauriti, contenenti sostanze pericolose" },
-       { code: "12 03 01 *", desc: "Soluzioni acquose di lavaggio" },
-       { code: "12 03 02 *", desc: "Rifiuti prodotti da processi di sgrassatura a vapore" },
-       { code: "13 01 01 *", desc: "Oli per circuiti idraulici contenenti PCB" },
-       { code: "13 01 04 *", desc: "Emulsioni clorurate" },
-       { code: "13 01 05 *", desc: "Emulsioni non clorurate" },
-       { code: "13 01 09 *", desc: "Oli minerali per circuiti idraulici, clorurati" },
-       { code: "13 01 10 *", desc: "Oli minerali per circuiti idraulici, non clorurati" },
-       { code: "13 01 11 *", desc: "Oli sintetici per circuiti idraulici" },
-       { code: "13 01 12 *", desc: "Oli per circuiti idraulici, facilmente biodegradabili" },
-       { code: "13 01 13 *", desc: "Altri oli per circuiti idraulici" },
-       { code: "13 02 04 *", desc: "Scarti di olio minerale per motori, ingranaggi e lubrificazione, clorurati" },
-       { code: "13 02 05 *", desc: "Scarti di olio minerale per motori, ingranaggi e lubrificazione, non clorurati" },
-       { code: "13 02 06 *", desc: "Scarti di olio sintetico per motori, ingranaggi e lubrificazione" },
-       { code: "13 02 07 *", desc: "Olio per motori, ingranaggi e lubrificazione, facilmente biodegradabile" },
-       { code: "13 02 08 *", desc: "Altri oli per motori, ingranaggi e lubrificazione" },
-       { code: "13 03 01 *", desc: "Oli isolanti e termoconduttori, contenenti PCB" },
-       { code: "13 03 06 *", desc: "Oli minerali isolanti e termoconduttori clorurati, diversi da quelli di cui alla voce 13 03 01" },
-       { code: "13 03 07 *", desc: "Oli minerali isolanti e termoconduttori non clorurati" },
-       { code: "13 03 08 *", desc: "Oli sintetici isolanti e termoconduttori" },
-       { code: "13 03 09 *", desc: "Oli isolanti e termoconduttori, facilmente biodegradabili" },
-       { code: "13 03 10 *", desc: "Altri oli isolanti e termoconduttori" },
-       { code: "13 04 01 *", desc: "Oli di sentina della navigazione interna" },
-       { code: "13 04 02 *", desc: "Oli di sentina delle fognature dei moli" },
-       { code: "13 04 03 *", desc: "Altri oli di sentina della navigazione" },
-       { code: "13 05 01 *", desc: "Rifiuti solidi delle camere a sabbia e di prodotti di separazione olio/acqua" },
-       { code: "13 05 02 *", desc: "Fanghi di prodotti di separazione olio/acqua" },
-       { code: "13 05 03 *", desc: "Fanghi da collettori" },
-       { code: "13 05 06 *", desc: "Oli prodotti dalla separazione olio/acqua" },
-       { code: "13 05 07 *", desc: "Acque oleose prodotte dalla separazione olio/acqua" },
-       { code: "13 05 08 *", desc: "Miscugli di rifiuti delle camere a sabbia e dei prodotti di separazione olio/acqua" },
-       { code: "13 07 01 *", desc: "Olio combustibile e carburante diesel" },
-       { code: "13 07 02 *", desc: "Petrolio" },
-       { code: "13 07 03 *", desc: "Altri carburanti (comprese le miscele)" },
-       { code: "13 08 01 *", desc: "Fanghi ed emulsioni prodotti dai processi di dissalazione" },
-       { code: "13 08 02 *", desc: "Altre emulsioni" },
-       { code: "13 08 99 *", desc: "Rifiuti non specificati altrimenti" },
-       { code: "14 06 01 *", desc: "Clorofluorocarburi, HCFC, HFC" },
-       { code: "14 06 02 *", desc: "Altri solventi e miscele di solventi, alogenati" },
-       { code: "14 06 03 *", desc: "Altri solventi e miscele di solventi" },
-       { code: "14 06 04 *", desc: "Fanghi o rifiuti solidi, contenenti solventi alogenati" },
-       { code: "14 06 05 *", desc: "Fanghi o rifiuti solidi, contenenti altri solventi" },
-       { code: "15 01 10 *", desc: "Imballaggi contenenti residui di sostanze pericolose o contaminati da tali sostanze" },
-       { code: "15 01 11 *", desc: "Imballaggi metallici contenenti matrici solide porose pericolose (ad esempio amianto), compresi i contenitori a pressione vuoti" },
-       { code: "15 02 02 *", desc: "Assorbenti, materiali filtranti (inclusi filtri dell'olio non specificati altrimenti), stracci e indumenti protettivi, contaminati da sostanze pericolose" },
-       { code: "16 01 04 *", desc: "Veicoli fuori uso" },
-       { code: "16 01 07 *", desc: "Filtri dell'olio" },
-       { code: "16 01 08 *", desc: "Componenti contenenti mercurio" },
-       { code: "16 01 09 *", desc: "Componenti contenenti PCB" },
-       { code: "16 01 10 *", desc: "Componenti esplosivi (ad esempio air bag)" },
-       { code: "16 01 11 *", desc: "Pastiglie per freni, contenenti amianto" },
-       { code: "16 01 13 *", desc: "Liquidi per freni" },
-       { code: "16 01 14 *", desc: "Liquidi antigelo contenenti sostanze pericolose" },
-       { code: "16 01 21 *", desc: "Componenti pericolosi diversi da quelli di cui alle voci da 16 01 07 a 16 01 11, 16 01 13 e 16 01 14" },
-       { code: "16 02 09 *", desc: "Trasformatori e condensatori contenenti PCB" },
-       { code: "16 02 10 *", desc: "Apparecchiature fuori uso contenenti PCB o da essi contaminate, diverse da quelle di cui alla voce 16 02 09" },
-       { code: "16 02 11 *", desc: "Apparecchiature fuori uso, contenenti clorofluorocarburi, HCFC, HFC" },
-       { code: "16 02 12 *", desc: "Apparecchiature fuori uso, contenenti amianto in fibre libere" },
-       { code: "16 02 13 *", desc: "Apparecchiature fuori uso, contenenti componenti pericolosi diversi da quelli di cui alle voci 16 02 09 e 16 02 12" },
-       { code: "16 02 15 *", desc: "Componenti pericolosi rimossi da apparecchiature fuori uso" },
-       { code: "16 03 03 *", desc: "Rifiuti inorganici, contenenti sostanze pericolose" },
-       { code: "16 03 05 *", desc: "Rifiuti organici, contenenti sostanze pericolose" },
-       { code: "16 04 01 *", desc: "Munizioni di scarto" },
-       { code: "16 04 02 *", desc: "Fuochi artificiali di scarto" },
-       { code: "16 04 03 *", desc: "Altri esplosivi di scarto" },
-       { code: "16 05 04 *", desc: "Gas in contenitori a pressione (compresi gli halon), contenenti sostanze pericolose" },
-       { code: "16 05 06 *", desc: "Sostanze chimiche di laboratorio contenenti o costituite da sostanze pericolose, comprese le miscele di sostanze chimiche di laboratorio" },
-       { code: "16 05 07 *", desc: "Sostanze chimiche inorganiche di scarto contenenti o costituite da sostanze pericolose" },
-       { code: "16 05 08 *", desc: "Sostanze chimiche organiche di scarto contenenti o costituite da sostanze pericolose" },
-       { code: "16 06 01 *", desc: "Batterie al piombo" },
-       { code: "16 06 02 *", desc: "Batterie al nichel-cadmio" },
-       { code: "16 06 03 *", desc: "Batterie contenenti mercurio" },
-       { code: "16 06 06 *", desc: "Elettroliti di batterie ed accumulatori, oggetto di raccolta differenziata" },
-       { code: "16 07 08 *", desc: "Rifiuti contenenti olio" },
-       { code: "16 07 09 *", desc: "Rifiuti contenenti altre sostanze pericolose" },
-       { code: "16 08 02 *", desc: "Catalizzatori esauriti contenenti metalli di transizione pericolosi o composti di metalli di transizione pericolosi" },
-       { code: "16 08 05 *", desc: "Catalizzatori esauriti contenenti acido fosforico" },
-       { code: "16 08 06 *", desc: "Liquidi esauriti usati come catalizzatori" },
-       { code: "16 08 07 *", desc: "Catalizzatori esauriti contaminati da sostanze pericolose" },
-       { code: "16 09 01 *", desc: "Permanganati, ad esempio permanganato di potassio" },
-       { code: "16 09 02 *", desc: "Cromati, ad esempio cromato di potassio, dicromato di potassio o di sodio" },
-       { code: "16 09 03 *", desc: "Perossidi, ad esempio perossido d'idrogeno" },
-       { code: "16 09 04 *", desc: "Sostanze ossidanti non specificate altrimenti" },
-       { code: "16 10 01 *", desc: "Soluzioni acquose di scarto, contenenti sostanze pericolose" },
-       { code: "16 10 03 *", desc: "Concentrati acquosi, contenenti sostanze pericolose" },
-       { code: "16 11 01 *", desc: "Rivestimenti e materiali refrattari a base di carbone provenienti dalle lavorazioni metallurgiche, contenenti sostanze pericolose" },
-       { code: "16 11 03 *", desc: "Altri rivestimenti e materiali refrattari provenienti dalle lavorazioni metallurgiche, contenenti sostanze pericolose" },
-       { code: "16 11 05 *", desc: "Rivestimenti e materiali refrattari provenienti da lavorazioni non metallurgiche, contenenti sostanze pericolose" },
-       { code: "17 01 06 *", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche, contenenti sostanze pericolose" },
-       { code: "17 02 04 *", desc: "Vetro, plastica e legno contenenti sostanze pericolose o da esse contaminati" },
-       { code: "17 03 01 *", desc: "Miscele bituminose contenenti catrame di carbone" },
-       { code: "17 03 03 *", desc: "Catrame di carbone e prodotti contenenti catrame" },
-       { code: "17 04 09 *", desc: "Rifiuti metallici contaminati da sostanze pericolose" },
-       { code: "17 04 10 *", desc: "Cavi, impregnati di olio, di catrame di carbone o di altre sostanze pericolose" },
-       { code: "17 05 03 *", desc: "Terra e rocce, contenenti sostanze pericolose" },
-       { code: "17 05 05 *", desc: "Fanghi di dragaggio, contenente sostanze pericolose" },
-       { code: "17 05 07 *", desc: "Pietrisco per massicciate ferroviarie, contenente sostanze pericolose" },
-       { code: "17 06 01 *", desc: "Materiali isolanti contenenti amianto" },
-       { code: "17 06 03 *", desc: "Altri materiali isolanti contenenti o costituiti da sostanze pericolose" },
-       { code: "17 06 05 *", desc: "Materiali da costruzione contenenti amianto" },
-       { code: "17 08 01 *", desc: "Materiali da costruzione a base di gesso contaminati da sostanze pericolose" },
-       { code: "17 09 01 *", desc: "Rifiuti dell'attività di costruzione e demolizione, contenenti mercurio" },
-       { code: "17 09 02 *", desc: "Rifiuti dell'attività di costruzione e demolizione, contenenti PCB (ad esempio sigillanti contenenti PCB, pavimentazioni a base di resina contenenti PCB, elementi stagni in vetro contenenti PCB, condensatori contenenti PCB)" },
-       { code: "17 09 03 *", desc: "Altri rifiuti dell'attività di costruzione e demolizione (compresi rifiuti misti) contenenti sostanze pericolose" },
-       { code: "18 01 03 *", desc: "Rifiuti che devono essere raccolti e smaltiti applicando precauzioni particolari per evitare infezioni" },
-       { code: "18 01 06 *", desc: "Sostanze chimiche pericolose o contenenti sostanze pericolose" },
-       { code: "18 01 08 *", desc: "Medicinali citotossici e citostatici" },
-       { code: "18 01 10 *", desc: "Rifiuti di amalgama prodotti da interventi odontoiatrici" },
-       { code: "18 02 02 *", desc: "Rifiuti che devono essere raccolti e smaltiti applicando precauzioni particolari per evitare infezioni" },
-       { code: "18 02 05 *", desc: "Sostanze chimiche pericolose o contenenti sostanze pericolose" },
-       { code: "18 02 07 *", desc: "Medicinali citotossici e citostatici" },
-       { code: "19 01 05 *", desc: "Residui di filtrazione prodotti dal trattamento dei fumi" },
-       { code: "19 01 06 *", desc: "Rifiuti liquidi acquosi prodotti dal trattamento dei fumi e di altri rifiuti liquidi acquosi" },
-       { code: "19 01 07 *", desc: "Rifiuti solidi prodotti dal trattamento dei fumi" },
-       { code: "19 01 10 *", desc: "Carbone attivo esaurito, impiegato per il trattamento dei fumi" },
-       { code: "19 01 11 *", desc: "Ceneri pesanti e scorie, contenenti sostanze pericolose" },
-       { code: "19 01 13 *", desc: "Ceneri leggere, contenenti sostanze pericolose" },
-       { code: "19 01 15 *", desc: "Ceneri di caldaia, contenenti sostanze pericolose" },
-       { code: "19 01 17 *", desc: "Rifiuti della pirolisi, contenenti sostanze pericolose" },
-       { code: "19 02 04 *", desc: "Miscugli di rifiuti contenenti almeno un rifiuto pericoloso" },
-       { code: "19 02 05 *", desc: "Fanghi prodotti da trattamenti chimico-fisici, contenenti sostanze pericolose" },
-       { code: "19 02 07 *", desc: "Oli e concentrati prodotti da processi di separazione" },
-       { code: "19 02 08 *", desc: "Rifiuti combustibili liquidi, contenenti sostanze pericolose" },
-       { code: "19 02 09 *", desc: "Rifiuti combustibili solidi, contenenti sostanze pericolose" },
-       { code: "19 02 11 *", desc: "Altri rifiuti contenenti sostanze pericolose" },
-       { code: "19 03 04 *", desc: "Rifiuti contrassegnati come pericolosi, parzialmente stabilizzati" },
-       { code: "19 03 06 *", desc: "Rifiuti contrassegnati come pericolosi, solidificati" },
-       { code: "19 04 02 *", desc: "Ceneri leggere ed altri rifiuti dal trattamento dei fumi" },
-       { code: "19 04 03 *", desc: "Fase solida non vetrificata" },
-       { code: "19 07 02 *", desc: "Percolato di discarica, contenente sostanze pericolose" },
-       { code: "19 08 06 *", desc: "Resine a scambio ionico saturate o esaurite" },
-       { code: "19 08 07 *", desc: "Soluzioni e fanghi di rigenerazione delle resine a scambio ionico" },
-       { code: "19 08 08 *", desc: "Rifiuti prodotti da sistemi a membrana, contenenti sostanze pericolose" },
-       { code: "19 08 10 *", desc: "Miscele di oli e grassi prodotte dalla separazione olio/acqua, diverse da quelle di cui alla voce 19 08 09" },
-       { code: "19 08 11 *", desc: "Fanghi prodotti dal trattamento biologico delle acque reflue industriali, contenenti sostanze pericolose" },
-       { code: "19 08 13 *", desc: "Fanghi contenenti sostanze pericolose prodotti da altri trattamenti delle acque reflue industriali" },
-       { code: "19 10 03 *", desc: "Fluff - frazione leggera e polveri, contenenti sostanze pericolose" },
-       { code: "19 10 05 *", desc: "Altre frazioni, contenenti sostanze pericolose" },
-       { code: "19 11 01 *", desc: "Filtri di argilla esauriti" },
-       { code: "19 11 02 *", desc: "Catrami acidi" },
-       { code: "19 11 03 *", desc: "Rifiuti liquidi acquosi" },
-       { code: "19 11 04 *", desc: "Rifiuti prodotti dalla purificazione di carburanti tramite basi" },
-       { code: "19 11 05 *", desc: "Fanghi prodotti dal trattamento in loco degli effluenti, contenenti sostanze pericolose" },
-       { code: "19 11 07 *", desc: "Rifiuti prodotti dalla purificazione dei fumi" },
-       { code: "19 12 06 *", desc: "Legno contenente sostanze pericolose" },
-       { code: "19 12 11 *", desc: "Altri rifiuti (compresi materiali misti) prodotti dal trattamento meccanico dei rifiuti, contenenti sostanze pericolose" },
-       { code: "19 13 01 *", desc: "Rifiuti solidi prodotti dalle operazioni di bonifica dei terreni, contenenti sostanze pericolose" },
-       { code: "19 13 03 *", desc: "Fanghi prodotti dalle operazioni di bonifica dei terreni, contenenti sostanze pericolose" },
-       { code: "19 13 05 *", desc: "Fanghi prodotti dalle operazioni di risanamento delle acque di falda, contenenti sostanze pericolose" },
-       { code: "19 13 07 *", desc: "Rifiuti liquidi acquosi e concentrati acquosi prodotti dalle operazioni di risanamento delle acque di falda, contenenti sostanze pericolose" },
-       { code: "20 01 13 *", desc: "Solventi" },
-       { code: "20 01 14 *", desc: "Acidi" },
-       { code: "20 01 15 *", desc: "Sostanze alcaline" },
-       { code: "20 01 17 *", desc: "Prodotti fotochimici" },
-       { code: "20 01 19 *", desc: "Pesticidi" },
-       { code: "20 01 21 *", desc: "Tubi fluorescenti ed altri rifiuti contenenti mercurio" },
-       { code: "20 01 23 *", desc: "Apparecchiature fuori uso contenenti clorofluorocarburi" },
-       { code: "20 01 26 *", desc: "Oli e grassi diversi da quelli di cui alla voce 20 01 25" },
-       { code: "20 01 27 *", desc: "Vernici, inchiostri, adesivi e resine contenenti sostanze pericolose" },
-       { code: "20 01 29 *", desc: "Detergenti contenenti sostanze pericolose" },
-       { code: "20 01 31 *", desc: "Medicinali citotossici e citostatici" },
-       { code: "20 01 33 *", desc: "Batterie e accumulatori di cui alle voci 16 06 01, 16 06 02 e 16 06 03 nonché batterie e accumulatori non suddivisi contenenti tali batterie" },
-       { code: "20 01 35 *", desc: "Apparecchiature elettriche ed elettroniche fuori uso, diverse da quelle di cui alla voce 20 01 21 e 20 01 23, contenenti componenti pericolosi" },
-       { code: "20 01 37 *", desc: "Legno, contenente sostanze pericolose" },
+      { code: "17 05 03 *", desc: "Terra e rocce, contenenti sostanze pericolose" },
+      { code: "17 09 04", desc: "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03" },
+      { code: "17 05 04", desc: "Terra e rocce, diverse da quelle di cui alla voce 17 05 03" },
+      { code: "17 01 01", desc: "Cemento" },
+      { code: "17 01 02", desc: "Mattoni" },
+      { code: "17 01 07", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche" },
+      { code: "17 02 01", desc: "Legno" },
+      { code: "17 02 03", desc: "Plastica" },
+      { code: "17 03 02", desc: "Miscele bituminose diverse da quelle di cui alla voce 17 03 01" },
+      { code: "17 04 05", desc: "Ferro e acciaio" },
+      { code: "17 06 04", desc: "Materiali isolanti diversi da quelli di cui alle voci 17 06 01 e 17 06 03" },
+      { code: "17 06 05 *", desc: "Materiali da costruzione contenenti amianto" },
+      { code: "15 01 01", desc: "Imballaggi in carta e cartone" },
+      { code: "15 01 02", desc: "Imballaggi in plastica" },
+      { code: "15 01 10 *", desc: "Imballaggi contenenti residui di sostanze pericolose" },
+      { code: "15 02 02 *", desc: "Assorbenti, materiali filtranti, stracci e indumenti protettivi contaminati" },
+      { code: "13 02 05 *", desc: "Scarti di olio minerale non clorurati" },
+      { code: "16 06 01 *", desc: "Batterie al piombo" },
+      { code: "20 03 01", desc: "Rifiuti urbani non differenziati" }
     ];
 
     const hpData = [
@@ -851,25 +518,24 @@
       { code: 'HP7', name: 'Cancerogeno' },
       { code: 'HP8', name: 'Corrosivo' },
       { code: 'HP9', name: 'Infettivo' },
-      { code: 'HP10', name: 'Tossico per la riproduzione' },
+      { code: 'HP10', name: 'Tossico riproduzione' },
       { code: 'HP11', name: 'Mutageno' },
-      { code: 'HP12', name: 'Liberazione di gas a tossicità acuta' },
+      { code: 'HP12', name: 'Gas a tossicità acuta' },
       { code: 'HP13', name: 'Sensibilizzante' },
       { code: 'HP14', name: 'Ecotossico' },
-      { code: 'HP15', name: 'Rifiuto che non possiede direttamente una delle caratteristiche summenzionate' }
+      { code: 'HP15', name: 'Altre caratteristiche' }
     ];
 
-    // Mappatura esatta dei file JPG caricati nella root di GitHub
     const pitImageMap = {
-      ghs01: "ghs01.jpg",
-      ghs02: "ghs02.jpg",
-      ghs03: "ghs03.jpg",
-      ghs04: "ghs04.jpg",
-      ghs05: "ghs05.jpg",
-      ghs06: "ghs06.jpg",
-      ghs07: "ghs07.jpg",
-      ghs08: "ghs08.jpg",
-      ghs09: "ghs09.jpg"
+      ghs01: "GHS01_Pittogramma_Esplosivo.jpg",
+      ghs02: "GHS02_Pittogramma_Infiammabile.jpg",
+      ghs03: "GHS03_Pittogramma_Ossidante.jpg",
+      ghs04: "GHS04_Pittogramma_Gas_Sotto_Pressione.jpg",
+      ghs05: "GHS05_Pittogramma_Corrosivo.jpg",
+      ghs06: "GHS06_Pittogramma_Tossico_Acuto.jpg",
+      ghs07: "GHS07_Pittogramma_Nocivo.jpg",
+      ghs08: "GHS08_Pittogramma_Gravi_Effetti.jpg",
+      ghs09: "GHS09_Pittogramma_Pericoloso_Ambiente.jpg"
     };
 
     const pitData = [
@@ -880,7 +546,7 @@
       { id: 'ghs04', label: 'GAS SOTTO PRESSIONE' },
       { id: 'ghs06', label: 'TOSSICO ACUTO' },
       { id: 'ghs07', label: 'NOCIVO' },
-      { id: 'ghs09', label: 'PERICOLOSO PER L\'AMBIENTE' },
+      { id: 'ghs09', label: 'PERICOLOSO AMBIENTE' },
       { id: 'ghs08', label: 'GRAVI EFFETTI' }
     ];
 
@@ -914,14 +580,13 @@
         pitBox.className = 'pit-item';
         pitBox.id = `view_pit_${pit.id}`;
         pitBox.innerHTML = `
-          <img src="${pitImageMap[pit.id]}" class="pit-img" alt="${pit.label}" onerror="this.src='https://via.placeholder.com/80?text=IMG+Mancante'">
+          <img src="${pitImageMap[pit.id]}" class="pit-img" alt="${pit.label}" onerror="this.src='https://via.placeholder.com/65?text=IMG'">
           <div class="pit-label">${pit.label}</div>
         `;
         viewPitGrid.appendChild(pitBox);
       });
     }
 
-    // Ricerca EER
     const searchEERInput = document.getElementById('searchEER');
     const eerSuggestions = document.getElementById('eerSuggestions');
 
@@ -969,7 +634,11 @@
     });
 
     document.getElementById('customDesc').addEventListener('input', e => {
-      document.getElementById('viewEERDesc').innerText = e.target.value || "Selezionare un codice EER dall'anagrafica";
+      document.getElementById('viewEERDesc').innerText = e.target.value || "Selezionare un codice EER";
+    });
+
+    document.getElementById('inputOperativa').addEventListener('input', e => {
+      document.getElementById('viewOperativa').innerText = e.target.value || 'Nessuna indicazione specifica.';
     });
 
     function updateHP() {
@@ -996,13 +665,12 @@
       });
     }
 
-    // Logo Upload
     document.getElementById('inputLogo').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
-          document.getElementById('logoPreview').innerHTML = `<img src="${evt.target.result}" alt="logoWB.jpg">`;
+          document.getElementById('logoPreview').innerHTML = `<img src="${evt.target.result}" alt="Logo">`;
         };
         reader.readAsDataURL(file);
       }
