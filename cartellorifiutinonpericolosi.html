@@ -1090,6 +1090,63 @@
     window.onload = function() {
       selectEER(eerDatabaseNonPericolosi[0]);
     };
+    // Funzione per regolare dinamicamente la dimensione dei caratteri
+function adattaTestoEER(testoDesc, codice) {
+  const elemDesc = document.getElementById('viewEERDesc');
+  const elemCode = document.getElementById('viewEERCode');
+  const isA3 = document.body.classList.contains('format-a3');
+
+  // Aggiorna prima i testi
+  elemDesc.innerText = testoDesc;
+  elemCode.innerText = codice;
+
+  const len = testoDesc.length;
+
+  // Calcolo dinamico dimensione font della Descrizione
+  let descSizeRem;
+  if (len < 20) {
+    // Descrizioni brevissime (es. "Cemento", "Legno", "Mattoni")
+    descSizeRem = isA3 ? 3.5 : 2.4;
+  } else if (len < 60) {
+    // Descrizioni medio-brevi
+    descSizeRem = isA3 ? 2.6 : 1.8;
+  } else if (len < 120) {
+    // Descrizioni medie
+    descSizeRem = isA3 ? 2.1 : 1.4;
+  } else {
+    // Descrizioni lunghe o articolate
+    descSizeRem = isA3 ? 1.7 : 1.15;
+  }
+
+  // Calcolo dinamico per il Codice EER
+  let codeSizeRem;
+  if (len < 20) {
+    // Se il testo sopra è breve, il codice EER diventa gigante
+    codeSizeRem = isA3 ? 9.5 : 6.5;
+  } else if (len < 60) {
+    codeSizeRem = isA3 ? 8.0 : 5.2;
+  } else {
+    codeSizeRem = isA3 ? 6.5 : 4.2;
+  }
+
+  elemDesc.style.fontSize = descSizeRem + 'rem';
+  elemCode.style.fontSize = codeSizeRem + 'rem';
+}
+
+// Aggiorna la funzione selectEER
+function selectEER(item) {
+  searchEERInput.value = item.code;
+  document.getElementById('customDesc').value = item.desc;
+  adattaTestoEER(item.desc, item.code);
+  eerSuggestions.style.display = 'none';
+}
+
+// Listener per la modifica manuale del testo
+document.getElementById('customDesc').addEventListener('input', e => {
+  const testo = e.target.value || "Selezionare un codice EER";
+  const codice = document.getElementById('viewEERCode').innerText;
+  adattaTestoEER(testo, codice);
+});
   </script>
 </body>
 </html>
