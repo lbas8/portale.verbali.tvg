@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Cartellonistica - Terzo Valico dei Giovi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    if (sessionStorage.getItem('cociv_authenticated') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+  <!-- TOP BAR HEADER -->
+  <header class="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <a href="../../enviromental.html" class="bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-xl border border-slate-700 transition">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div>
+          <h1 class="font-bold text-base leading-tight">Cartellonistica di Cantiere</h1>
+          <p class="text-[11px] text-slate-400">Terzo Valico dei Giovi — Seleziona Matrice</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <a href="../../enviromental.html" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-slate-700">
+          <i class="fa-solid fa-house"></i> Home Enviromental
+        </a>
+       </div>
+    </div>
+  </header>
+
+  <!-- CONTENUTO CENTRALE: SELEZIONE MATRICE CARTELLONISTICA -->
+  <main class="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col justify-center items-center w-full">
+    
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 p-6 md:p-10 w-full text-slate-800 space-y-8">
+      
+      <div class="text-center space-y-2">
+        <span class="bg-amber-100 text-amber-900 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-amber-200">
+          Segnaletica Ambientale di Cantiere
+        </span>
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight">
+          Seleziona la Matrice del Cartello
+        </h2>
+        <p class="text-xs md:text-sm text-slate-500 max-w-xl mx-auto">
+          Scegli l'ambito e la matrice di riferimento per generare, compilare o stampare la cartellonistica ufficiale di cantiere.
+        </p>
+      </div>
+
+      <!-- GRID SCHERMATE MATRICI -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- SCHERMATA MATRICE 1: RIFIUTI PERICOLOSI -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between space-y-5 border border-slate-700 shadow-md hover:border-amber-500 transition group">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <div class="bg-red-500/20 w-12 h-12 rounded-xl flex items-center justify-center border border-red-500/40">
+                <i class="fa-solid fa-trash-can text-red-400 text-xl"></i>
+              </div>
+              <span class="text-[10px] font-bold bg-red-950 text-red-300 border border-red-800 px-2.5 py-0.5 rounded-full uppercase">
+                D.Lgs. 152/2006
+              </span>
+            </div>
+            <h3 class="font-bold text-lg text-white group-hover:text-amber-400 transition uppercase tracking-wide">
+              Matrice: RIFIUTI PERICOLOSI
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Generazione e gestione dei cartelli per Depositi Temporanei Rifiuti (DTR), identificazione codici EER/CER, classe di pericolo, pittogrammi e limiti di stoccaggio.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800 flex gap-2">
+            <a href="cartellorifiutipericolosi.html" class="w-full bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2.5 px-4 rounded-xl text-center transition flex items-center justify-center gap-2 shadow">
+              <i class="fa-solid fa-print"></i> Apri Modulo Cartelli Rifiuti
+            </a>
+          </div>
+        </div>
+
+
+<!-- CARD RIFIUTI NON PERICOLOSI (GIALLO SENAPE) -->
+<div class="bg-slate-900 border-2 border-yellow-600/70 hover:border-yellow-500 rounded-2xl p-6 shadow-xl transition flex flex-col justify-between">
+  
+  <div>
+    <div class="flex justify-between items-center mb-4">
+      <!-- Icona Cestino in Giallo Senape -->
+      <div class="w-12 h-12 bg-yellow-950/60 border border-yellow-600/40 rounded-xl flex items-center justify-center text-yellow-500 text-xl">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+      <!-- Badge Normativa Giallo Senape -->
+      <span class="bg-yellow-950/80 border border-yellow-600/50 text-yellow-400 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+        D.Lgs. 152/2006
+      </span>
+    </div>
+
+    <!-- Titolo Giallo Senape -->
+    <h3 class="text-xl font-black text-yellow-400 uppercase tracking-tight mb-2">
+      MATRICE: RIFIUTI NON PERICOLOSI
+    </h3>
+    
+    <p class="text-xs text-slate-400 leading-relaxed mb-6">
+      Generazione e gestione dei cartelli per Depositi Temporanei Rifiuti (DTR), identificazione codici EER/CER, classe di pericolo, pittogrammi e limiti di stoccaggio.
+    </p>
+  </div>
+
+  <!-- Pulsante Giallo Senape -->
+  <a href="cartellorifiutinonpericolosi.html" 
+     class="w-full bg-yellow-600 hover:bg-yellow-500 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition">
+    <i class="fa-solid fa-print"></i> Apri Modulo Cartelli Rifiuti
+  </a>
+
+</div>
+        
+        <!-- SCHERMATA MATRICE 2: SOTTOPRODOTTO -->
+        <div class="bg-slate-900 text-white rounded-2xl p-6 flex flex-col justify-between space-y-5 border border-slate-700 shadow-md hover:border-emerald-500 transition group">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <div class="bg-emerald-500/20 w-12 h-12 rounded-xl flex items-center justify-center border border-emerald-500/40">
+                <i class="fa-solid fa-mountain text-emerald-400 text-xl"></i>
+              </div>
+              <span class="text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full uppercase">
+                D.P.R. 120/2017
+              </span>
+            </div>
+            <h3 class="font-bold text-lg text-white group-hover:text-emerald-400 transition uppercase tracking-wide">
+              Matrice: SOTTOPRODOTTO
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Cartellonistica identificativa per cumuli di Terre e Rocce da Scavo gestite come Sottoprodotto, indicazioni WBS/Pk, sito di provenienza e destinazione.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800 flex gap-2">
+            <a href="cartellosottoprodotto.html" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 px-4 rounded-xl text-center transition flex items-center justify-center gap-2 shadow">
+              <i class="fa-solid fa-print"></i> Apri Modulo Cartelli Sottoprodotto
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="text-center py-4 text-[11px] text-slate-500 border-t border-slate-800 bg-slate-900">
+    Consorzio COCIV — Progetto Terzo Valico dei Giovi / AV-AC Genoa-Milan
+  </footer>
+
+</body>
+</html>

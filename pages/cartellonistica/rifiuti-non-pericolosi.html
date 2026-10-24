@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartello Rifiuti Non Pericolosi - Terzo Valico Di Giovi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #121824;
+      --primary: #2563eb;
+      --text-main: #0f172a;
+      --text-light: #f8fafc;
+      --border-color: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header Portale */
+    header {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .header-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-title h1 { font-size: 1.4rem; font-weight: 700; }
+    .header-title p { font-size: 0.85rem; color: #94a3b8; }
+    .btn-back {
+      color: #f8fafc;
+      text-decoration: none;
+      background: #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-back:hover { background: #475569; }
+
+    /* App Layout */
+    .app-container {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 2rem;
+      max-width: 1600px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      height: fit-content;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    .panel-section { margin-bottom: 1.25rem; }
+    .panel-section h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      color: #334155;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-group { margin-bottom: 0.85rem; position: relative; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem; color: #475569; }
+    .form-control {
+      width: 100%;
+      padding: 0.55rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    
+    /* Dropdown Suggerimenti EER */
+    .eer-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .eer-item {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .eer-item:hover { background-color: #f0f9ff; color: #0284c7; }
+    .eer-item strong { color: #0f172a; }
+
+    /* Preview Area */
+    .preview-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .print-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 1050px;
+      justify-content: flex-end;
+    }
+    .btn-print {
+      background-color: #059669;
+      color: white;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .btn-print:hover { background-color: #047857; }
+    .btn-print.btn-a3 { background-color: #0284c7; }
+    .btn-print.btn-a3:hover { background-color: #0369a1; }
+
+    /* CARTELLO SHEET NON PERICOLOSI (LAYOUT PIENO A GRIGLIA) */
+    .cartello-sheet {
+      background: white;
+      width: 1050px;
+      height: 700px;
+      padding: 24px;
+      border: 4px solid #000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: grid;
+      grid-template-rows: 65px 75px 1fr 100px;
+      gap: 14px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Header Logos e Titolo */
+    .c-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #000;
+      padding-bottom: 8px;
+    }
+    .c-logo-webuild { max-width: 180px; max-height: 50px; object-fit: contain; }
+    .c-main-title { text-align: center; font-size: 1.25rem; font-weight: bold; line-height: 1.2; text-transform: uppercase; }
+    .c-logo-esecutrice {
+      width: 170px;
+      height: 55px;
+      border: 1px dashed #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .c-logo-esecutrice img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* Riga WBS e Produttore Affiancati */
+    .c-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .c-box-evidenza {
+      border: 2.5px solid #0f172a;
+      border-radius: 6px;
+      padding: 6px 12px;
+      text-align: center;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .c-box-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 2px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 1px;
+    }
+    .c-box-value {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #0f172a;
+      text-transform: uppercase;
+    }
+
+    /* Box Codice EER & Descrizione Ufficiale (Dinamico a tutto spazio) */
+    .c-eer-box-container {
+      border: 4px solid #000;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .c-eer-desc {
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.25;
+      color: #000;
+      max-width: 95%;
+      transition: font-size 0.15s ease;
+    }
+    .c-eer-code {
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #000;
+      line-height: 1;
+      transition: font-size 0.15s ease;
+    }
+
+    /* Box Descrizione Operativa */
+    .c-operativa-box {
+      border: 3px dashed #0284c7;
+      border-radius: 6px;
+      padding: 10px 14px;
+      background: #f0f9ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .c-operativa-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #0369a1;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .c-operativa-text {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    /* REGOLAZIONI SPECIFICHE PER LA STAMPA A3 (RIEMPIMENTO TOTALE) */
+    body.format-a3 .cartello-sheet {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 40px !important;
+      border-width: 6px !important;
+      grid-template-rows: 90px 110px 1fr 140px !important;
+      gap: 20px !important;
+    }
+    body.format-a3 .c-logo-webuild { max-width: 260px !important; max-height: 75px !important; }
+    body.format-a3 .c-main-title { font-size: 1.9rem !important; }
+    body.format-a3 .c-logo-esecutrice { width: 240px !important; height: 80px !important; font-size: 0.95rem !important; }
+    body.format-a3 .c-box-label { font-size: 0.95rem !important; }
+    body.format-a3 .c-box-value { font-size: 1.5rem !important; }
+    body.format-a3 .c-eer-box-container { border-width: 6px !important; padding: 25px !important; }
+    body.format-a3 .c-operativa-box { border-width: 4px !important; padding: 18px 22px !important; }
+    body.format-a3 .c-operativa-label { font-size: 1.1rem !important; }
+    body.format-a3 .c-operativa-text { font-size: 1.5rem !important; }
+
+    /* STAMPA GENERALE */
+    @media print {
+      body { background: white; margin: 0; padding: 0; }
+      header, .controls-panel, .print-actions { display: none !important; }
+      .app-container { display: block; margin: 0; padding: 0; width: 100vw; height: 100vh; }
+      .preview-area { width: 100vw; height: 100vh; }
+      .cartello-sheet {
+        border: none !important;
+        box-shadow: none !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <div class="header-title">
+        <h1>Portale Gestione Ambientale</h1>
+        <p>Terzo Valico dei Giovi — COCIV</p>
+      </div>
+      <a href="cartellonisticaform.html" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Torna alla Gestione
+      </a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Pannello di Controllo -->
+    <div class="controls-panel">
+      
+      <div class="panel-section">
+        <h3><i class="fas fa-building"></i> Intestazione e Luogo</h3>
+        <div class="form-group">
+          <label>Logo Impresa Esecutrice</label>
+          <input type="file" id="inputLogo" accept="image/*" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>WBS / Luogo di Produzione</label>
+          <input type="text" id="inputWBS" class="form-control" value="CRAVASCO">
+        </div>
+        <div class="form-group">
+          <label>Produttore del Rifiuto</label>
+          <input type="text" id="inputProduttore" class="form-control" value="Consorzio Tunnel Giovi">
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h3><i class="fas fa-barcode"></i> Codice EER Non Pericoloso</h3>
+        <div class="form-group">
+          <label>Cerca Codice EER (Solo Non Pericolosi)</label>
+          <input type="text" id="searchEER" class="form-control" placeholder="Es. 17 09 04, 17 05 04..." autocomplete="off">
+          <div class="eer-suggestions" id="eerSuggestions"></div>
+        </div>
+        <div class="form-group">
+          <label>Descrizione Ufficiale EER</label>
+          <textarea id="customDesc" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-info-circle text-sky-600"></i> Descrizione Operativa (Cantiere)</label>
+          <input type="text" id="inputOperativa" class="form-control" value="Depositare nei cassoni dedicati ai rifiuti non pericolosi. Vietata la miscelazione." placeholder="Istruzioni sbrigative per operai...">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Anteprima e Stampa -->
+    <div class="preview-area">
+      <div class="print-actions">
+        <button class="btn-print" onclick="stampaFormato('A4')">
+          <i class="fas fa-print"></i> Stampa A4 Orizzontale
+        </button>
+        <button class="btn-print btn-a3" onclick="stampaFormato('A3')">
+          <i class="fas fa-expand"></i> Stampa A3 Orizzontale (Ingrandito)
+        </button>
+      </div>
+
+      <div class="cartello-sheet" id="cartelloSheet">
+        
+        <!-- HEADER LOGHI -->
+        <div class="c-header-row">
+          <img src="logo_webuild.jpg" class="c-logo-webuild" alt="Logo Webuild" onerror="this.src='https://via.placeholder.com/180?text=Logo+Webuild'">
+          <div class="c-main-title">
+            Linea Ferroviaria AV/AC<br>Terzo Valico Di Giovi
+          </div>
+          <div class="c-logo-esecutrice" id="logoPreview">
+            caricare logo impresa esecutrice
+          </div>
+        </div>
+
+        <!-- RIGA INFO WBS E PRODUTTORE AFFIANCATI -->
+        <div class="c-info-grid">
+          <div class="c-box-evidenza">
+            <div class="c-box-label">WBS / Luogo di Produzione</div>
+            <div class="c-box-value" id="viewWBS">CRAVASCO</div>
+          </div>
+          <div class="c-box-evidenza">
+            <div class="c-box-label">Produttore</div>
+            <div class="c-box-value" id="viewProduttore">Consorzio Tunnel Giovi</div>
+          </div>
+        </div>
+
+        <!-- BOX CENTRALE CODICE EER E DESCRIZIONE DINAMICA -->
+        <div class="c-eer-box-container">
+          <div class="c-eer-desc" id="viewEERDesc">Cemento</div>
+          <div class="c-eer-code" id="viewEERCode">17 01 01</div>
+        </div>
+
+        <!-- BOX INDICAZIONI OPERATIVE -->
+        <div class="c-operativa-box">
+          <div class="c-operativa-label"><i class="fas fa-hard-hat"></i> Indicazioni Operative per il Cantiere</div>
+          <div class="c-operativa-text" id="viewOperativa">Depositare nei cassoni dedicati ai rifiuti non pericolosi. Vietata la miscelazione.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const eerDatabaseNonPericolosi = [
+      { code: "17 01 01", desc: "Cemento" },
+      { code: "17 01 02", desc: "Mattoni" },
+      { code: "17 09 04", desc: "Rifiuti misti dell'attività di costruzione e demolizione, diversi da quelli di cui alle voci 17 09 01, 17 09 02 e 17 09 03" },
+      { code: "17 05 04", desc: "Terra e rocce, diverse da quelle di cui alla voce 17 05 03" },
+      { code: "17 01 07", desc: "Miscugli o scorie di cemento, mattoni, mattonelle e ceramiche, diverse da quelle di cui alla voce 17 01 06" },
+      { code: "17 02 01", desc: "Legno" },
+      { code: "17 02 03", desc: "Plastica" },
+      { code: "17 03 02", desc: "Miscele bituminose diverse da quelle di cui alla voce 17 03 01" },
+      { code: "17 04 05", desc: "Ferro e acciaio" },
+      { code: "17 06 04", desc: "Materiali isolanti diversi da quelli di cui alle voci 17 06 01 e 17 06 03" },
+      { code: "15 01 01", desc: "Imballaggi in carta e cartone" },
+      { code: "15 01 02", desc: "Imballaggi in plastica" },
+      { code: "15 01 03", desc: "Imballaggi in legno" },
+      { code: "20 03 01", desc: "Rifiuti urbani non differenziati" }
+    ];
+
+    // Funzione per regolare dinamicamente la dimensione dei caratteri
+    function adattaTestoEER(testoDesc, codice) {
+      const elemDesc = document.getElementById('viewEERDesc');
+      const elemCode = document.getElementById('viewEERCode');
+      const isA3 = document.body.classList.contains('format-a3');
+
+      elemDesc.innerText = testoDesc;
+      elemCode.innerText = codice;
+
+      const len = testoDesc.length;
+
+      let descSizeRem, codeSizeRem;
+      if (len < 15) {
+        descSizeRem = isA3 ? 3.8 : 2.6;
+        codeSizeRem = isA3 ? 10.5 : 7.2;
+      } else if (len < 40) {
+        descSizeRem = isA3 ? 3.0 : 2.0;
+        codeSizeRem = isA3 ? 9.0 : 6.0;
+      } else if (len < 90) {
+        descSizeRem = isA3 ? 2.4 : 1.6;
+        codeSizeRem = isA3 ? 7.5 : 5.0;
+      } else {
+        descSizeRem = isA3 ? 1.8 : 1.25;
+        codeSizeRem = isA3 ? 6.0 : 4.0;
+      }
+
+      elemDesc.style.fontSize = descSizeRem + 'rem';
+      elemCode.style.fontSize = codeSizeRem + 'rem';
+    }
+
+    const searchEERInput = document.getElementById('searchEER');
+    const eerSuggestions = document.getElementById('eerSuggestions');
+
+    searchEERInput.addEventListener('input', function() {
+      const query = this.value.trim().toLowerCase().replace(/\s+/g, '');
+      eerSuggestions.innerHTML = '';
+
+      if (query.length < 2) {
+        eerSuggestions.style.display = 'none';
+        return;
+      }
+
+      const matches = eerDatabaseNonPericolosi.filter(item => {
+        const cleanCode = item.code.toLowerCase().replace(/\s+/g, '');
+        const cleanDesc = item.desc.toLowerCase();
+        return cleanCode.includes(query) || cleanDesc.includes(query);
+      });
+
+      if (matches.length > 0) {
+        matches.forEach(match => {
+          const div = document.createElement('div');
+          div.className = 'eer-item';
+          div.innerHTML = `<strong>${match.code}</strong> - ${match.desc}`;
+          div.addEventListener('click', () => selectEER(match));
+          eerSuggestions.appendChild(div);
+        });
+        eerSuggestions.style.display = 'block';
+      } else {
+        eerSuggestions.style.display = 'none';
+      }
+    });
+
+    function selectEER(item) {
+      searchEERInput.value = item.code;
+      document.getElementById('customDesc').value = item.desc;
+      adattaTestoEER(item.desc, item.code);
+      eerSuggestions.style.display = 'none';
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!searchEERInput.contains(e.target) && !eerSuggestions.contains(e.target)) {
+        eerSuggestions.style.display = 'none';
+      }
+    });
+
+    document.getElementById('customDesc').addEventListener('input', e => {
+      const testo = e.target.value || "Selezionare un codice EER";
+      const codice = document.getElementById('viewEERCode').innerText;
+      adattaTestoEER(testo, codice);
+    });
+
+    document.getElementById('inputOperativa').addEventListener('input', e => {
+      document.getElementById('viewOperativa').innerText = e.target.value || 'Nessuna indicazione specifica.';
+    });
+
+    document.getElementById('inputLogo').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('logoPreview').innerHTML = `<img src="${evt.target.result}" alt="Logo">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('inputWBS').addEventListener('input', e => {
+      document.getElementById('viewWBS').innerText = e.target.value || '—';
+    });
+    document.getElementById('inputProduttore').addEventListener('input', e => {
+      document.getElementById('viewProduttore').innerText = e.target.value || '—';
+    });
+
+    function stampaFormato(formato) {
+      if (formato === 'A3') {
+        document.body.classList.add('format-a3');
+      } else {
+        document.body.classList.remove('format-a3');
+      }
+
+      let printStyle = document.getElementById('print-style-dynamic');
+      if (!printStyle) {
+        printStyle = document.createElement('style');
+        printStyle.id = 'print-style-dynamic';
+        document.head.appendChild(printStyle);
+      }
+      
+      printStyle.innerHTML = `
+        @media print {
+          @page {
+            size: ${formato === 'A3' ? 'A3' : 'A4'} landscape;
+            margin: 0mm;
+          }
+        }
+      `;
+      
+      setTimeout(() => {
+        window.print();
+      }, 100);
+    }
+
+    window.onload = function() {
+      selectEER(eerDatabaseNonPericolosi[0]);
+    };
+  </script>
+</body>
+</html>
